@@ -12,10 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author baiyan
@@ -36,18 +33,20 @@ public class HueShellServiceImpl implements HueShellService {
     @Autowired
     private ShellContentService shellContentService;
 
+    @Autowired
     HueShell hueShell;
+
     JobPlan jobPlan;
     ShellContent shellContent;
 
     @Override
     public String submit(String name) {
         hueShell = hueShellService.selectByName(name);
-        String msg=check(hueShell);
-        if (msg!="OK") {
-            return "提交" + name + "失败！！"+msg;
+        String msg = check(hueShell);
+        if (msg != "OK") {
+            return "提交" + name + "失败！！" + msg;
         } else {
-            jobPlan = new JobPlan(name, hueShell.getInput(),hueShell.getShellName(),hueShell.getOutput(), hueShell.getExecuteRate(), hueShell.getExecuteTime(), hueShell.getParaments(), GetTime.getTimeStamp("yyyyMMdd"));
+            jobPlan = new JobPlan(name, hueShell.getInput(), hueShell.getShellName(), hueShell.getOutput(), hueShell.getExecuteRate(), hueShell.getExecuteTime(), hueShell.getParaments(), GetTime.getTimeStamp("yyyyMMdd"));
             shellContent = new ShellContent(name, hueShell.getShellContent(), hueShell.getType(), GetTime.getTimeStamp("yyyyMMdd"));
             return "jobPlan插入结果" + jobPlanService.insert(jobPlan) + "\nshellContent插入结果:" + shellContentService.insertShellContent(shellContent);
         }
@@ -63,9 +62,56 @@ public class HueShellServiceImpl implements HueShellService {
         return hueShellMapper.insert(hueShell, new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()));
     }
 
+    /**
+     * @描述 我们的开发端目前使用的是hue，所以这一步需要将hue数据库中的desktop_document2表的search内容转化为hueshell,其中
+     * @参数 执行脚本名称，不以.bi结尾
+     * @返回值 hueshell对象
+     * @创建人 baiyan
+     * @创建时间 2018/9/25
+     * @修改人和其它信息
+     */
     @Override
     public HueShell selectByName(String name) {
-        return hueShellMapper.getHueShell(name);
+        String executorContent = hueShellMapper.getSearch(name + ".bi");
+        //name type executetime shellname shellcontent input output execute_rate paraments
+        hueShell.setName(name);
+        Map<String, String> fileMap = new HashMap<String, String>(); //负责存储从数据库中查询出来的键值对
+        String[] ec = executorContent.split("\\n");
+        for (String x : ec) {
+            if (x.contains("command=")) {//处理hue界面的command=xxxx.sql x=20133113 y=${yyyyMMdd}
+                String[] g = x.replaceAll("command=", "").trim().split("//s+");
+                hueShell.setShellName(g[0]);
+                String command = hueShellMapper.getSearch(g[0]);
+                hueShell.setShellContent(command);
+                if (g.length > 1) {
+                    StringBuffer p = new StringBuffer();
+                    for (int j = 1; j < g.length; j++) {
+                        p.append(g[j] + ",");
+                    }
+                    hueShell.setParaments(p.toString());
+                }
+            } else if (x.split("=").length > 1)
+                fileMap.put(x.split("=")[0].toLowerCase(), x.split("=")[1]);
+        }
+        if (fileMap.keySet().contains("executetime") && fileMap.keySet().contains("type")) {
+            try {
+                throw new Exception("缺少executetime或者缺少type");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        hueShell.setExecuteTime(fileMap.get("executetime"));
+        hueShell.setType(fileMap.get("type"));
+
+        if (fileMap.keySet().contains("input"))
+            hueShell.setInput(fileMap.get("input"));
+
+        if (fileMap.keySet().contains("output"))
+            hueShell.setOutput(fileMap.get("output"));
+        if (fileMap.keySet().contains("executerate"))
+            hueShell.setExecuteRate(fileMap.get("executerate"));
+
+        return hueShell;
     }
 
 

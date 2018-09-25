@@ -5,12 +5,14 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
+import java.sql.Connection;
+
 @SpringBootApplication
 @EnableScheduling
-@MapperScan("com.baiyan.forwind.mapper")
-public class ForwindApplication {
+@MapperScan("com.mhc.bi.mapper")
+public class TheAdvisorApplication {
 	public static void main(String[] args) {
-		SpringApplication.run(ForwindApplication.class, args);
+		SpringApplication.run(TheAdvisorApplication.class, args);
 		System.out.println("Hello world");
 	}
 }

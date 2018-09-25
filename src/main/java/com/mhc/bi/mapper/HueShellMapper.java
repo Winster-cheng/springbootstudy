@@ -46,7 +46,7 @@ public interface HueShellMapper {
     int insert(@Param("hueShell") HueShell hueShell, @Param("createTime") String createTime);
 
 
-    @Select("select * from hueshell where name=#{name}")
+    @Select("select search from hue.desktop_document2 where name=#{name} and is_trashed=0;")
     @Results({
             @Result(column = "id",property = "id"),
             @Result(column = "execute_time", property = "executeTime"),
@@ -61,6 +61,6 @@ public interface HueShellMapper {
             @Result(column = "execute_rate",property = "executeRate"),
             @Result(column = "paraments",property = "paraments")
     })
-    HueShell getHueShell(String name);
+    String getSearch(String name);
 
 }
