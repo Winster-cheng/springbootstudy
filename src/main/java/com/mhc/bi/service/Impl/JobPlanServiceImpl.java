@@ -2,7 +2,7 @@ package com.mhc.bi.service.Impl;
 
 import com.mhc.bi.Utils.GetTime;
 import com.mhc.bi.domain.JobPlan;
-import com.mhc.bi.mapper.JobPlanMapper;
+import com.mhc.bi.mapper.theadvisor.JobPlanMapper;
 import com.mhc.bi.service.JobPlanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

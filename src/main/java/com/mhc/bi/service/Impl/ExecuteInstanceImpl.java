@@ -2,7 +2,7 @@ package com.mhc.bi.service.Impl;
 
 import com.mhc.bi.Utils.GetTime;
 import com.mhc.bi.domain.ExecuteInstance;
-import com.mhc.bi.mapper.ExecuteInstanceMapper;
+import com.mhc.bi.mapper.theadvisor.ExecuteInstanceMapper;
 import com.mhc.bi.service.ExecuteInstanceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

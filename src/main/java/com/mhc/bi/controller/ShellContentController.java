@@ -1,6 +1,6 @@
 package com.mhc.bi.controller;
 
-import com.mhc.bi.domain.JsonData;
+import com.mhc.bi.Utils.JsonData;
 import com.mhc.bi.domain.ShellContent;
 import com.mhc.bi.service.ShellContentService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -2,7 +2,7 @@ package com.mhc.bi.service.Impl;
 
 import com.mhc.bi.Utils.GetTime;
 import com.mhc.bi.domain.ShellContent;
-import com.mhc.bi.mapper.ShellContentMapper;
+import com.mhc.bi.mapper.theadvisor.ShellContentMapper;
 import com.mhc.bi.service.ShellContentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

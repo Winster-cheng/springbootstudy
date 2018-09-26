@@ -1,10 +1,13 @@
 package com.mhc.bi.domain;
 
+import org.springframework.stereotype.Service;
+
 /**
  * @author baiyan
  * @date 2018/09/17
  * @description 对应hue中的desktop_document2，相对于JsonPlan+ShellContent
  */
+@Service
 public class HueShell {
     private int id;
     private String name;

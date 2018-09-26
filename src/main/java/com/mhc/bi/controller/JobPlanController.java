@@ -1,7 +1,7 @@
 package com.mhc.bi.controller;
 
 import com.mhc.bi.domain.JobPlan;
-import com.mhc.bi.domain.JsonData;
+import com.mhc.bi.Utils.JsonData;
 import com.mhc.bi.service.JobPlanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

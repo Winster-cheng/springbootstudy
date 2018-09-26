@@ -1,10 +1,12 @@
 package com.mhc.bi.service.Impl;
 
 import com.mhc.bi.Utils.GetTime;
+import com.mhc.bi.Utils.StringHandle;
 import com.mhc.bi.domain.HueShell;
 import com.mhc.bi.domain.JobPlan;
 import com.mhc.bi.domain.ShellContent;
-import com.mhc.bi.mapper.HueShellMapper;
+import com.mhc.bi.mapper.hue.DesktopDocument2Mapper;
+import com.mhc.bi.mapper.theadvisor.HueShellMapper;
 import com.mhc.bi.service.HueShellService;
 import com.mhc.bi.service.JobPlanService;
 import com.mhc.bi.service.ShellContentService;
@@ -23,6 +25,9 @@ import java.util.*;
 public class HueShellServiceImpl implements HueShellService {
     @Autowired
     HueShellMapper hueShellMapper;
+
+    @Autowired
+    DesktopDocument2Mapper desktopDocument2Mapper;
 
     @Autowired
     private HueShellService hueShellService;
@@ -63,7 +68,7 @@ public class HueShellServiceImpl implements HueShellService {
     }
 
     /**
-     * @描述 我们的开发端目前使用的是hue，所以这一步需要将hue数据库中的desktop_document2表的search内容转化为hueshell,其中
+     * @描述 从hue数据库中的desktop_document2表的search内容转化为hueshell,其中
      * @参数 执行脚本名称，不以.bi结尾
      * @返回值 hueshell对象
      * @创建人 baiyan
@@ -72,7 +77,8 @@ public class HueShellServiceImpl implements HueShellService {
      */
     @Override
     public HueShell selectByName(String name) {
-        String executorContent = hueShellMapper.getSearch(name + ".bi");
+        String executorContent = desktopDocument2Mapper.getSearch(StringHandle.checkEnding(name,".bi"));
+        System.out.println("从hue2中取出的"+StringHandle.checkEnding(name,"bi")+"内容是"+executorContent);
         //name type executetime shellname shellcontent input output execute_rate paraments
         hueShell.setName(name);
         Map<String, String> fileMap = new HashMap<String, String>(); //负责存储从数据库中查询出来的键值对
@@ -81,7 +87,7 @@ public class HueShellServiceImpl implements HueShellService {
             if (x.contains("command=")) {//处理hue界面的command=xxxx.sql x=20133113 y=${yyyyMMdd}
                 String[] g = x.replaceAll("command=", "").trim().split("//s+");
                 hueShell.setShellName(g[0]);
-                String command = hueShellMapper.getSearch(g[0]);
+                String command = desktopDocument2Mapper.getSearch(g[0]);
                 hueShell.setShellContent(command);
                 if (g.length > 1) {
                     StringBuffer p = new StringBuffer();
@@ -93,7 +99,7 @@ public class HueShellServiceImpl implements HueShellService {
             } else if (x.split("=").length > 1)
                 fileMap.put(x.split("=")[0].toLowerCase(), x.split("=")[1]);
         }
-        if (fileMap.keySet().contains("executetime") && fileMap.keySet().contains("type")) {
+        if (!fileMap.keySet().contains("executetime") &&!fileMap.keySet().contains("type")) {
             try {
                 throw new Exception("缺少executetime或者缺少type");
             } catch (Exception e) {

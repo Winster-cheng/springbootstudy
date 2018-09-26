@@ -1,4 +1,4 @@
-package com.mhc.bi.mapper;
+package com.mhc.bi.mapper.theadvisor;
 
 import com.mhc.bi.domain.HueShell;
 import org.apache.ibatis.annotations.*;
@@ -44,23 +44,5 @@ public interface HueShellMapper {
     @Insert("insert into hueshell(name,input,output,execute_time,execute_rate,shellcontent,shellname,type,gmt_create,paraments) values(#{hueShell.name},#{hueShell.input},#{hueShell.output},#{hueShell.executeTime},#{hueShell.executeRate},#{hueShell.shellContent},#{hueShell.shellName},#{hueShell.type},#{createTime},#{hueShell.paraments})")
     @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
     int insert(@Param("hueShell") HueShell hueShell, @Param("createTime") String createTime);
-
-
-    @Select("select search from hue.desktop_document2 where name=#{name} and is_trashed=0;")
-    @Results({
-            @Result(column = "id",property = "id"),
-            @Result(column = "execute_time", property = "executeTime"),
-            @Result(column = "name", property = "name"),
-            @Result(column = "gmt_create",property = "gmtCreate"),
-            @Result(column = "gmt_modify",property = "gmtModify"),
-            @Result(column = "shellcontent", property = "shellContent"),
-            @Result(column = "shellname", property = "shellName"),
-            @Result(column = "type", property = "type"),
-            @Result(column = "input", property = "input"),
-            @Result(column = "output", property = "output"),
-            @Result(column = "execute_rate",property = "executeRate"),
-            @Result(column = "paraments",property = "paraments")
-    })
-    String getSearch(String name);
 
 }

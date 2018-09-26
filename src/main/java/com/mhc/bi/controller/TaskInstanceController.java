@@ -1,6 +1,6 @@
 package com.mhc.bi.controller;
 
-import com.mhc.bi.domain.JsonData;
+import com.mhc.bi.Utils.JsonData;
 import com.mhc.bi.domain.TaskInstance;
 import com.mhc.bi.exec.ExecServer;
 import com.mhc.bi.exec.FlowControl;

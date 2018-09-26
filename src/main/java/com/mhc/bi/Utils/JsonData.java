@@ -1,4 +1,4 @@
-package com.mhc.bi.domain;
+package com.mhc.bi.Utils;
 
 import java.io.Serializable;
 

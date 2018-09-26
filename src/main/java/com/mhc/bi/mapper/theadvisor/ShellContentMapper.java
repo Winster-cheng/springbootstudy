@@ -1,4 +1,4 @@
-package com.mhc.bi.mapper;
+package com.mhc.bi.mapper.theadvisor;
 
 import com.mhc.bi.domain.ShellContent;
 import org.apache.ibatis.annotations.*;

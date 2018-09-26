@@ -1,4 +1,4 @@
-package com.mhc.bi.mapper;
+package com.mhc.bi.mapper.theadvisor;
 
 import com.mhc.bi.domain.ExecuteInstance;
 import org.apache.ibatis.annotations.Insert;
