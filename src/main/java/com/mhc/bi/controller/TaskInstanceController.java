@@ -1,7 +1,7 @@
 package com.mhc.bi.controller;
 
 import com.mhc.bi.Utils.JsonData;
-import com.mhc.bi.domain.TaskInstance;
+import com.mhc.bi.domain.theadvisor.TaskInstance;
 import com.mhc.bi.exec.ExecServer;
 import com.mhc.bi.exec.FlowControl;
 import com.mhc.bi.service.TaskInstanceService;
@@ -72,10 +72,11 @@ public class TaskInstanceController {
     public Object start2(){
         TaskInstance t=new TaskInstance();
         t.setStatus(2);
-        t.setExecuteDay("20180924");
-        t.setName("task1_0");
+        t.setExecuteDay("20180927");
+        t.setName("test_0");
         return taskInstanceService.updateStatus(t);
     }
+
 
 
 

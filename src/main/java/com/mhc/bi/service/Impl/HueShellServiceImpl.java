@@ -2,9 +2,9 @@ package com.mhc.bi.service.Impl;
 
 import com.mhc.bi.Utils.GetTime;
 import com.mhc.bi.Utils.StringHandle;
-import com.mhc.bi.domain.HueShell;
-import com.mhc.bi.domain.JobPlan;
-import com.mhc.bi.domain.ShellContent;
+import com.mhc.bi.domain.theadvisor.HueShell;
+import com.mhc.bi.domain.theadvisor.JobPlan;
+import com.mhc.bi.domain.theadvisor.ShellContent;
 import com.mhc.bi.mapper.hue.DesktopDocument2Mapper;
 import com.mhc.bi.mapper.theadvisor.HueShellMapper;
 import com.mhc.bi.service.HueShellService;
@@ -47,14 +47,45 @@ public class HueShellServiceImpl implements HueShellService {
     @Override
     public String submit(String name) {
         hueShell = hueShellService.selectByName(name);
+        insertOrAddNewVersion(hueShell);//做一个备份到hueshell表
         String msg = check(hueShell);
         if (msg != "OK") {
             return "提交" + name + "失败！！" + msg;
         } else {
-            jobPlan = new JobPlan(name, hueShell.getInput(), hueShell.getShellName(), hueShell.getOutput(), hueShell.getExecuteRate(), hueShell.getExecuteTime(), hueShell.getParaments(), GetTime.getTimeStamp("yyyyMMdd"));
-            shellContent = new ShellContent(name, hueShell.getShellContent(), hueShell.getType(), GetTime.getTimeStamp("yyyyMMdd"));
-            return "jobPlan插入结果" + jobPlanService.insert(jobPlan) + "\nshellContent插入结果:" + shellContentService.insertShellContent(shellContent);
+            jobPlan = new JobPlan(hueShell.getName(), hueShell.getInput(), hueShell.getShellName().replaceAll(".bi", ""), hueShell.getOutput(), hueShell.getExecuteRate(), hueShell.getExecuteTime(), hueShell.getParaments(), GetTime.getTimeStamp("yyyyMMdd"));
+            shellContent = new ShellContent(hueShell.getShellName(), hueShell.getShellContent(), hueShell.getType(), GetTime.getTimeStamp("yyyyMMdd"));
+            return name+" 插入jobPlan结果" + jobPlanService.insert(jobPlan) + "\n插入shellContent结果:" + shellContentService.insertShellContent(shellContent);
         }
+    }
+
+    @Override
+    public HueShell selectAliveByName(String name) {
+        return hueShellMapper.selectAliveByName(name);
+    }
+
+    @Override
+    public int insertOrAddNewVersion(HueShell hueShell) {
+        //如果有旧版本，那么把旧版本is_history设置为1
+        HueShell h = hueShellService.selectAliveByName(hueShell.getName());
+        if (h != null) {
+            hueShellMapper.updateHistory(h);
+        }
+        hueShellService.insert(hueShell);
+        return 0;
+    }
+
+    /**
+     * @param output
+     * @描述 根据output和is_history=1查询hueshell对象
+     * @参数 output
+     * @返回值 HueShell
+     * @创建人 baiyan
+     * @创建时间 2018/9/27
+     * @修改人和其它信息
+     */
+    @Override
+    public HueShell selectByOutput(String output) {
+        return hueShellMapper.selectByOutput(output);
     }
 
     @Override
@@ -64,11 +95,11 @@ public class HueShellServiceImpl implements HueShellService {
 
     @Override
     public int insert(HueShell hueShell) {
-        return hueShellMapper.insert(hueShell, new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()));
+        return hueShellMapper.insert(hueShell, GetTime.getTimeWithMysqlFormat());
     }
 
     /**
-     * @描述 从hue数据库中的desktop_document2表的search内容转化为hueshell,其中
+     * @描述 从hue数据库中的desktop_document2表的search内容转化为hueshell, 其中
      * @参数 执行脚本名称，不以.bi结尾
      * @返回值 hueshell对象
      * @创建人 baiyan
@@ -77,17 +108,18 @@ public class HueShellServiceImpl implements HueShellService {
      */
     @Override
     public HueShell selectByName(String name) {
-        String executorContent = desktopDocument2Mapper.getSearch(StringHandle.checkEnding(name,".bi"));
-        System.out.println("从hue2中取出的"+StringHandle.checkEnding(name,"bi")+"内容是"+executorContent);
+        String executorContent = desktopDocument2Mapper.selectByName(StringHandle.checkEnding(name, ".bi")).getSearch();
+
+        System.out.println("从hue2中取出的" + StringHandle.checkEnding(name, ".bi") + "内容是:\n" + executorContent);
         //name type executetime shellname shellcontent input output execute_rate paraments
-        hueShell.setName(name);
+        hueShell.setName(name.replace(".bi", ""));
         Map<String, String> fileMap = new HashMap<String, String>(); //负责存储从数据库中查询出来的键值对
         String[] ec = executorContent.split("\\n");
         for (String x : ec) {
             if (x.contains("command=")) {//处理hue界面的command=xxxx.sql x=20133113 y=${yyyyMMdd}
                 String[] g = x.replaceAll("command=", "").trim().split("//s+");
                 hueShell.setShellName(g[0]);
-                String command = desktopDocument2Mapper.getSearch(g[0]);
+                String command = desktopDocument2Mapper.selectByName(g[0]).getSearch();
                 hueShell.setShellContent(command);
                 if (g.length > 1) {
                     StringBuffer p = new StringBuffer();
@@ -99,9 +131,9 @@ public class HueShellServiceImpl implements HueShellService {
             } else if (x.split("=").length > 1)
                 fileMap.put(x.split("=")[0].toLowerCase(), x.split("=")[1]);
         }
-        if (!fileMap.keySet().contains("executetime") &&!fileMap.keySet().contains("type")) {
+        if (fileMap.get("executetime") == null || fileMap.get("type") == null || fileMap.get("output") == null) {
             try {
-                throw new Exception("缺少executetime或者缺少type");
+                throw new Exception("缺少executetime或者缺少type或者缺少output");
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -109,14 +141,15 @@ public class HueShellServiceImpl implements HueShellService {
         hueShell.setExecuteTime(fileMap.get("executetime"));
         hueShell.setType(fileMap.get("type"));
 
-        if (fileMap.keySet().contains("input"))
+        if (fileMap.keySet().contains("input")) {
             hueShell.setInput(fileMap.get("input"));
+        }
 
         if (fileMap.keySet().contains("output"))
             hueShell.setOutput(fileMap.get("output"));
         if (fileMap.keySet().contains("executerate"))
             hueShell.setExecuteRate(fileMap.get("executerate"));
-
+        hueShell.setIsHistory(1);
         return hueShell;
     }
 
@@ -134,7 +167,7 @@ public class HueShellServiceImpl implements HueShellService {
         int startHour = getEarliesTime(hueShell);
         HueShell parentHueShell;
         for (String x : hueShell.getInput().split(",")) {//检查每天父节点的最早执行时间
-            parentHueShell = hueShellService.selectByName(x);
+            parentHueShell = hueShellService.selectByOutput(x);
             if (startHour < getEarliesTime(parentHueShell)) {
                 return hueShell.getName() + "的执行时间早于" + parentHueShell.getName();
             }

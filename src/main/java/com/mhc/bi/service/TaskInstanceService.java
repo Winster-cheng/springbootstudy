@@ -1,6 +1,6 @@
 package com.mhc.bi.service;
 
-import com.mhc.bi.domain.TaskInstance;
+import com.mhc.bi.domain.theadvisor.TaskInstance;
 
 import java.util.List;
 
@@ -21,7 +21,7 @@ public interface TaskInstanceService {
 
     public List<TaskInstance> selectStartNode(String time);
 
-    public TaskInstance selectByTimeAndName(String day, String name);
+    public TaskInstance selectByTimeAndOutput(String day, String output);
 
     public void createTaskInstance();
 
@@ -32,4 +32,5 @@ public interface TaskInstanceService {
     public List<TaskInstance> selectOutNode(String input, String day);
 
     public int updateStatus(TaskInstance taskInstance);
+
 }

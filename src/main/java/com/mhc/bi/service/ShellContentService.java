@@ -1,6 +1,6 @@
 package com.mhc.bi.service;
 
-import com.mhc.bi.domain.ShellContent;
+import com.mhc.bi.domain.theadvisor.ShellContent;
 
 import java.util.List;
 

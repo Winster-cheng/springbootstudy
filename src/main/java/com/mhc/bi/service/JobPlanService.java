@@ -1,6 +1,6 @@
 package com.mhc.bi.service;
 
-import com.mhc.bi.domain.JobPlan;
+import com.mhc.bi.domain.theadvisor.JobPlan;
 
 import java.util.List;
 
@@ -11,8 +11,14 @@ import java.util.List;
  */
 public interface JobPlanService {
     public List<JobPlan> selectAll();
+
     public int update(JobPlan jobPlan);
+
     public int delete(JobPlan jobPlan);
+
     public int insert(JobPlan jobPlan);
+
     public JobPlan selectJobPlan(String name);
+
+    public JobPlan selectJobPlanByOutput(String output);
 }

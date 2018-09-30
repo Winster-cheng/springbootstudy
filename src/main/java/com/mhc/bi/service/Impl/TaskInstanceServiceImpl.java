@@ -1,8 +1,9 @@
 package com.mhc.bi.service.Impl;
 
+import com.mhc.bi.Utils.Algorithm;
 import com.mhc.bi.Utils.GetTime;
-import com.mhc.bi.domain.JobPlan;
-import com.mhc.bi.domain.TaskInstance;
+import com.mhc.bi.domain.theadvisor.JobPlan;
+import com.mhc.bi.domain.theadvisor.TaskInstance;
 import com.mhc.bi.mapper.theadvisor.TaskInstanceMapper;
 import com.mhc.bi.service.JobPlanService;
 import com.mhc.bi.service.TaskInstanceService;
@@ -54,13 +55,13 @@ public class TaskInstanceServiceImpl implements TaskInstanceService {
     }
 
     @Override
-    public TaskInstance selectByTimeAndName(String day, String name) {
-        return taskInstanceMapper.selectByTimeAndName(day, name);
+    public TaskInstance selectByTimeAndOutput(String day, String output) {
+        return taskInstanceMapper.selectByTimeAndOutput(day, output);
     }
 
     @Override
     public int insertTaskInstance(TaskInstance taskInstances) {
-        return taskInstanceMapper.insertIntoTaskInstance(taskInstances, GetTime.getTimeStamp("yyyyMMddhhmm"));
+        return taskInstanceMapper.insertIntoTaskInstance(taskInstances, GetTime.getTimeWithMysqlFormat());
     }
 
     @Override
@@ -68,7 +69,7 @@ public class TaskInstanceServiceImpl implements TaskInstanceService {
         TaskInstance taskInstance;
         System.out.println("Strating create TaskInstance！！！");
         List<JobPlan> list = jobPlanService.selectAll();
-        String day = new SimpleDateFormat("yyyyMMdd").format(new Date());
+        String day = GetTime.getTimeStamp("yyyyMMdd", +1); //每天我们生成的是第二天的任务
         for (JobPlan jobPlan : list) {
             //每个时间点都生成一个执行实例
             for (String time : jobPlan.getExecuteTime().split(",")) {
@@ -81,8 +82,8 @@ public class TaskInstanceServiceImpl implements TaskInstanceService {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                if (jobPlan.getOutput() != null)
-                    taskInstance.setOutput(jobPlan.getOutput() + "_" + time);
+                taskInstance.setShellName(jobPlan.getShellName());
+                taskInstance.setOutput(jobPlan.getOutput() + "_" + time);
                 taskInstance.setStatus(1);
                 taskInstance.setExecuteTime(time);
                 taskInstance.setExecuteDay(day);
@@ -104,13 +105,13 @@ public class TaskInstanceServiceImpl implements TaskInstanceService {
     }
 
     @Override
-    public List<TaskInstance> selectOutNode(String input,String day) {
-        return taskInstanceMapper.selectOutNode(input,day);
+    public List<TaskInstance> selectOutNode(String input, String day) {
+        return taskInstanceMapper.selectOutNode(input, day);
     }
 
     @Override
     public int updateStatus(TaskInstance taskInstance) {
-        return taskInstanceMapper.updateStatus(taskInstance,GetTime.getTimeStamp("yyyyMMddHHmmss"));
+        return taskInstanceMapper.updateStatus(taskInstance, GetTime.getTimeStamp("yyyyMMddHHmmss"));
     }
 
     /**
@@ -126,45 +127,24 @@ public class TaskInstanceServiceImpl implements TaskInstanceService {
         String[] inputs;
         inputs = jobPlan.getInput().split(",");
         for (String in : inputs) {  //遍历父节点，每个父节点生成相应的父节点_hour
-            JobPlan parentJobPlan = jobPlanService.selectJobPlan(in);
-            System.out.println("parentJobPlan.getExecuteTime(" + in + "):" + parentJobPlan.getExecuteTime());
+            JobPlan parentJobPlan = jobPlanService.selectJobPlanByOutput(in);
             if (Arrays.asList(parentJobPlan.getExecuteTime().split(",")).contains(time)) {//如果父节点包含子节点（taskinstance）的执行时间
                 if (sb.toString().length() > 0) {
-                    sb.append("," + parentJobPlan.getName() + "_" + time);
+                    sb.append("," + parentJobPlan.getOutput() + "_" + time);
                 } else {
-                    sb.append(parentJobPlan.getName() + "_" + time);
+                    sb.append(parentJobPlan.getOutput() + "_" + time);
                 }
             } else {//如果父节点不包含子节点（taskinstance）的执行时间，我们取最近的时间
                 if (sb.toString().length() > 0) {
-                    sb.append("," + parentJobPlan.getName() + "_" + getCloseTime(changeStringToInt(parentJobPlan.getExecuteTime().split(",")), Integer.parseInt(time)));
+                    sb.append("," + parentJobPlan.getOutput() + "_" + Algorithm.getSimulateNumber(Integer.parseInt(time), changeStringToInt(parentJobPlan.getExecuteTime().split(","))));
                 } else {
-                    sb.append(parentJobPlan.getName() + "_" + getCloseTime(changeStringToInt(parentJobPlan.getExecuteTime().split(",")), Integer.parseInt(time)));
+                    sb.append(parentJobPlan.getOutput() + "_" + Algorithm.getSimulateNumber(Integer.parseInt(time), changeStringToInt(parentJobPlan.getExecuteTime().split(","))));
                 }
             }
         }
-        System.out.println("getTaskInstanceInput返回值是" + sb.toString());
         return sb.toString();
     }
 
-    /**
-     * @描述 输入a数组，数字b,一直遍历a,直到返回和b最近的数字（<=b）
-     * @参数 int[] a,int b
-     * @返回值 int c(c<=2)
-     * @创建人 baiyan
-     * @创建时间 2018/9/21
-     * @修改人和其它信息
-     */
-    public int getCloseTime(int[] a, int b) throws Exception {
-
-        for (int g : a) {
-            if (g == b) {
-                return g;
-            } else {
-                return getCloseTime(a, b--);
-            }
-        }
-        throw new Exception("在a数组找不到小于d的值，这个判断记得移到提交环节");
-    }
 
     /**
      * @描述 转String数组为int数组

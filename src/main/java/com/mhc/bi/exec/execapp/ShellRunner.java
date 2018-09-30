@@ -2,16 +2,20 @@ package com.mhc.bi.exec.execapp;
 
 import com.mhc.bi.Utils.GetTime;
 import com.mhc.bi.common.Status;
-import com.mhc.bi.domain.ExecuteInstance;
-import com.mhc.bi.domain.ShellContent;
-import com.mhc.bi.domain.TaskInstance;
+import com.mhc.bi.domain.theadvisor.ExecuteInstance;
+import com.mhc.bi.domain.theadvisor.ShellContent;
+import com.mhc.bi.domain.theadvisor.TaskInstance;
 import com.mhc.bi.exec.FlowControl;
 import com.mhc.bi.service.ExecuteInstanceService;
 import com.mhc.bi.service.ShellContentService;
 import com.mhc.bi.service.TaskInstanceService;
+import com.mhc.bi.service.alter.DingDingAlert;
+import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -25,8 +29,10 @@ import java.util.regex.Pattern;
  */
 public class ShellRunner extends Runner implements Runnable {
     public String name;
+    public String realName;  //去除了时间后缀之后的名称
+    public String readShellName;
+    public String output;
     public Status status;
-    public String paraments;
     public TaskInstance taskInstance;
     public List<TaskInstance> inputList; //父节点
     public List<TaskInstance> outputNodeList; //该节点的子节点
@@ -37,56 +43,82 @@ public class ShellRunner extends Runner implements Runnable {
     public ExecuteInstance executeInstance;
     public TaskInstanceService taskInstanceService;
     public ExecuteInstanceService executeInstanceService;
+    public DingDingAlert dingDingAlert;
+    public org.slf4j.Logger logger;
 
-    public ShellRunner(TaskInstance taskInstance, TaskInstanceService taskInstanceService, ShellContentService shellContentService, ExecuteInstanceService executeInstanceService) {
-        //TODO 3个service类无法通过注入的方式实现，需要深入学习下这个知识点
+
+    public ShellRunner(TaskInstance taskInstance, TaskInstanceService taskInstanceService, ShellContentService shellContentService, ExecuteInstanceService executeInstanceService, DingDingAlert dingDingAlert) {
+        //TODO 4个service类无法通过注入的方式实现，需要深入学习下这个知识点
+        this.dingDingAlert = dingDingAlert;
         this.executeInstanceService = executeInstanceService;
         this.taskInstanceService = taskInstanceService;
         this.shellContentService = shellContentService;
         executeInstance = new ExecuteInstance();
-        ShellContent shellContent = shellContentService.selectByName(taskInstance.getName().split("_")[0]);
         this.taskInstance = taskInstance;
-        this.command = shellContent.getShellContent();
-        //TODO 这里没进行参数替换，以后加上去
-        this.paraments = taskInstance.getParaments();
+        //进行参数替换
+        this.realName = taskInstance.getRealName();
+        this.readShellName = taskInstance.getShellName();
+        this.command = getCommand(shellContentService, taskInstanceService, taskInstance);
         this.day = taskInstance.getExecuteDay();
         this.executeTime = taskInstance.getExecuteTime();
         this.name = taskInstance.getName();
+        this.output = taskInstance.getOutput();
+        this.logger = LoggerFactory.getLogger(this.getClass());
         this.setInputListAndOutputList(taskInstance);
     }
 
     @Override
     public void run() {
-        if (checkParentsStatus()) {
-            int time = timeCheck();
-            if (time != 0) {
-                System.out.println("时间未到，等待" + time + "小时");
-                try {
-                    Thread.sleep(time * 3600000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-            System.out.println("开始执行" + name);
-            this.taskInstance.setStartTime(GetTime.getTimeStamp("yyyyMMddHHmmss"));
-            int execStatus = this.execute(this.command);
-            this.taskInstance.setEndTme(GetTime.getTimeStamp("yyyyMMddHHmmss"));
-            if (execStatus != 0) {
-                this.taskInstance.setStatus(5);
-                System.out.println(this.name + "执行失败");
-                return;
-            } else {
-                this.taskInstance.setStatus(4);
-                System.out.println(this.name + "执行成功");
-            }
-            taskInstanceService.updateStatus(this.taskInstance);
-            this.initExecuteInstance(taskInstance);
-            if (this.outputNodeList != null) {
-                for (TaskInstance taskInstance : outputNodeList) {
-                    FlowControl.threadPoolExecutor.submit(new ShellRunner(taskInstance, taskInstanceService, shellContentService, executeInstanceService));
-                }
+        taskInstance.setStatus(3);
+        this.taskInstance.setStartTime(GetTime.getTimeWithMysqlFormat());
+        taskInstanceService.updateStatus(this.taskInstance);
+        if (!checkParentsStatus()) return;
+        int time = timeCheck();
+        if (time != 0) {
+            System.out.println("时间未到，等待" + time + "小时");
+            try {
+                Thread.sleep(time * 3600000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
+        System.out.println("开始执行" + name);
+        int execStatus = this.execute(this.command);
+        this.taskInstance.setEndTme(GetTime.getTimeWithMysqlFormat());
+        if (execStatus != 0) {
+            this.taskInstance.setStatus(5);
+            dingDingAlert.sendMsg(this.realName + "在" + this.executeTime + "点的任务执行失败");
+            taskInstanceService.updateStatus(this.taskInstance);
+            return;
+        }
+        this.taskInstance.setStatus(4);
+        taskInstanceService.updateStatus(this.taskInstance);
+        dingDingAlert.sendMsg(this.realName + "在" + this.executeTime + "点的任务执行成功");
+        this.initExecuteInstance(taskInstance);
+        if (this.outputNodeList != null) {
+            for (TaskInstance taskInstance : outputNodeList) {
+                FlowControl.threadPoolExecutor.submit(new ShellRunner(taskInstance, taskInstanceService, shellContentService, executeInstanceService, dingDingAlert));
+            }
+        }
+    }
+
+
+    /**
+     * @描述 输入TaskInstance, 获取替换过参数的命令
+     * @参数
+     * @返回值
+     * @创建人 baiyan
+     * @创建时间 2018/9/27
+     * @修改人和其它信息
+     */
+    public String getCommand(ShellContentService shellContentService, TaskInstanceService taskInstanceService, TaskInstance taskInstance) {
+        ShellContent shellContent;
+        //获取去除了时间后缀的task任务名
+        shellContent = shellContentService.selectByName(readShellName);
+        if (taskInstance.getParaments() != null) {
+            this.command = paramentsReplace(shellContent.getShellContent(), taskInstance.getParaments());
+        } else this.command = shellContent.getShellContent();
+        return paramentsReplace(command, taskInstance.getParaments());
     }
 
     /**
@@ -118,48 +150,45 @@ public class ShellRunner extends Runner implements Runnable {
         //生成父节点列表
         if (taskInstance.getInput() != null && taskInstance.getInput().contains(",")) {
             for (String task : taskInstance.getInput().split(",")) {
-                inputList.add(taskInstanceService.selectByTimeAndName(taskInstance.getExecuteDay(), task));
+                inputList.add(taskInstanceService.selectByTimeAndOutput(taskInstance.getExecuteDay(), task));
             }
         } else if (taskInstance.getInput() != null) {
-            inputList.add(taskInstanceService.selectByTimeAndName(taskInstance.getExecuteDay(), taskInstance.getInput()));
+            inputList.add(taskInstanceService.selectByTimeAndOutput(taskInstance.getExecuteDay(), taskInstance.getInput()));
         }
-
         //生成子节点列表
-        if (taskInstance.getOutput() == null)
-            outputNodeList = taskInstanceService.selectOutNode(taskInstance.getName(), taskInstance.getExecuteDay());
-        else outputNodeList = taskInstanceService.selectOutNode(taskInstance.getOutput(), taskInstance.getExecuteDay());
+        outputNodeList = taskInstanceService.selectOutNode(taskInstance.getOutput(), taskInstance.getExecuteDay());
     }
 
-    public int execute(String command) {
-        StringBuffer results = new StringBuffer();
-        String[] commands = {"/bin/sh", "-c", command};
+    public int execute(String cmd) {
+        String result = "";
         int exitValue = 1;
         try {
-            ProcessBuilder hiveProcessBuilder = new ProcessBuilder(commands);
-            Process process = hiveProcessBuilder.start();
-            try {
-                exitValue = process.waitFor();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            String[] commands = {"/bin/sh", "-c", cmd};
+            ProcessBuilder builder = new ProcessBuilder(commands);
+            builder.redirectErrorStream(true);
+            Process process = builder.start();
+            InputStream in = process.getInputStream();
+            byte[] re = new byte[1024];
+            while (in.read(re) != -1) {
+                String msg = new String(re);
+                logger.info(msg);
+                re = new byte[1024];
+                result = result + new String(msg);
             }
-            BufferedReader br = new BufferedReader(new InputStreamReader(
-                    process.getInputStream()));
-            String data = null;
-            while ((data = br.readLine()) != null) {
-                results.append(data + "\n");
-            }
+            exitValue = process.waitFor();
 
-        } catch (IOException e) {
-            e.printStackTrace();
+            in.close();
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
-        System.out.println(results.toString());
         return exitValue;
     }
 
     public boolean checkParentsStatus() {
+        System.out.println(this.inputList);
         for (TaskInstance t : this.inputList) {
-            if (taskInstanceService.selectByTimeAndName(t.getExecuteDay(), t.getName()).getStatus() != 4) {
-                System.out.println(this.name + "的父节点" + t.getName().split("_")[0] + "在 " + t.getExecuteDay() + "日" + t.getName().split("_")[1] + "点" + "状态是" + Status.getStatus(t.getStatus()) + ",结束本次执行");
+            if (t.getStatus() != 4) {
+                System.out.println(this.name + "的父节点" + t.getRealName() + "在 " + t.getExecuteDay() + "日" + this.executeTime + "点" + "状态是" + Status.getStatus(t.getStatus()) + ",结束本次执行");
                 return false;
             }
         }
@@ -195,7 +224,8 @@ public class ShellRunner extends Runner implements Runnable {
         this.executeInstance.setEndTime(taskInstance.getEndTime());
         this.executeInstance.setStartTime(taskInstance.getStartTime());
         this.executeInstance.setStatus(taskInstance.getStatus());
-        this.executeInstance.setLogLink("暂无");
+        this.executeInstance.setLogLink("No LOG");
         this.executeInstanceService.insert(this.executeInstance);
     }
+
 }

@@ -1,6 +1,6 @@
 package com.mhc.bi.mapper.theadvisor;
 
-import com.mhc.bi.domain.TaskInstance;
+import com.mhc.bi.domain.theadvisor.TaskInstance;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -19,7 +19,7 @@ import java.util.List;
  * private String paraments;
  */
 public interface TaskInstanceMapper {
-    @Insert("insert into taskinstance(name,input,output,gmt_create,status,execute_time,execute_day,paraments) values(#{taskInstance.name},#{taskInstance.input},#{taskInstance.output},#{createTime},#{taskInstance.status},#{taskInstance.executeTime},#{taskInstance.executeDay},#{taskInstance.paraments})")
+    @Insert("insert into taskinstance(name,shellname,input,output,gmt_create,status,execute_time,execute_day,paraments) values(#{taskInstance.name},#{taskInstance.shellName},#{taskInstance.input},#{taskInstance.output},#{createTime},#{taskInstance.status},#{taskInstance.executeTime},#{taskInstance.executeDay},#{taskInstance.paraments})")
     @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
     int insertIntoTaskInstance(@Param("taskInstance") TaskInstance taskInstance, @Param("createTime") String createTime);
 
@@ -30,6 +30,7 @@ public interface TaskInstanceMapper {
     @Results({
             @Result(column = "id", property = "id"),
             @Result(column = "name", property = "name"),
+            @Result(column = "shellname", property = "shellName"),
             @Result(column = "input", property = "input"),
             @Result(column = "output", property = "output"),
             @Result(column = "gmt_create", property = "gmtCreate"),
@@ -42,10 +43,26 @@ public interface TaskInstanceMapper {
     List<TaskInstance> selectByExecuteTime(String time);
 
 
-    @Select("select * from taskinstance where execute_day=#{day} and name=#{name}")
+    @Select("select * from taskinstance where execute_day=#{day} and output=#{output}")
     @Results({
             @Result(column = "id", property = "id"),
             @Result(column = "name", property = "name"),
+            @Result(column = "shellname", property = "shellName"),
+            @Result(column = "input", property = "input"),
+            @Result(column = "output", property = "output"),
+            @Result(column = "gmt_create", property = "gmtCreate"),
+            @Result(column = "gmt_modify", property = "gmtModify"),
+            @Result(column = "status", property = "status"),
+            @Result(column = "execute_time", property = "executeTime"),
+            @Result(column = "execute_day", property = "executeDay"),
+            @Result(column = "paraments", property = "paraments")
+    })    TaskInstance selectByTimeAndOutput(@Param("day") String day, @Param("output") String name);
+
+    @Select("select * from taskinstance where execute_day=#{day} and output=#{name}")
+    @Results({
+            @Result(column = "id", property = "id"),
+            @Result(column = "name", property = "name"),
+            @Result(column = "shellname", property = "shellName"),
             @Result(column = "input", property = "input"),
             @Result(column = "output", property = "output"),
             @Result(column = "gmt_create", property = "gmtCreate"),
@@ -55,12 +72,13 @@ public interface TaskInstanceMapper {
             @Result(column = "execute_day", property = "executeDay"),
             @Result(column = "paraments", property = "paraments")
     })
-    TaskInstance selectByTimeAndName(@Param("day") String day, @Param("name") String name);
+    TaskInstance selectByTimeAndOutputName(@Param("day") String day, @Param("name") String name);
 
     @Select("select * from taskinstance where input is null and  execute_day=#{execute_day}")
     @Results({
             @Result(column = "id", property = "id"),
             @Result(column = "name", property = "name"),
+            @Result(column = "shellname", property = "shellName"),
             @Result(column = "input", property = "input"),
             @Result(column = "output", property = "output"),
             @Result(column = "gmt_create", property = "gmtCreate"),
@@ -77,6 +95,7 @@ public interface TaskInstanceMapper {
     @Results({
             @Result(column = "id", property = "id"),
             @Result(column = "name", property = "name"),
+            @Result(column = "shellname", property = "shellName"),
             @Result(column = "input", property = "input"),
             @Result(column = "output", property = "output"),
             @Result(column = "gmt_create", property = "gmtCreate"),

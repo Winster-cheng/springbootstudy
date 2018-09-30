@@ -1,4 +1,4 @@
-package com.mhc.bi.domain;
+package com.mhc.bi.domain.theadvisor;
 
 /**
  * @author baiyan
@@ -22,9 +22,9 @@ public class JobPlan {
         super();
     }
 
-    public JobPlan(String name, String input,String shellName, String output,String executeRate, String executeTime,  String paraments, String gmtCreate) {
+    public JobPlan(String name, String input, String shellName, String output, String executeRate, String executeTime, String paraments, String gmtCreate) {
         this.name = name;
-        this.shellName=name;
+        this.shellName = shellName;
         this.input = input;
         this.executeRate = executeRate;
         this.executeTime = executeTime;
@@ -103,5 +103,13 @@ public class JobPlan {
 
     public void setGmtModify(String gmtModify) {
         this.gmtModify = gmtModify;
+    }
+
+    public String getShellName() {
+        return shellName;
+    }
+
+    public void setShellName(String shellName) {
+        this.shellName = shellName;
     }
 }

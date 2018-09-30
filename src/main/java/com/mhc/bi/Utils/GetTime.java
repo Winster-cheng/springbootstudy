@@ -78,4 +78,20 @@ public class GetTime {
         SimpleDateFormat sdf =new SimpleDateFormat("HH");//只有时分秒
         return sdf.format(date);
     }
+
+
+    /**
+     *@描述 mysql的datetime格式的当前时间
+     *@参数
+     *@返回值
+     *@创建人  baiyan
+     *@创建时间  2018/9/27
+     *@修改人和其它信息
+     */
+    public static String getTimeWithMysqlFormat() {
+        Date date =new Date();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return format.format(date);
+    }
+
 }

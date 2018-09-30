@@ -1,6 +1,6 @@
 package com.mhc.bi.exec;
 
-import com.mhc.bi.domain.TaskInstance;
+import com.mhc.bi.domain.theadvisor.TaskInstance;
 import com.mhc.bi.service.ShellContentService;
 import com.mhc.bi.service.TaskInstanceService;
 import org.springframework.beans.factory.annotation.Autowired;

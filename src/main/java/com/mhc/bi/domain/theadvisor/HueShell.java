@@ -1,4 +1,4 @@
-package com.mhc.bi.domain;
+package com.mhc.bi.domain.theadvisor;
 
 import org.springframework.stereotype.Service;
 
@@ -21,12 +21,12 @@ public class HueShell {
     private String shellName;
     private String shellContent;
     private String paraments;
-
+    private int isHistory;
     public HueShell() {
         super();
     }
 
-    public HueShell(int id, String name, String type, String input,String output,String paraments ,String gmtCreate, String gmtModify, String executeTime, String executeRate, String shellName, String shellContent) {
+    public HueShell(int id, String name, String type, String input,String output,String paraments ,String gmtCreate, String gmtModify, String executeTime, String executeRate, String shellName, String shellContent,int isHistory) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -39,6 +39,7 @@ public class HueShell {
         this.shellName = shellName;
         this.shellContent = shellContent;
         this.paraments=paraments;
+        this.isHistory=isHistory;
     }
 
     public String getParaments() {
@@ -135,5 +136,13 @@ public class HueShell {
 
     public void setShellContent(String shellContent) {
         this.shellContent = shellContent;
+    }
+
+    public int getIsHistory() {
+        return isHistory;
+    }
+
+    public void setIsHistory(int isHistory) {
+        this.isHistory = isHistory;
     }
 }

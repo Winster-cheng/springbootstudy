@@ -1,7 +1,7 @@
 package com.mhc.bi.service.Impl;
 
 import com.mhc.bi.Utils.GetTime;
-import com.mhc.bi.domain.ExecuteInstance;
+import com.mhc.bi.domain.theadvisor.ExecuteInstance;
 import com.mhc.bi.mapper.theadvisor.ExecuteInstanceMapper;
 import com.mhc.bi.service.ExecuteInstanceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +20,6 @@ public class ExecuteInstanceImpl implements ExecuteInstanceService {
     @Override
     public int insert(ExecuteInstance executeInstance) {
 
-        return executeInstanceMapper.insert(executeInstance,GetTime.getTimeStamp("yyyyMMddHHmmss"));
+        return executeInstanceMapper.insert(executeInstance,GetTime.getTimeWithMysqlFormat());
     }
 }

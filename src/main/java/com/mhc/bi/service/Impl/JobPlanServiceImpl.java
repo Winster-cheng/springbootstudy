@@ -1,7 +1,7 @@
 package com.mhc.bi.service.Impl;
 
 import com.mhc.bi.Utils.GetTime;
-import com.mhc.bi.domain.JobPlan;
+import com.mhc.bi.domain.theadvisor.JobPlan;
 import com.mhc.bi.mapper.theadvisor.JobPlanMapper;
 import com.mhc.bi.service.JobPlanService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +37,12 @@ public class JobPlanServiceImpl implements JobPlanService {
 
     @Override
     public int insert(JobPlan jobPlan) {
-        return jobPlanMapper.insertIntoJobPlan(jobPlan,GetTime.getTimeStamp("yyyyMMddHHmmss"));
+        return jobPlanMapper.insertIntoJobPlan(jobPlan, GetTime.getTimeWithMysqlFormat());
+    }
+
+    @Override
+    public JobPlan selectJobPlanByOutput(String output) {
+        return jobPlanMapper.selectJobPlanByOutput(output);
     }
 
     @Override

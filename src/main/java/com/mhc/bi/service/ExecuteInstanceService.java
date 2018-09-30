@@ -1,6 +1,6 @@
 package com.mhc.bi.service;
 
-import com.mhc.bi.domain.ExecuteInstance;
+import com.mhc.bi.domain.theadvisor.ExecuteInstance;
 
 /**
  * @author baiyan

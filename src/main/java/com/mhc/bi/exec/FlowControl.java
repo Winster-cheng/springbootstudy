@@ -1,12 +1,13 @@
 package com.mhc.bi.exec;
 
 import com.mhc.bi.Utils.GetTime;
-import com.mhc.bi.domain.TaskInstance;
+import com.mhc.bi.domain.theadvisor.TaskInstance;
 import com.mhc.bi.exec.execapp.Runner;
 import com.mhc.bi.exec.execapp.ShellRunner;
 import com.mhc.bi.service.ExecuteInstanceService;
 import com.mhc.bi.service.ShellContentService;
 import com.mhc.bi.service.TaskInstanceService;
+import com.mhc.bi.service.alter.DingDingAlert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +29,8 @@ public class FlowControl {
     @Autowired
     ShellContentService shellContentService;
 
+    @Autowired
+    DingDingAlert dingDingAlert;
 
     @Autowired
     ExecuteInstanceService executeInstanceService;
@@ -49,9 +52,9 @@ public class FlowControl {
         startNode = taskInstanceService.selectStartNode(GetTime.getTimeStamp("yyyyMMdd"));
         //从头节点开始启动
         for (TaskInstance taskInstance : startNode) {
-            shellRunner=new ShellRunner(taskInstance, taskInstanceService, shellContentService,executeInstanceService);//这里请解决构造方法中无法引用注解的问题，目前先把注解对象传入
+            shellRunner=new ShellRunner(taskInstance, taskInstanceService, shellContentService,executeInstanceService,dingDingAlert);//这里请解决构造方法中无法引用注解的问题，目前先把注解对象传入
             threadPoolExecutor.submit(shellRunner);
         }
-        return "任务完成";
+        return "所有任务都已经启动";
     }
 }

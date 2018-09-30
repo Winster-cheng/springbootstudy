@@ -1,8 +1,10 @@
 package com.mhc.bi.task;
 
-import com.mhc.bi.domain.TaskInstance;
+import com.mhc.bi.domain.theadvisor.TaskInstance;
+import com.mhc.bi.exec.FlowControl;
 import com.mhc.bi.service.JobPlanService;
 import com.mhc.bi.service.TaskInstanceService;
+import com.mhc.bi.service.alter.DingDingAlert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -20,12 +22,25 @@ public class TaskInstanceSchedule {
     @Autowired
     private TaskInstanceService taskInstanceService;
 
+    @Autowired
+    private FlowControl flowControl;
+
+    @Autowired
+    DingDingAlert dingDingAlert;
     TaskInstance taskInstance;
 
+    //@Scheduled(cron="0*/1 * * * * *") //每秒执行
     @Scheduled(cron = "0 30 23 ? * *")
-//@Scheduled(cron="0*/1 * * * * *") //每秒执行
-    public void createTaskInstance(){
+    public void createTaskInstance() {
+        dingDingAlert.sendMsg("开始生成任务实例");
         taskInstanceService.createTaskInstance();
     }
+
+    @Scheduled(cron = "0 01 00 ? * *")
+    public void start() {
+        dingDingAlert.sendMsg("开始执行任务");
+        flowControl.start();
+    }
+
 
 }

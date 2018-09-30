@@ -1,6 +1,6 @@
 package com.mhc.bi.mapper.theadvisor;
 
-import com.mhc.bi.domain.ExecuteInstance;
+import com.mhc.bi.domain.theadvisor.ExecuteInstance;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;

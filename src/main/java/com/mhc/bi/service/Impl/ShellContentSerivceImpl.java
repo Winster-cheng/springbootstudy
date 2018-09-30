@@ -1,7 +1,7 @@
 package com.mhc.bi.service.Impl;
 
 import com.mhc.bi.Utils.GetTime;
-import com.mhc.bi.domain.ShellContent;
+import com.mhc.bi.domain.theadvisor.ShellContent;
 import com.mhc.bi.mapper.theadvisor.ShellContentMapper;
 import com.mhc.bi.service.ShellContentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +20,13 @@ public class ShellContentSerivceImpl implements ShellContentService {
     private ShellContentMapper shellContentMapper;
 
     public int addShellContent(ShellContent content) {
-        shellContentMapper.insertIntoShellContent(content, GetTime.getTimeStamp("yyyyMMddhhmm"));
+        insertShellContent(content);
         return content.getId();
     }
 
     @Override
     public int insertShellContent(ShellContent content) {
-        return  shellContentMapper.insertIntoShellContent(content, GetTime.getTimeStamp("yyyyMMddhhmm"));
+        return  shellContentMapper.insertIntoShellContent(content, GetTime.getTimeWithMysqlFormat());
     }
 
     @Override

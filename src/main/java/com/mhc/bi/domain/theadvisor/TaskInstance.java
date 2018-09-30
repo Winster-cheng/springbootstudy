@@ -1,4 +1,4 @@
-package com.mhc.bi.domain;
+package com.mhc.bi.domain.theadvisor;
 
 /**
  * @author baiyan
@@ -20,6 +20,7 @@ package com.mhc.bi.domain;
 public class TaskInstance {
     private int id;
     private String name;
+    private String shellName;
     private String input;
     private String output;
     private String gmtCreate;
@@ -142,5 +143,27 @@ public class TaskInstance {
 
     public void setStartTime(String startTime) {
         this.startTime = startTime;
+    }
+
+    public String getShellName() {
+        return shellName;
+    }
+
+    public void setShellName(String shellName) {
+        this.shellName = shellName;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getRealName() {
+        //获取去除了时间后缀的task任务名
+        if (this.name.substring(0, this.name.length() - 2).endsWith("_")) {
+            return this.name.substring(0, this.name.length() - 3);
+        } else {
+            return this.name.substring(0, this.name.length() - 2);
+        }
+
     }
 }

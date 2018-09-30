@@ -1,6 +1,6 @@
 package com.mhc.bi.mapper.theadvisor;
 
-import com.mhc.bi.domain.ShellContent;
+import com.mhc.bi.domain.theadvisor.ShellContent;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;

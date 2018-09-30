@@ -1,6 +1,6 @@
 package com.mhc.bi.mapper.theadvisor;
 
-import com.mhc.bi.domain.JobPlan;
+import com.mhc.bi.domain.theadvisor.JobPlan;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -8,17 +8,10 @@ import java.util.List;
 /**
  * @author baiyan
  * @date 2018/09/14
- * @description private String name;
- * private String input;
- * private String executeRate;
- * private String executeTime;
- * private String output;
- * private String paraments;
- * private String gmtCreate;
- * private String gmtModify;
- */
+ * @description
+*/
 public interface JobPlanMapper {
-    @Insert("insert into jobplan(name,input,execute_rate,execute_time,output,paraments,gmt_create) values(#{jobPlan.name},#{jobPlan.input},#{jobPlan.executeRate},#{jobPlan.executeTime},#{jobPlan.output},#{jobPlan.paraments},#{createTime})")
+    @Insert("insert into jobplan(name,input,execute_rate,execute_time,output,paraments,gmt_create,shellname) values(#{jobPlan.name},#{jobPlan.input},#{jobPlan.executeRate},#{jobPlan.executeTime},#{jobPlan.output},#{jobPlan.paraments},#{createTime},#{jobPlan.shellName})")
     @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
     int insertIntoJobPlan(@Param("jobPlan") JobPlan jobPlan, @Param("createTime") String creatTime);
 
@@ -55,6 +48,21 @@ public interface JobPlanMapper {
             @Result(column = "gmt_modify", property = "gmtModify")
     })
     JobPlan selectJobPlan(String name);
+
+    @Select("select * from jobplan where output=#{output}")
+    @Results({
+            @Result(column = "id", property = "id"),
+            @Result(column = "name", property = "name"),
+            @Result(column = "input", property = "input"),
+            @Result(column = "execute_rate", property = "executeRate"),
+            @Result(column = "execute_time", property = "executeTime"),
+            @Result(column = "output", property = "output"),
+            @Result(column = "paraments", property = "paraments"),
+            @Result(column = "gmt_create", property = "gmtCreate"),
+            @Result(column = "gmt_modify", property = "gmtModify")
+    })
+    JobPlan selectJobPlanByOutput(String output);
+
 
 
 }
