@@ -1,7 +1,6 @@
 package com.mhc.bi.service.Impl;
 
 import com.mhc.bi.domain.hue.DesktopDocument2;
-import com.mhc.bi.domain.theadvisor.HueShell;
 import com.mhc.bi.mapper.hue.DesktopDocument2Mapper;
 import com.mhc.bi.service.DesktopDocument2Service;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -19,7 +19,7 @@ public interface TaskInstanceService {
 
     public List<TaskInstance> selectAll();
 
-    public List<TaskInstance> selectStartNode(String time);
+    public TaskInstance selectStartNode(String time);
 
     public TaskInstance selectByTimeAndOutput(String day, String output);
 

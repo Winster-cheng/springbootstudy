@@ -7,7 +7,7 @@ import com.mhc.bi.exec.execapp.ShellRunner;
 import com.mhc.bi.service.ExecuteInstanceService;
 import com.mhc.bi.service.ShellContentService;
 import com.mhc.bi.service.TaskInstanceService;
-import com.mhc.bi.service.alter.DingDingAlert;
+import com.mhc.bi.service.alert.DingDingAlert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,12 +49,15 @@ public class FlowControl {
      * @修改人和其它信息
      */
     public Object start() {
-        startNode = taskInstanceService.selectStartNode(GetTime.getTimeStamp("yyyyMMdd"));
-        //从头节点开始启动
-        for (TaskInstance taskInstance : startNode) {
-            shellRunner=new ShellRunner(taskInstance, taskInstanceService, shellContentService,executeInstanceService,dingDingAlert);//这里请解决构造方法中无法引用注解的问题，目前先把注解对象传入
-            threadPoolExecutor.submit(shellRunner);
-        }
+//        startNode = taskInstanceService.selectStartNode(GetTime.getTimeStamp("yyyyMMdd"));
+//        //从头节点开始启动
+//        for (TaskInstance taskInstance : startNode) {
+//            shellRunner=new ShellRunner(taskInstance, taskInstanceService, shellContentService,executeInstanceService,dingDingAlert);//这里请解决构造方法中无法引用注解的问题，目前先把注解对象传入
+//            threadPoolExecutor.submit(shellRunner);
+//        }
+        //从固定头节点开始启动
+        TaskInstance taskInstance=taskInstanceService.selectStartNode(GetTime.getTimeStamp("yyyyMMdd"));
+        shellRunner=new ShellRunner(taskInstance,taskInstanceService,shellContentService,executeInstanceService,dingDingAlert);
         return "所有任务都已经启动";
     }
 }

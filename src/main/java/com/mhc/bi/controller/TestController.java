@@ -1,6 +1,6 @@
 package com.mhc.bi.controller;
 
-import com.mhc.bi.service.alter.DingDingAlert;
+import com.mhc.bi.service.alert.DingDingAlert;
 import com.mhc.bi.domain.hue.DesktopDocument2;
 import com.mhc.bi.exec.FlowControl;
 import com.mhc.bi.service.DesktopDocument2Service;

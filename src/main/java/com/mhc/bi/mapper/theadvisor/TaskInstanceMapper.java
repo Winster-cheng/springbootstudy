@@ -74,7 +74,7 @@ public interface TaskInstanceMapper {
     })
     TaskInstance selectByTimeAndOutputName(@Param("day") String day, @Param("name") String name);
 
-    @Select("select * from taskinstance where input is null and  execute_day=#{execute_day}")
+    @Select("select * from taskinstance where name=\"project_etl_start\" and execute_day=#{execute_day} ")
     @Results({
             @Result(column = "id", property = "id"),
             @Result(column = "name", property = "name"),
@@ -88,7 +88,7 @@ public interface TaskInstanceMapper {
             @Result(column = "execute_day", property = "executeDay"),
             @Result(column = "paraments", property = "paraments")
     })
-    List<TaskInstance> selectStartNode(String day);
+    TaskInstance selectStartNode(String day);
 
 
     @Select("select * from taskinstance where input=#{input} and execute_day=#{day}")

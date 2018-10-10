@@ -50,7 +50,7 @@ public class TaskInstanceServiceImpl implements TaskInstanceService {
     }
 
     @Override
-    public List<TaskInstance> selectStartNode(String day) {
+    public TaskInstance selectStartNode(String day) {
         return taskInstanceMapper.selectStartNode(day);
     }
 

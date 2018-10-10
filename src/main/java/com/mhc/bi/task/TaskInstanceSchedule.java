@@ -4,7 +4,7 @@ import com.mhc.bi.domain.theadvisor.TaskInstance;
 import com.mhc.bi.exec.FlowControl;
 import com.mhc.bi.service.JobPlanService;
 import com.mhc.bi.service.TaskInstanceService;
-import com.mhc.bi.service.alter.DingDingAlert;
+import com.mhc.bi.service.alert.DingDingAlert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;

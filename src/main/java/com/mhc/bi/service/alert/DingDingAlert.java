@@ -1,4 +1,4 @@
-package com.mhc.bi.service.alter;
+package com.mhc.bi.service.alert;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;

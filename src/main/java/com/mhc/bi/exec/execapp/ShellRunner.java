@@ -9,14 +9,10 @@ import com.mhc.bi.exec.FlowControl;
 import com.mhc.bi.service.ExecuteInstanceService;
 import com.mhc.bi.service.ShellContentService;
 import com.mhc.bi.service.TaskInstanceService;
-import com.mhc.bi.service.alter.DingDingAlert;
-import org.apache.logging.log4j.Logger;
+import com.mhc.bi.service.alert.DingDingAlert;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
