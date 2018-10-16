@@ -53,6 +53,8 @@
             <artifactId>spring-boot-devtools</artifactId>
             <optional>true</optional>
         </dependency>
+
+        <!--连接钉钉-->
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpcore</artifactId>
@@ -63,8 +65,21 @@
             <artifactId>httpclient</artifactId>
             <version>4.5.2</version>
         </dependency>
-
-
+        <!--连接讴歌-->
+        <dependency>
+            <groupId>com.mhc.framework</groupId>
+            <artifactId>framework-support-auth</artifactId>
+            <version>1.2.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.mhc.framework</groupId>
+            <artifactId>framework-core</artifactId>
+            <version>1.2.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
@@ -75,6 +90,4 @@
             </plugin>
         </plugins>
     </build>
-
-
 </project>

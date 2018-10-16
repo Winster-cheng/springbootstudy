@@ -34,6 +34,13 @@ public class TestController {
         return desktopDocument2Service.getDesktopDocument2(name);
     }
 
+    @GetMapping("/test1")
+    public Object loginOut(){
+        return "test1";
+    }
+
+
+    //钉钉手动接入
     @GetMapping("dingding")
     public void sendDingDingMsg(String msg){
         dingDingAlert.sendMsg(msg);

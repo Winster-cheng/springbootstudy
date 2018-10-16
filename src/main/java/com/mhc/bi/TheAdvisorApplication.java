@@ -13,6 +13,5 @@ import java.sql.Connection;
 public class TheAdvisorApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(TheAdvisorApplication.class, args);
-		System.out.println("Hello world");
 	}
 }
