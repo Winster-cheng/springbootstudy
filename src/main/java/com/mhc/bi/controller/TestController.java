@@ -34,9 +34,14 @@ public class TestController {
         return desktopDocument2Service.getDesktopDocument2(name);
     }
 
-    @GetMapping("/test1")
+    @GetMapping("loginValidate")
     public Object loginOut(){
-        return "test1";
+        return "我是跳转界面";
+    }
+
+    @GetMapping("test1")
+    public Object tset1(){
+        return "我是首页地址";
     }
 
 
