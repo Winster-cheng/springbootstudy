@@ -1,66 +1,101 @@
-import React, { Fragment } from 'react';
-import { formatMessage, FormattedMessage } from 'umi/locale';
-import { Button, Icon, Card } from 'antd';
-import Result from '@/components/Result';
+import React, { Component } from 'react';
+import { connect } from 'dva';
+import { Tree, Row, Col, Button } from 'antd';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
+import { Controlled as CodeMirror } from 'react-codemirror2';
+import './TaskSubmit.less';
+// require('codemirror/lib/codemirror.css');
 
-const extra = (
-  <Fragment>
-    <div
-      style={{
-        fontSize: 16,
-        color: 'rgba(0, 0, 0, 0.85)',
-        fontWeight: '500',
-        marginBottom: 16,
-      }}
-    >
-      <FormattedMessage
-        id="app.result.error.hint-title"
-        defaultMessage="The content you submitted has the following error:"
-      />
-    </div>
-    <div style={{ marginBottom: 16 }}>
-      <Icon style={{ color: '#f5222d', marginRight: 8 }} type="close-circle-o" />
-      <FormattedMessage
-        id="app.result.error.hint-text1"
-        defaultMessage="Your account has been frozen"
-      />
-      <a style={{ marginLeft: 16 }}>
-        <FormattedMessage id="app.result.error.hint-btn1" defaultMessage="Thaw immediately" />
-        <Icon type="right" />
-      </a>
-    </div>
-    <div>
-      <Icon style={{ color: '#f5222d', marginRight: 8 }} type="close-circle-o" />
-      <FormattedMessage
-        id="app.result.error.hint-text2"
-        defaultMessage="Your account is not yet eligible to apply"
-      />
-      <a style={{ marginLeft: 16 }}>
-        <FormattedMessage id="app.result.error.hint-btn2" defaultMessage="Upgrade immediately" />
-        <Icon type="right" />
-      </a>
-    </div>
-  </Fragment>
-);
+const { DirectoryTree, TreeNode } = Tree;
 
-const actions = (
-  <Button type="primary">
-    <FormattedMessage id="app.result.error.btn-text" defaultMessage="Return to modify" />
-  </Button>
-);
+@connect(({ task, loading }) => ({
+  taskTreeData: task.treeData,
+  loading: loading.models.task,
+}))
+class TaskSubmit extends Component {
+  constructor(props, context) {
+    super(props, context);
+    this.state = {
+      code: '',
+    };
+  }
 
-export default () => (
-  <PageHeaderWrapper>
-    <Card bordered={false}>
-      <Result
-        type="error"
-        title={formatMessage({ id: 'app.result.error.title' })}
-        description={formatMessage({ id: 'app.result.error.description' })}
-        extra={extra}
-        actions={actions}
-        style={{ marginTop: 48, marginBottom: 16 }}
-      />
-    </Card>
-  </PageHeaderWrapper>
-);
+  componentDidMount() {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'task/fetchTaskTreeData',
+    });
+  }
+
+  onSelect = () => {
+    console.log('Trigger Select');
+  };
+
+  onExpand = () => {
+    console.log('Trigger Expand');
+  };
+
+  render() {
+    const {
+      // loading,
+      taskTreeData,
+    } = this.props;
+    const { code } = this.state;
+    const TreeNodeList = data =>
+      data ? (
+        data.map(node => {
+          if (node.children) {
+            return (
+              <TreeNode title={node.name} key={node.id}>
+                {TreeNodeList(node.children)}
+              </TreeNode>
+            );
+          }
+          return <TreeNode title={node.name} key={node.id} isLeaf />;
+        })
+      ) : (
+        <TreeNode title="加载中" key={-1} isLeaf />
+      );
+    const options = {
+      mode: 'xml',
+      theme: 'material',
+      lineNumbers: true,
+    };
+    return (
+      <PageHeaderWrapper>
+        <Row>
+          <Col span={4}>
+            <DirectoryTree
+              multiple
+              defaultExpandAll
+              onSelect={this.onSelect}
+              onExpand={this.onExpand}
+            >
+              {TreeNodeList(taskTreeData)}
+            </DirectoryTree>
+          </Col>
+          <Col span={20}>
+            <Row>
+              <Button>保存</Button>
+              <Button>提交</Button>
+              <Button>查看依赖</Button>
+            </Row>
+            <Row>
+              <CodeMirror
+                value={code}
+                options={options}
+                onBeforeChange={(editor, data, value) => {
+                  {
+                    /* this.setState({value}); */
+                  }
+                }}
+                onChange={(editor, data, value) => {}}
+              />
+            </Row>
+          </Col>
+        </Row>
+      </PageHeaderWrapper>
+    );
+  }
+}
+export default TaskSubmit;

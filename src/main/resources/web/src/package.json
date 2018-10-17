@@ -31,6 +31,7 @@
     "bizcharts": "^3.2.2",
     "bizcharts-plugin-slider": "^2.0.3",
     "classnames": "^2.2.6",
+    "codemirror": "^5.40.2",
     "dva": "^2.4.0",
     "enquire-js": "^0.2.1",
     "hash.js": "^1.1.5",
@@ -46,6 +47,8 @@
     "qs": "^6.5.2",
     "rc-animate": "^2.4.4",
     "react": "^16.5.1",
+    "react-codemirror": "^1.0.0",
+    "react-codemirror2": "^5.1.0",
     "react-container-query": "^0.11.0",
     "react-copy-to-clipboard": "^5.0.1",
     "react-document-title": "^2.0.3",
@@ -103,10 +106,5 @@
     "> 1%",
     "last 2 versions",
     "not ie <= 10"
-  ],
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run lint-staged"
-    }
-  }
+  ]
 }
