@@ -1,66 +1,96 @@
-import React, { Fragment } from 'react';
-import { formatMessage, FormattedMessage } from 'umi/locale';
-import { Button, Icon, Card } from 'antd';
-import Result from '@/components/Result';
+import React, { PureComponent } from 'react';
+import { connect } from 'dva';
+import { Row, Col, Button, Form, Input, Card, Badge } from 'antd';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
+import GeneralTable from '@/components/GeneralTable';
+import styles from "./JobPlan.less"
 
-const extra = (
-  <Fragment>
-    <div
-      style={{
-        fontSize: 16,
-        color: 'rgba(0, 0, 0, 0.85)',
-        fontWeight: '500',
-        marginBottom: 16,
-      }}
-    >
-      <FormattedMessage
-        id="app.result.error.hint-title"
-        defaultMessage="The content you submitted has the following error:"
-      />
-    </div>
-    <div style={{ marginBottom: 16 }}>
-      <Icon style={{ color: '#f5222d', marginRight: 8 }} type="close-circle-o" />
-      <FormattedMessage
-        id="app.result.error.hint-text1"
-        defaultMessage="Your account has been frozen"
-      />
-      <a style={{ marginLeft: 16 }}>
-        <FormattedMessage id="app.result.error.hint-btn1" defaultMessage="Thaw immediately" />
-        <Icon type="right" />
-      </a>
-    </div>
-    <div>
-      <Icon style={{ color: '#f5222d', marginRight: 8 }} type="close-circle-o" />
-      <FormattedMessage
-        id="app.result.error.hint-text2"
-        defaultMessage="Your account is not yet eligible to apply"
-      />
-      <a style={{ marginLeft: 16 }}>
-        <FormattedMessage id="app.result.error.hint-btn2" defaultMessage="Upgrade immediately" />
-        <Icon type="right" />
-      </a>
-    </div>
-  </Fragment>
-);
+const { Item } = Form;
 
-const actions = (
-  <Button type="primary">
-    <FormattedMessage id="app.result.error.btn-text" defaultMessage="Return to modify" />
-  </Button>
-);
+@connect(({ job, loading }) => ({
+  jobList: job.jobList,
+  loading: loading.models.job,
+}))
+@Form.create()
+class JobPlan extends PureComponent {
+  state = {
+  }
 
-export default () => (
-  <PageHeaderWrapper>
-    <Card bordered={false}>
-      <Result
-        type="error"
-        title={formatMessage({ id: 'app.result.error.title' })}
-        description={formatMessage({ id: 'app.result.error.description' })}
-        extra={extra}
-        actions={actions}
-        style={{ marginTop: 48, marginBottom: 16 }}
-      />
-    </Card>
-  </PageHeaderWrapper>
-);
+  scroll = { x: false };
+
+  columns = [
+    { title: '任务名称', dataIndex: 'jobName'},
+    { title: '修改日期', dataIndex: 'updateDate'},
+    { title: '任务类型', dataIndex: 'planType'},
+    { title: '责任人', dataIndex: 'responser'},
+    { title: '调度类型', dataIndex: 'jobType'},
+  ];
+
+  componentDidMount() {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'job/fetchJobs',
+    });
+  }
+
+  handleSearch = () => {
+    
+  }
+
+  handleFormReset = () => {
+
+  }
+
+  renderForm = () => {
+    const { getFieldDecorator } = this.props.form;
+    return (
+      <Form onSubmit={this.handleSearch} layout="inline">
+        <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+          <Col md={8} sm={24}>
+            <Item label="请输入脚本名称">
+              {getFieldDecorator('searchJobName')(<Input />)}
+            </Item>
+          </Col>
+          <Col md={8} sm={24}>
+            <span className="SubmitButtons">
+              <Button type="primary" htmlType="submit">
+                查询
+              </Button>
+              <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>
+                重置
+              </Button>
+            </span>
+          </Col>
+        </Row>
+      </Form>
+    );
+  }
+
+  handleGeneralTableChange = () => {
+    
+  }
+
+  render() {
+    const {
+      loading,
+      jobList,
+    } = this.props;
+    console.log(jobList)
+    return (
+      <PageHeaderWrapper>
+        <div className={styles.CommonTableList}>
+          <div className="CommonTableList-Form">{this.renderForm()}</div>
+          <GeneralTable
+            rowKey="jobId"
+            scroll={this.scroll}
+            loading={loading}
+            data={jobList}
+            columns={this.columns}
+            onChange={this.handleGeneralTableChange}
+          />
+        </div>
+      </PageHeaderWrapper>
+    );
+  }
+}
+export default JobPlan;

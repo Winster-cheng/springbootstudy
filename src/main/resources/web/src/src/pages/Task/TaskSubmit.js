@@ -1,10 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
+import router from 'umi/router';
 import { Tree, Row, Col, Button } from 'antd';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
-import { Controlled as CodeMirror } from 'react-codemirror2';
-import './TaskSubmit.less';
-// require('codemirror/lib/codemirror.css');
+import {UnControlled as CodeMirror} from 'react-codemirror2'
+
+require('codemirror/mode/javascript/javascript');
+require('codemirror/lib/codemirror.css');
+require('codemirror/theme/neo.css');
+
+import styles from "./TaskSubmit.less"
 
 const { DirectoryTree, TreeNode } = Tree;
 
@@ -16,7 +21,9 @@ class TaskSubmit extends Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
-      code: '',
+      initCode: 'const a = 0;',
+      codeValue: "",
+      initResult: "提交成功"
     };
   }
 
@@ -35,12 +42,21 @@ class TaskSubmit extends Component {
     console.log('Trigger Expand');
   };
 
+  saveCode = () => {
+    const a = this.state.codeValue
+    console.log(`${a}`)
+  }
+
+  submitCode = () => {
+    console.log(this.state.codeValue)
+  }
+
   render() {
     const {
       // loading,
       taskTreeData,
     } = this.props;
-    const { code } = this.state;
+    const { initCode, initResult } = this.state;
     const TreeNodeList = data =>
       data ? (
         data.map(node => {
@@ -56,15 +72,10 @@ class TaskSubmit extends Component {
       ) : (
         <TreeNode title="加载中" key={-1} isLeaf />
       );
-    const options = {
-      mode: 'xml',
-      theme: 'material',
-      lineNumbers: true,
-    };
     return (
       <PageHeaderWrapper>
-        <Row>
-          <Col span={4}>
+        <Row gutter={8}>
+          <Col span={4} className={styles.treeContainer}>
             <DirectoryTree
               multiple
               defaultExpandAll
@@ -76,20 +87,32 @@ class TaskSubmit extends Component {
           </Col>
           <Col span={20}>
             <Row>
-              <Button>保存</Button>
-              <Button>提交</Button>
-              <Button>查看依赖</Button>
+              <Button onClick={this.saveCode}>保存</Button>
+              <Button onClick={this.submitCode}>提交</Button>
+              <Button onClick={() => router.push('/jobPlan?jobId=1')}>查看依赖</Button>
             </Row>
-            <Row>
+            <Row className={styles.codeRow}>
               <CodeMirror
-                value={code}
-                options={options}
-                onBeforeChange={(editor, data, value) => {
-                  {
-                    /* this.setState({value}); */
-                  }
+                value={initCode}
+                options={{
+                  theme: 'neo',
+                  lineNumbers: true
                 }}
-                onChange={(editor, data, value) => {}}
+                onChange={(editor, data, value) => {
+                  this.setState({codeValue: value})
+                }}
+              />
+              
+            </Row>
+            <Row className={styles.resultRow}>
+              <CodeMirror
+                value={initResult}
+                options={{
+                  theme: 'neo',
+                  lineNumbers: true,
+                  readOnly: true
+                }}
+                width="100px"
               />
             </Row>
           </Col>

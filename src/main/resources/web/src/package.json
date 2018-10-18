@@ -47,7 +47,6 @@
     "qs": "^6.5.2",
     "rc-animate": "^2.4.4",
     "react": "^16.5.1",
-    "react-codemirror": "^1.0.0",
     "react-codemirror2": "^5.1.0",
     "react-container-query": "^0.11.0",
     "react-copy-to-clipboard": "^5.0.1",

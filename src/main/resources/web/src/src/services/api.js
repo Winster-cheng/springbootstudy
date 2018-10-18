@@ -128,3 +128,10 @@ export async function getFakeCaptcha(mobile) {
 export async function queryTaskTreeData() {
   return request(`/api/task/getTreeData`);
 }
+
+export async function queryJobs(params) {
+  return request(`/api/job/getJobPlans`, {
+    method: 'POST',
+    body: params,
+  });
+}
