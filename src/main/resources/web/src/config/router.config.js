@@ -6,6 +6,10 @@ export default [
     authority: ['admin', 'user'],
     routes: [
       {
+        path: '/',
+        redirect: '/taskSubmit',
+      },
+      {
         path: '/taskSubmit',
         name: 'taskSubmit',
         icon: 'dashboard',

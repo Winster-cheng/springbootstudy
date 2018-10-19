@@ -30,7 +30,6 @@ export default class GeneralTable extends PureComponent {
       showTotal: total => `共${total}条`,
       ...pagination,
     };
-    console.log(list)
     return (
       <div className={styles.generalTable}>
         <Table

@@ -124,14 +124,3 @@ export async function queryNotices() {
 export async function getFakeCaptcha(mobile) {
   return request(`/api/captcha?mobile=${mobile}`);
 }
-
-export async function queryTaskTreeData() {
-  return request(`/api/task/getTreeData`);
-}
-
-export async function queryJobs(params) {
-  return request(`/api/job/getJobPlans`, {
-    method: 'POST',
-    body: params,
-  });
-}
