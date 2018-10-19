@@ -1,4 +1,4 @@
-import { queryJobs } from '@/services/api';
+import { queryJobs } from '@/services/job';
 
 export default {
   namespace: 'job',

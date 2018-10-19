@@ -1,4 +1,4 @@
-import { queryTaskTreeData } from '@/services/api';
+import { queryTaskTreeData } from '@/services/task';
 
 export default {
   namespace: 'task',

@@ -74,7 +74,7 @@ class TaskSubmit extends Component {
       );
     return (
       <PageHeaderWrapper>
-        <Row gutter={8}>
+        <Row className={styles.container}>
           <Col span={4} className={styles.treeContainer}>
             <DirectoryTree
               multiple
@@ -85,7 +85,7 @@ class TaskSubmit extends Component {
               {TreeNodeList(taskTreeData)}
             </DirectoryTree>
           </Col>
-          <Col span={20}>
+          <Col span={20} className={styles.codeContainer}>
             <Row>
               <Button onClick={this.saveCode}>保存</Button>
               <Button onClick={this.submitCode}>提交</Button>
@@ -112,7 +112,6 @@ class TaskSubmit extends Component {
                   lineNumbers: true,
                   readOnly: true
                 }}
-                width="100px"
               />
             </Row>
           </Col>

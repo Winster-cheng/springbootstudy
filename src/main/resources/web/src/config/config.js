@@ -109,7 +109,7 @@ export default {
       },
     ],
   },
-
+  // urlLoaderExcludes: [/MenuIcon.svg$/],
   chainWebpack: webpackPlugin,
   cssnano: {
     mergeRules: false,

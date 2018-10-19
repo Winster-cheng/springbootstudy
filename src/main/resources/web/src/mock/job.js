@@ -20,5 +20,5 @@ const jobs = [
   };
    
 export default {
-    'POST /api/job/getJobPlans': (req,res) => res.json(jobData)
+    'POST /job/getJobPlans': (req,res) => res.json(jobData)
 }

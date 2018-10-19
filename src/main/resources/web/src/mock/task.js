@@ -1,5 +1,5 @@
 export default {
-  'GET /api/task/getTreeData': (req, res) =>
+  'GET /task/getTreeData': (req, res) =>
     res.json([
       {
         name: 'parent',
