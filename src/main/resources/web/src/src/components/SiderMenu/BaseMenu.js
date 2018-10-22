@@ -7,14 +7,24 @@ import { formatMessage } from 'umi/locale';
 import pathToRegexp from 'path-to-regexp';
 import { urlToList } from '../_utils/pathTools';
 import styles from './index.less';
+import taskSubmitMenuIcon from "../../assets/icon_task_submit.svg"
+import jobPlanMenuIcon from "../../assets/icon_job_plan.svg"
+import taskInstanceMenuIcon from "../../assets/icon_task_instance.svg"
 
 const { SubMenu } = Menu;
-
+const customMenuIcon = {
+  "icon_task_submit": taskSubmitMenuIcon,
+  "icon_job_plan": jobPlanMenuIcon,
+  "icon_task_instance": taskInstanceMenuIcon
+}
 // Allow menu.js config icon as string or ReactNode
 //   icon: 'setting',
 //   icon: 'http://demo.com/icon.png',
 //   icon: <Icon type="setting" />,
 const getIcon = icon => {
+  if (typeof icon === 'string' && icon.indexOf('icon_') >= 0) {
+    return <Icon component={customMenuIcon[icon]} />;
+  }
   if (typeof icon === 'string' && icon.indexOf('http') === 0) {
     return <img src={icon} alt="icon" className={styles.icon} />;
   }

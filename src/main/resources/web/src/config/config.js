@@ -59,7 +59,7 @@ export default {
     'primary-color': defaultSettings.primaryColor,
   },
   externals: {
-    '@antv/data-set': 'DataSet',
+    // '@antv/data-set': 'DataSet',
   },
   // proxy: {
   //   '/server/api/': {
@@ -109,7 +109,7 @@ export default {
       },
     ],
   },
-  // urlLoaderExcludes: [/MenuIcon.svg$/],
+  urlLoaderExcludes: [/icon_\w+.svg(\?v=\d+.\d+.\d+)?$/],
   chainWebpack: webpackPlugin,
   cssnano: {
     mergeRules: false,

@@ -26,7 +26,9 @@ module.exports = {
     'jsx-a11y/anchor-is-valid': 0,
     'linebreak-style': 0,
     'react/destructuring-assignment': 0,
-    'import/first': 0
+    'import/first': 0,
+    'react/jsx-closing-tag-location': 0,
+    'no-script-url': 0
   },
   settings: {
     polyfills: ['fetch', 'promises', 'url'],

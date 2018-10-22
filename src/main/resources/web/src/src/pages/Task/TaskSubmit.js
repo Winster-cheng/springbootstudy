@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import router from 'umi/router';
-import { Tree, Row, Col, Button } from 'antd';
+import { Tree, Row, Col, Button, Spin, Icon, Tabs, Menu, Dropdown } from 'antd';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
-import {UnControlled as CodeMirror} from 'react-codemirror2'
+import {UnControlled as CodeMirror} from 'react-codemirror2';
+import Folder from "../../assets/icon_folder.svg";
+import OpenFolder from "../../assets/icon_folder_open.svg";
 
 require('codemirror/mode/javascript/javascript');
 require('codemirror/lib/codemirror.css');
@@ -11,11 +13,12 @@ require('codemirror/theme/neo.css');
 
 import styles from "./TaskSubmit.less"
 
-const { DirectoryTree, TreeNode } = Tree;
+const { TreeNode } = Tree;
+const { TabPane } = Tabs;
 
 @connect(({ task, loading }) => ({
   taskTreeData: task.treeData,
-  loading: loading.models.task,
+  treeDataLoading: loading.effects["task/fetchTaskTreeData"],
 }))
 class TaskSubmit extends Component {
   constructor(props, context) {
@@ -23,7 +26,28 @@ class TaskSubmit extends Component {
     this.state = {
       initCode: 'const a = 0;',
       codeValue: "",
-      initResult: "提交成功"
+      panes: [
+        { title: '任务一', key: '1' },
+        { title: '任务一任务一任务一', key: '2' },
+        { title: '任务一', key: '3' },
+        // { title: 'Tab 2', content: 'Content of Tab Pane 2', key: '4' },
+        // { title: 'Tab 1', content: 'Content of Tab Pane 1', key: '5' },
+        // { title: 'Tab 2', content: 'Content of Tab Pane 2', key: '6' },
+        // { title: 'Tab 1', content: 'Content of Tab Pane 1', key: '7' },
+        // { title: 'Tab 2', content: 'Content of Tab Pane 2', key: '8' },
+        // { title: 'Tab 1', content: 'Content of Tab Pane 1', key: '9' },
+        // { title: 'Tab 2', content: 'Content of Tab Pane 2', key: '10' },
+        // { title: 'Tab 2', content: 'Content of Tab Pane 2', key: '61' },
+        // { title: 'Tab 1', content: 'Content of Tab Pane 1', key: '71' },
+        // { title: 'Tab 2', content: 'Content of Tab Pane 2', key: '81' },
+        // { title: 'Tab 1', content: 'Content of Tab Pane 1', key: '91' },
+        // { title: 'Tab 2', content: 'Content of Tab Pane 2', key: '101' },
+        // { title: 'Tab 2', content: 'Content of Tab Pane 2', key: '62' },
+        // { title: 'Tab 1', content: 'Content of Tab Pane 1', key: '72' },
+        // { title: 'Tab 2', content: 'Content of Tab Pane 2', key: '82' },
+        // { title: 'Tab 1', content: 'Content of Tab Pane 1', key: '92' },
+        // { title: 'Tab 2', content: 'Content of Tab Pane 2', key: '102' },
+      ]
     };
   }
 
@@ -32,6 +56,8 @@ class TaskSubmit extends Component {
     dispatch({
       type: 'task/fetchTaskTreeData',
     });
+   const containerHeight = document.body.clientHeight - 152;
+   document.getElementsByClassName("task-submit-container")[0].style.height = `${containerHeight}px`
   }
 
   onSelect = () => {
@@ -51,69 +77,112 @@ class TaskSubmit extends Component {
     console.log(this.state.codeValue)
   }
 
+  dropDownMenu = () => {
+    const menu = (
+      <Menu>
+        <Menu.Item>
+          <a href="javascript:;" onClick={this.closeOtherTab}>关闭其他</a>
+        </Menu.Item>
+        <Menu.Item>
+          <a href="javascript:;" onClick={this.closeAllTab}>关闭所有</a>
+        </Menu.Item>
+      </Menu>
+    );
+    return (
+      <Dropdown overlay={menu} className={styles.dropDownMenu}>
+        <a className="ant-dropdown-link" href="#">
+          <Icon type="ellipsis" theme="outlined" className={styles.dropDownMenuIcon} />
+        </a>
+      </Dropdown>
+    )
+  }
+
+  LeafIcon = () => <span className={styles.leafDot} />
+
+  TreeNodeList = data =>
+  data ? (
+    data.map(node => {
+      if (node.children) {
+        return (
+          <TreeNode 
+            icon={({ expanded }) => <Icon component={expanded ? OpenFolder : Folder} />}
+            title={node.name}
+            key={node.id}
+            selectable={false}
+          >
+            {this.TreeNodeList(node.children)}
+          </TreeNode>
+        );
+      }
+      return <TreeNode icon={this.LeafIcon()} title={node.name} key={node.id} isLeaf />;
+    })
+  ) : (
+    <TreeNode title="加载中" icon={<Spin />} key={-1} isLeaf />
+  );
+
+  onTabChange = () => {
+
+  }
+
   render() {
     const {
-      // loading,
+      treeDataLoading,
       taskTreeData,
     } = this.props;
-    const { initCode, initResult } = this.state;
-    const TreeNodeList = data =>
-      data ? (
-        data.map(node => {
-          if (node.children) {
-            return (
-              <TreeNode title={node.name} key={node.id}>
-                {TreeNodeList(node.children)}
-              </TreeNode>
-            );
-          }
-          return <TreeNode title={node.name} key={node.id} isLeaf />;
-        })
-      ) : (
-        <TreeNode title="加载中" key={-1} isLeaf />
-      );
+    const { initCode } = this.state;
+    
     return (
       <PageHeaderWrapper>
-        <Row className={styles.container}>
-          <Col span={4} className={styles.treeContainer}>
-            <DirectoryTree
-              multiple
-              defaultExpandAll
+        <Row className="task-submit-container" style={{background: "#FFF"}}>
+          <Col span={4} style={{height: "100%",background: "#fff",borderRight: "1px solid #E7E7E7"}}>
+            {treeDataLoading ? <Spin /> : 
+            <Tree
               onSelect={this.onSelect}
               onExpand={this.onExpand}
-            >
-              {TreeNodeList(taskTreeData)}
-            </DirectoryTree>
+              showIcon
+            >{this.TreeNodeList(taskTreeData)}
+            </Tree>}
           </Col>
-          <Col span={20} className={styles.codeContainer}>
-            <Row>
-              <Button onClick={this.saveCode}>保存</Button>
-              <Button onClick={this.submitCode}>提交</Button>
-              <Button onClick={() => router.push('/jobPlan?jobId=1')}>查看依赖</Button>
+          <Col span={20} style={{height: "100%",background: "#FAFAFA",position: "relative"}}>
+            <Row className={styles.tabWrap}>
+              <Tabs
+                type="card"
+                onChange={this.onTabChange}
+              >
+                {this.state.panes.map(pane =>
+                  <TabPane
+                    tab={<span className={styles.tab}>
+                      {pane.title}
+                      <Icon
+                        className={styles['close-icon']}
+                        type="close-circle"
+                        theme="outlined"
+                      />
+                    </span>}
+                    key={pane.key}
+                  />)}
+              </Tabs>
+              {this.dropDownMenu()}
             </Row>
-            <Row className={styles.codeRow}>
+            <Row style={{height: "calc(100% - 48px)"}}>
               <CodeMirror
                 value={initCode}
                 options={{
-                  theme: 'neo',
-                  lineNumbers: true
-                }}
+                      theme: 'neo',
+                      lineNumbers: true
+                    }}
                 onChange={(editor, data, value) => {
-                  this.setState({codeValue: value})
-                }}
-              />
-              
-            </Row>
-            <Row className={styles.resultRow}>
-              <CodeMirror
-                value={initResult}
-                options={{
-                  theme: 'neo',
-                  lineNumbers: true,
-                  readOnly: true
-                }}
+                      this.setState({codeValue: value})
+                    }}
               />
             </Row>
+          </Col>  
+        </Row>
+        <Row className={styles["btn-wrap"]}>
+          <Col span={24} className={styles.btnCol}>
+            <Button type="primary" onClick={this.saveCode} className={styles.btn}>保存</Button>
+            <Button onClick={this.submitCode} className={styles.btn}>提交</Button>
+            <Button onClick={() => router.push('/jobPlan?jobId=1')} className={styles.btn2}>查看依赖</Button>
           </Col>
         </Row>
       </PageHeaderWrapper>

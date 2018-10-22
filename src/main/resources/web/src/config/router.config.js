@@ -12,19 +12,19 @@ export default [
       {
         path: '/taskSubmit',
         name: 'taskSubmit',
-        icon: "https://img.maihaoche.com/mhc_fe/ghost/taskSubmitMenuIcon.svg",
+        icon: "icon_task_submit",
         component: './Task/TaskSubmit',
       },
       {
         path: '/jobPlan',
         name: 'jobPlan',
-        icon: "https://img.maihaoche.com/mhc_fe/ghost/jobPlanMenuIcon.svg",
+        icon: "icon_job_plan",
         component: './Job/jobPlan',
       },
       {
         path: '/taskInstance',
         name: 'taskInstance',
-        icon: "https://img.maihaoche.com/mhc_fe/ghost/taskInstanceMenuIcon.svg",
+        icon: "icon_task_instance",
         component: './Task/taskInstance',
       },
     ],

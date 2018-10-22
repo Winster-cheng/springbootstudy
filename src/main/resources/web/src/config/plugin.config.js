@@ -15,22 +15,22 @@ export default config => {
       outFile,
     },
   ]);
-  // config.module
-  // .rule('svg')
-  // .test(/MenuIcon.svg(\?v=\d+.\d+.\d+)?$/)
-  // .use([
-  //     {
-  //         loader: 'babel-loader'
-  //     },
-  //     {
-  //         loader: '@svgr/webpack',
-  //         options: {
-  //             babel: false,
-  //             icon: true
-  //         }
-  //     }
-  // ])
-  // .loader(require.resolve('@svgr/webpack'));
+  config.module
+  .rule('svg')
+  .test(/icon_\w+.svg(\?v=\d+.\d+.\d+)?$/)
+  .use([
+      {
+          loader: 'babel-loader'
+      },
+      {
+          loader: '@svgr/webpack',
+          options: {
+              babel: false,
+              icon: true,
+          }
+      }
+  ])
+  .loader(require.resolve('@svgr/webpack'));
   config.plugin('ant-design-theme').use(AntDesignThemePlugin, [
     {
       antDir: path.join(__dirname, '../node_modules/antd'),

@@ -26,7 +26,7 @@ export default class GeneralTable extends PureComponent {
       showSizeChanger: true,
       showQuickJumper: true,
       defaultCurrent: 1,
-      defaultPageSize: 20,
+      defaultPageSize: 10,
       showTotal: total => `共${total}条`,
       ...pagination,
     };

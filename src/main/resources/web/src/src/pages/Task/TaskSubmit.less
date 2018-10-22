@@ -1,22 +1,69 @@
 @import '~antd/lib/style/themes/default.less';
 
-.container{
-    height: 85vh;
-    
-    .treeContainer{
-        height: 100%;
-        background: #fff;
-        border-right: 1px solid #E7E7E7;
+:global{
+    .ant-tree .anticon > svg{
+        font-size: 18px;
+        vertical-align: middle;
     }
-    .codeContainer{
-        height: 100%;
-        background: #FAFAFA;
-        .codeRow{
-            // height: 60vh;
+    .ant-tabs-bar {
+        border-bottom: none;
+        margin-bottom: 0;
+    }
+}
+
+.leafDot{
+    width: 4px;
+    height: 4px;
+    display: inline-block;
+    background-color: rgba(0,0,0,0.45);
+    border-radius: 4px;
+    vertical-align: middle;
+}
+.tabWrap{
+    padding: 8px 40px 0 10px;
+    border-bottom: 1px solid #E7E7E7;
+    position: relative;
+    .dropDownMenu{
+        position: absolute;
+        top: 18px;
+        right: 16px;
+        .dropDownMenuIcon{
+            font-size: 20px;
         }
-        .resultRow{
-            margin-top: 5px;
-            // height: 18vh;
+    }
+    .tab{
+        max-width: 96px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        display: inline-block;
+        padding-right: 32px;
+        position: relative;
+        .close-icon{
+            position: absolute;
+            right: 0;
+            top: 12px;
+            margin-right: 0;
+        }
+    }
+}
+
+// .codeContainer{
+//     height: calc(100% - 48px);
+// }
+.btn-wrap{
+    box-shadow: 0px -2px 6px 0px rgba(176,176,176,0.2);
+    margin-left: -24px;
+    .btnCol{
+        background-color: #fff;
+        height: 64px;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        .btn{
+            margin-right: 8px;
+        }
+        .btn2{
+            margin-right: 16px;
         }
     }
 }
