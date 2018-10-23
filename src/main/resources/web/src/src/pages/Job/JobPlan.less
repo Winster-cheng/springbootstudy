@@ -2,9 +2,32 @@
 
 .fixedHeightTableList {
   margin-bottom: 16px;
+  :global {
+    .ant-table-footer{
+      background: #fff;
+      padding: 0
+    }
+    .ant-table-thead th:not(:first-child):not(:last-child),
+    .ant-table-tbody td:not(:first-child):not(:last-child){
+      border-right-color: transparent;
+    }
+  }
+  .graphContainer{
+    background: #fff;
+    height: 645px;
+    position: absolute;
+    z-index: 1;
+    right: -2000px;
+    top: 88px;
+    box-shadow: -2px 0px 6px 0px rgba(176,176,176,.3);
+    transition-duration: .4s;
+    transition-property: right;
+    transition-timing-function: ease-in;
+  }
 }
 .tdEllisps{
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
+  display: inline-block;
 }

@@ -26,6 +26,7 @@
   },
   "dependencies": {
     "@antv/data-set": "^0.9.6",
+    "@antv/g6": "^2.1.4-beta.3",
     "@babel/runtime": "^7.1.2",
     "antd": "^3.10.0",
     "classnames": "^2.2.6",

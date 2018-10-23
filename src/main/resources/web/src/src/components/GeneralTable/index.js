@@ -15,6 +15,8 @@ export default class GeneralTable extends PureComponent {
     const {
       data: {list, ...pagination},
       loading,
+      bordered,
+      footer,
       columns,
       rowKey,
       scroll,
@@ -33,8 +35,9 @@ export default class GeneralTable extends PureComponent {
     return (
       <div className={styles.generalTable}>
         <Table
-          bordered
+          bordered={bordered}
           size={size}
+          footer={footer}
           rowSelection={rowSelection}
           scroll={scroll}
           loading={loading}
