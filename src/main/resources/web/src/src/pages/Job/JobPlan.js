@@ -8,15 +8,22 @@ import styles from './JobPlan.less';
 
 const {Item} = Form;
 
-@connect (({job, loading}) => ({
-  jobList: job.jobList,
+@connect (({job, task, loading}) => ({
+  data: job.data,
   loading: loading.models.job,
+  graphDependencies: task.graphNodes,
+  graphNodesFetchLoading: loading.effects["task/fetchAllGraphNodes"],
 }))
 @Form.create ()
 class JobPlan extends PureComponent {
   state = {
     formValues: {},
-    showGraphContainer: "hide"
+    pagination: {
+      pageNo: 1,
+      orderByTime: ""
+    },
+    showGraphContainer: "hide",
+    jobId: 0
   };
 
   graphContainerRight = {
@@ -27,26 +34,26 @@ class JobPlan extends PureComponent {
   scroll = {x: false};
 
   fixedWidth = {
-    jobName: '',
-    updateDate: '',
+    name: '',
+    gmtModify: '',
+    executeRate: '',
+    owner: '',
     planType: '',
-    responser: '',
-    jobType: '',
   };
 
   columns = [
     {
       title: '任务名称',
-      dataIndex: 'jobName',
+      dataIndex: 'name',
       percent: 33,
-      render: (text, {jobId}) => this.renderTooltip (text, 'jobName', jobId),
+      render: (text, {id}) => this.renderTooltip (text, 'name', id),
     },
     {
       title: '修改日期',
-      dataIndex: 'updateDate',
+      dataIndex: 'gmtModify',
       sorter: true,
       percent: 18,
-      render: text => this.renderTooltip (text, 'updateDate'),
+      render: text => this.renderTooltip (text, 'gmtModify'),
     },
     {
       title: '任务类型',
@@ -56,22 +63,22 @@ class JobPlan extends PureComponent {
     },
     {
       title: '责任人',
-      dataIndex: 'responser',
+      dataIndex: 'owner',
       percent: 18,
-      render: text => this.renderTooltip (text, 'responser'),
+      render: text => this.renderTooltip (text, 'owner'),
     },
     {
       title: '调度类型',
-      dataIndex: 'jobType',
+      dataIndex: 'executeRate',
       // percent: 15,
-      render: text => this.renderTooltip (text, 'jobType'),
+      render: text => this.renderTooltip (text, 'executeRate'),
     },
   ];
 
   componentDidMount () {
     const {dispatch} = this.props;
     dispatch ({
-      type: 'job/fetchJobs',
+      type: 'job/fetchJobs'
     });
   }
 
@@ -99,31 +106,44 @@ class JobPlan extends PureComponent {
   showGraph = (e,jobId) => {
     e.stopPropagation();
     this.setState({
-      showGraphContainer: "show"
+      showGraphContainer: "show",
+      jobId
+    })
+    this.props.dispatch({
+      type: 'task/fetchAllGraphNodes',
+      payload: jobId
     })
   };
 
   handleSearch = e => {
     e.preventDefault ();
-
     const {dispatch, form} = this.props;
-
     form.validateFields ((err, fieldsValue) => {
       if (err) return;
-      console.log (fieldsValue);
-
       this.setState ({
         formValues: fieldsValue,
       });
 
-      // dispatch ({
-      //   type: 'alarmList/fetch',
-      //   payload: values,
-      // });
+      dispatch ({
+        type: 'job/fetchJobs',
+        payload: {
+          ...this.state.pagination,
+          ...fieldsValue
+        },
+      });
     });
   };
 
-  handleFormReset = () => {};
+  handleFormReset = () => {
+    const { form, dispatch } = this.props;
+    form.resetFields();
+    this.setState({
+      formValues: {},
+    });
+    dispatch({
+      type: 'job/fetchJobs'
+    });
+  };
 
   renderForm = () => {
     const {getFieldDecorator} = this.props.form;
@@ -135,7 +155,7 @@ class JobPlan extends PureComponent {
         >
           <Col md={6} sm={24}>
             <Item label="脚本名称">
-              {getFieldDecorator ('searchJobName') (
+              {getFieldDecorator ('filename') (
                 <Input placeholder="请输入" />
               )}
             </Item>
@@ -155,15 +175,37 @@ class JobPlan extends PureComponent {
     );
   };
 
-  handleGeneralTableChange = () => {};
+  handleGeneralTableChange = (pagination, filters, sorter) => {
+    const param = {}
+    if(sorter.order){
+      if(sorter.order === "descend"){
+        param.orderByTime = 2;
+      }else{
+        param.orderByTime = 1;
+      }
+    }else{
+      param.orderByTime = "";
+    }
+    param.pageNo = pagination.current;
+    this.setState({
+      pagination: param
+    })
+    this.props.dispatch ({
+      type: 'job/fetchJobs',
+      payload: {
+        ...param,
+        ...this.state.formValues
+      },
+    });
+  };
 
   autoFooter = () => {
-    const { jobList = {} } = this.props;
-    const { list = [] } = jobList;
+    const { data = {} } = this.props;
+    const { list = [] } = data;
     if(list.length > 0 && list.length < 11){
       const autoFooterHeight = 59 * (10 - list.length);
       return <div style={{height: `${autoFooterHeight}px`}}>
-        <div style={{height: "100%",width: `${parseInt(this.fixedWidth.jobName,10)+33}px`,borderRight: "1px solid #e8e8e8"}} />
+        <div style={{height: "100%",width: `${parseInt(this.fixedWidth.name,10)+33}px`,borderRight: "1px solid #e8e8e8"}} />
       </div>
     }
       return false;
@@ -176,7 +218,7 @@ class JobPlan extends PureComponent {
   }
 
   render () {
-    const {loading, jobList = {}} = this.props;
+    const {loading, data = {}, graphDependencies, graphNodesFetchLoading} = this.props;
     const tableFullWidth =
       document.body.clientWidth -
       (document.getElementsByClassName ('ant-layout-sider')[0]
@@ -185,8 +227,8 @@ class JobPlan extends PureComponent {
             .style.width.replace ('px', '')
         : 0) - 48 - 64;
     this.columns = this.columns.map (item => {
-      if(item.dataIndex === "jobType"){// 最后一列 宽度取rest
-        delete this.fixedWidth.jobType;
+      if(item.dataIndex === "executeRate"){// 最后一列 宽度取rest
+        delete this.fixedWidth.executeRate;
         item.width = tableFullWidth - Object.values(this.fixedWidth).reduce((pre,value=0) => pre + value,0);
         this.fixedWidth[item.dataIndex] = `${item.width - 32}`;
       }else{
@@ -195,8 +237,8 @@ class JobPlan extends PureComponent {
       }
       return item;
     });
-    const { jobName = 0 } = this.fixedWidth;
-    const maskWidthNumber = tableFullWidth - jobName - 36;
+    const { name = 0 } = this.fixedWidth;
+    const maskWidthNumber = tableFullWidth - name - 36;
     const maskWidth = `${maskWidthNumber}px`;
     this.graphContainerRight.hide = `-${maskWidthNumber + 33}px`
     return (
@@ -204,16 +246,16 @@ class JobPlan extends PureComponent {
         <Card bordered={false} onClick={this.hideGraphContainer}>
           <div className={styles.fixedHeightTableList}>
             <div onClick={e => e.stopPropagation()} style={{right:`${this.graphContainerRight[this.state.showGraphContainer]}`,width: maskWidth}} className={styles.graphContainer}>
-              <GraphFlow />
+              <GraphFlow loading={graphNodesFetchLoading} graphDependencies={graphDependencies} jobPlanId={this.state.jobId} />
             </div>
             <div className="CommonTableList-Form">{this.renderForm ()}</div>
             <GeneralTable
-              rowKey="jobId"
+              rowKey="id"
               bordered
               footer={this.autoFooter}
               scroll={this.scroll}
               loading={loading}
-              data={jobList}
+              data={data}
               columns={this.columns}
               onChange={this.handleGeneralTableChange}
             />

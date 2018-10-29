@@ -1,38 +1,39 @@
 const jobs = [
     {
-      jobId: 1,
-      jobName: 'MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库',
-      responser: "test1",
+      id: 1,
+      name: 'MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库',
+      owner: "test1",
       jobType: 2,
-      planType: 3,
-      updateDate: "2018-09-08",
+      executeRate: 3,
+      gmtModify: "2018-09-08",
     },
-    {
-      jobId: 2,
-      jobName: 'MOCK测试仓库',
-      responser: "test1",
-      jobType: 2,
-      planType: 3,
-      updateDate: "2018-09-08",
-    },
-    {
-      jobId: 3,
-      jobName: 'MOCK测试仓库',
-      responser: "test1",
-      jobType: 2,
-      planType: 3,
-      updateDate: "2018-09-08",
-    },
+    // {
+    //   id: 2,
+    //   name: 'ceshi1',
+    //   owner: "test1",
+    //   jobType: 2,
+    //   executeRate: 3,
+    //   gmtModify: "2018-09-08",
+    // },
+    // {
+    //   id: 3,
+    //   name: '2',
+    //   owner: "test1",
+    //   jobType: 2,
+    //   executeRate: 3,
+    //   gmtModify: "2018-09-08",
+    // },
   ];
   
   const jobData = {
-    list: jobs,
-    message: null,
-    pageNo: 1,
-    pageSize: 10,
-    success: true,
-    totalCount: 21,
-    totalPage: 2,
+    result: true,
+    dataValue: {
+      pageSize: 1,
+      pageNo: 1,
+      totalPage: 3,
+      totalCount: 3,
+      list: jobs
+    }
   };
    
 export default {

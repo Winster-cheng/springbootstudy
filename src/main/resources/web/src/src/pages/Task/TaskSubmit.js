@@ -30,23 +30,6 @@ class TaskSubmit extends Component {
         { title: '任务一', key: '1' },
         { title: '任务一任务一任务一', key: '2' },
         { title: '任务一', key: '3' },
-        // { title: 'Tab 2', content: 'Content of Tab Pane 2', key: '4' },
-        // { title: 'Tab 1', content: 'Content of Tab Pane 1', key: '5' },
-        // { title: 'Tab 2', content: 'Content of Tab Pane 2', key: '6' },
-        // { title: 'Tab 1', content: 'Content of Tab Pane 1', key: '7' },
-        // { title: 'Tab 2', content: 'Content of Tab Pane 2', key: '8' },
-        // { title: 'Tab 1', content: 'Content of Tab Pane 1', key: '9' },
-        // { title: 'Tab 2', content: 'Content of Tab Pane 2', key: '10' },
-        // { title: 'Tab 2', content: 'Content of Tab Pane 2', key: '61' },
-        // { title: 'Tab 1', content: 'Content of Tab Pane 1', key: '71' },
-        // { title: 'Tab 2', content: 'Content of Tab Pane 2', key: '81' },
-        // { title: 'Tab 1', content: 'Content of Tab Pane 1', key: '91' },
-        // { title: 'Tab 2', content: 'Content of Tab Pane 2', key: '101' },
-        // { title: 'Tab 2', content: 'Content of Tab Pane 2', key: '62' },
-        // { title: 'Tab 1', content: 'Content of Tab Pane 1', key: '72' },
-        // { title: 'Tab 2', content: 'Content of Tab Pane 2', key: '82' },
-        // { title: 'Tab 1', content: 'Content of Tab Pane 1', key: '92' },
-        // { title: 'Tab 2', content: 'Content of Tab Pane 2', key: '102' },
       ]
     };
   }
@@ -60,8 +43,9 @@ class TaskSubmit extends Component {
    document.getElementsByClassName("task-submit-container")[0].style.height = `${containerHeight}px`
   }
 
-  onSelect = () => {
-    console.log('Trigger Select');
+  onSelect = (selectedKeys,{selected,node}) => {
+
+    console.log(node);
   };
 
   onExpand = () => {
@@ -100,25 +84,25 @@ class TaskSubmit extends Component {
   LeafIcon = () => <span className={styles.leafDot} />
 
   TreeNodeList = data =>
-  data ? (
+  // data ? (
     data.map(node => {
-      if (node.children) {
+      if (!node.type) {
         return (
-          <TreeNode 
+          <TreeNode
             icon={({ expanded }) => <Icon component={expanded ? OpenFolder : Folder} />}
             title={node.name}
             key={node.id}
             selectable={false}
           >
-            {this.TreeNodeList(node.children)}
+            {node.children && this.TreeNodeList(node.children)}
           </TreeNode>
         );
       }
-      return <TreeNode icon={this.LeafIcon()} title={node.name} key={node.id} isLeaf />;
+      return <TreeNode key={node.id} icon={this.LeafIcon()} title={node.name} isLeaf />;
     })
-  ) : (
-    <TreeNode title="加载中" icon={<Spin />} key={-1} isLeaf />
-  );
+  // ) : (
+    // <TreeNode title="加载中" icon={<Spin />} key={-1} isLeaf />
+  ;
 
   onTabChange = () => {
 

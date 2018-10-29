@@ -1,7 +1,9 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
+import { connect } from 'dva';
+import { Spin } from "antd";
+import { uniq, isEqual } from "lodash";
 import './g6';
 import G6 from '@antv/g6';
-import {cloneDeep} from 'lodash';
 import G6Plugins from '@antv/g6/build/plugins';
 import './index.less';
 import collapseButton from '../../assets/collapse_btn.svg';
@@ -9,81 +11,23 @@ import expandButton from '../../assets/expand_btn.svg';
 
 const MIN_ARROW_SIZE = 3;
 
-export default class GraphFlow extends Component {
-  constructor (props, context) {
-    super (props, context);
+@connect(({ task, loading }) => ({
+  newNodes: task.newNodes,
+  graphNodeExpandLoading: loading.effects["task/fetchGraphNode"],
+}))
+class GraphFlow extends Component {
+  constructor(props){
+    super(props);
     this.state = {
-      data: {
-        nodes: [
-          {
-            id: 1,
-            name: '收集日志',
-            hasParent: false,
-            hasChildren: true,
-            input: [],
-            output: [2, 3],
-          },
-          {
-            id: 2,
-            name: '入 es 集群',
-            hasParent: true,
-            hasChildren: true,
-            input: [1],
-            output: [4],
-          },
-          {
-            id: 3,
-            name: '入 hdfs',
-            hasParent: true,
-            hasChildren: true,
-            input: [1],
-            output: [4],
-          },
-          {
-            id: 4,
-            name: 'hive 计算',
-            hasParent: true,
-            hasChildren: true,
-            input: [2, 3],
-            output: [5],
-          },
-          {
-            id: 5,
-            name: 'report',
-            hasParent: true,
-            hasChildren: false,
-            input: [4],
-            output: [],
-          },
-        ],
-        edges: [
-          {
-            source: 1,
-            target: 2,
-          },
-          {
-            source: 1,
-            target: 3,
-          },
-          {
-            source: 3,
-            target: 4,
-          },
-          {
-            source: 2,
-            target: 4,
-          },
-          {
-            source: 4,
-            target: 5,
-          },
-        ],
-      },
-    };
+      graph: null,
+      graphDependencies: {},
+      jobPlanId: 0,
+    }
   }
 
   componentDidMount () {
     const that = this;
+    const { g6RegisterInit } = that;
     const toggleDomVisible = (id, isShow) => {
       Array.prototype.forEach.call (
         document.getElementsByClassName (`ce-button-${id}`),
@@ -92,7 +36,7 @@ export default class GraphFlow extends Component {
         }
       );
     };
-    that.g6RegisterInit ();
+    g6RegisterInit ();
     const graph = new G6.Graph ({
       container: 'mountNode',
       fitView: 'cc',
@@ -108,7 +52,7 @@ export default class GraphFlow extends Component {
       shape: 'VHV',
       endArrow: true,
     });
-    graph.read (this.state.data);
+    // graph.read (this.state.data);
     graph.on ('node:mouseenter', ev => {
       const {item} = ev;
       const {id} = item.getModel ();
@@ -120,32 +64,113 @@ export default class GraphFlow extends Component {
       toggleDomVisible (id, false);
     });
     graph.on ('node:click', ev => {
-        console.log(ev)
       const {item, domEvent} = ev;
-      const {id} = item.getModel ();
+      const {id, output, input, hasChildren, hasParent} = item.getModel ();
       const { target } = domEvent;
       const { className } = target;
       if (className.indexOf('ce-button') > -1 &&  className.indexOf('bottom') > -1) {
-
-        console.log(1)
+        const fdAndRm = parentId =>{
+          const node = graph.find(parentId);
+          const { model = {} } = node;
+          const { output = [], input = [] } = model; 
+          output.forEach(childId => fdAndRm(childId))
+          input.forEach(parentId => graph.update(parentId,{
+            output: []
+          }))
+          graph.remove(node);
+        }
+        if(output.length > 0){
+          output.forEach( nodeId => {
+            fdAndRm(nodeId)
+          })
+        }else if(hasChildren){
+            that.props.dispatch({
+              type: "task/fetchGraphNode",
+              payload: {
+                jobPlanId: id,
+                isTop: false,
+              }
+            })
+        }
       } else if (className.indexOf('ce-button') > -1 &&  className.indexOf('top') > -1) {
-        console.log(2)
+        const compareStack = [id];
+        const fdAndRm = (nodeId) =>{
+          const node = graph.find(nodeId);
+          if(node){
+            compareStack.push(nodeId);
+            const { model = {} } = node;
+            const { output = [], input = [] } = model; 
+            uniq(input.concat(output)).forEach(childId => {
+              if(compareStack.indexOf(childId) === -1){
+                fdAndRm(childId)
+              }
+            })
+            graph.remove(node);
+          }
+        }
+        if(input.length > 0){
+          input.forEach( nodeId => {
+            fdAndRm(nodeId)
+          })
+          graph.update(id,{
+            input: []
+          })
+        }else if(hasParent){
+            that.props.dispatch({
+              type: "task/fetchGraphNode",
+              payload: {
+                jobPlanId: id,
+                isTop: true,
+              }
+            })
+        }
       }
-        // const {data} = that.state;
-        // const {roots} = data;
-        // const supplyData = {roots: []};
-        // const find = src => {
-        //   if (supplyData.roots.length === 0) {
-        //     if (src.main === main) {
-        //       supplyData.roots.push (src);
-        //     } else if (src.children && src.children.length > 0) {
-        //       src.children.map (item1 => find (item1));
-        //     }
-        //   }
-        // };
-        // roots.map (obj => find (obj));
-    //   }
     });
+    this.setState({
+      graph
+    })
+  }
+
+  static getDerivedStateFromProps(nextProps, prevState){
+    if(!nextProps.loading && prevState.graph && nextProps.graphDependencies 
+      && (!isEqual(prevState.jobPlanId,nextProps.jobPlanId) || !isEqual(prevState.graphDependencies,nextProps.graphDependencies))){
+      prevState.graph.read (nextProps.graphDependencies);
+      return {
+        ...prevState,
+        graphDependencies: nextProps.graphDependencies,
+        jobPlanId: nextProps.jobPlanId
+      }
+    }
+    if(prevState.graph && nextProps.newNodes.result){
+      const { graph } = prevState;
+      const { isTop, list } = nextProps.newNodes;
+      list.forEach( node => {
+        if(graph.find(node.id)) return false;
+        graph.add('node',node)
+        if(isTop){
+          node.output.forEach( target => {
+            graph.add('edge',{
+              source: node.id,
+              target
+            });
+            graph.update(target,{
+              input: uniq(graph.find(target).model.input.concat(node.id))
+            })
+          });
+        }else{
+          node.input.forEach( source => {
+            graph.add('edge',{
+              source,
+              target: node.id
+            });
+            graph.update(source,{
+              output: uniq(graph.find(source).model.output.concat(node.id))
+            })
+          });
+        }
+      })
+    }
+    return null;
   }
 
   g6RegisterInit = () => {
@@ -271,6 +296,33 @@ export default class GraphFlow extends Component {
   };
 
   render () {
-    return <div style={{width: '100%', height: '100%'}} id="mountNode" />;
+    const { loading, graphNodeExpandLoading } = this.props;
+    const commonStyle = {
+      width: '100%',
+      height: '100%'
+    }
+    const spinStyle = {
+      display: loading ? "flex" : "none",
+      justifyContent: "center",
+      alignItems: "center",
+      ...commonStyle
+    }
+    const chartStyle = {
+      display: !loading ? "inline-block" : "none",
+      ...commonStyle
+    }
+
+    const expandSpinStyle = {
+      ...spinStyle,
+      display: graphNodeExpandLoading ? "flex" : "none",
+      position: "absolute",
+      zIndex: 1
+    }
+    return (<React.Fragment>
+      <Spin style={spinStyle} />
+      <Spin style={expandSpinStyle} />
+      <div style={chartStyle} id="mountNode" />
+    </React.Fragment>)
   }
 }
+export default GraphFlow

@@ -4,12 +4,14 @@ export default {
   namespace: 'job',
 
   state: {
-    jobList: [],
+    data: [],
+
   },
 
   effects: {
     *fetchJobs({ payload }, { call, put }) {
-        const response = yield call(queryJobs, payload);
+      const params = { pageNo: 1, pageSize: 10, orderByTime: "", filename: "", ...payload };
+        const response = yield call(queryJobs, params);
         yield put({
           type: 'queryJobs',
           payload: response,
@@ -21,7 +23,15 @@ export default {
     queryJobs(state, action) {
       return {
         ...state,
-        jobList: action.payload,
+        data: {
+          ...state.data,
+          list: action.payload.dataValue.list,
+          pagination: {
+            current: action.payload.dataValue.pageNo,
+            pageSize: action.payload.dataValue.pageSize,
+            total: action.payload.dataValue.totalCount
+          }
+        }
       };
     },
   },

@@ -13,7 +13,7 @@ export default class GeneralTable extends PureComponent {
 
   render() {
     const {
-      data: {list, ...pagination},
+      data: {list, pagination},
       loading,
       bordered,
       footer,
@@ -25,7 +25,7 @@ export default class GeneralTable extends PureComponent {
     } = this.props;
 
     const paginationProps = {
-      showSizeChanger: true,
+      showSizeChanger: false,
       showQuickJumper: true,
       defaultCurrent: 1,
       defaultPageSize: 10,

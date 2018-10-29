@@ -28,7 +28,8 @@ module.exports = {
     'react/destructuring-assignment': 0,
     'import/first': 0,
     'react/jsx-closing-tag-location': 0,
-    'no-script-url': 0
+    'no-script-url': 0,
+    'no-shadow': [1]
   },
   settings: {
     polyfills: ['fetch', 'promises', 'url'],
