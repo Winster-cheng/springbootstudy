@@ -7,6 +7,7 @@ import com.mhc.bi.domain.theadvisor.TaskInstance;
 import com.mhc.bi.mapper.theadvisor.TaskInstanceMapper;
 import com.mhc.bi.service.JobPlanService;
 import com.mhc.bi.service.TaskInstanceService;
+import com.mhc.bi.vo.PageMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -114,6 +115,17 @@ public class TaskInstanceServiceImpl implements TaskInstanceService {
         return taskInstanceMapper.updateStatus(taskInstance, GetTime.getTimeStamp("yyyyMMddHHmmss"));
     }
 
+    @Override
+    public PageMessage select(int pageSize, int pageNo, String date, String fileName, int status, int timingSortType, int bussinessDateSortType, int startTimeSortType) {
+        int totalCount = taskInstanceMapper.getTotalCount();
+        PageMessage pageMessage = new PageMessage();
+        pageMessage.setTotalPage(totalCount % pageSize == 0 ? totalCount / pageSize : totalCount / pageSize + 1);
+        pageMessage.setPageNo(pageNo);
+        pageMessage.setPageSize(pageSize);
+        pageMessage.setTotalCount(totalCount);
+        return null;
+    }
+
     /**
      * @描述 输入JobPlan，返回这个任务对应的TaskInstance的input ，比如taskinstance 中name=task_2,input可能为task1_1或者task_2
      * @参数 JobPlan
@@ -184,4 +196,5 @@ public class TaskInstanceServiceImpl implements TaskInstanceService {
         }
         return map;
     }
+
 }

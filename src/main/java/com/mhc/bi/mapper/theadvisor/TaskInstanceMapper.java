@@ -19,7 +19,7 @@ import java.util.List;
  * private String paraments;
  */
 public interface TaskInstanceMapper {
-    @Insert("insert into taskinstance(name,shellname,input,output,gmt_create,status,execute_time,execute_day,paraments) values(#{taskInstance.name},#{taskInstance.shellName},#{taskInstance.input},#{taskInstance.output},#{createTime},#{taskInstance.status},#{taskInstance.executeTime},#{taskInstance.executeDay},#{taskInstance.paraments})")
+    @Insert("insert into taskinstance(name,shellname,input,output,gmt_create,gmt_modify,status,execute_time,execute_day,paraments) values(#{taskInstance.name},#{taskInstance.shellName},#{taskInstance.input},#{taskInstance.output},#{createTime},,#{createTime},#{taskInstance.status},#{taskInstance.executeTime},#{taskInstance.executeDay},#{taskInstance.paraments})")
     @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
     int insertIntoTaskInstance(@Param("taskInstance") TaskInstance taskInstance, @Param("createTime") String createTime);
 
@@ -118,4 +118,7 @@ public interface TaskInstanceMapper {
 
     @Update("update taskinstance set status=#{taskInstance.status},start_time=#{taskInstance.startTime},end_time=#{taskInstance.endTime},gmt_modify=#{gmtModify} where name=#{taskInstance.name} and execute_day=#{taskInstance.executeDay}")
     int updateStatus(@Param("taskInstance") TaskInstance taskInstance, @Param("gmtModify") String gmtModify);
+
+    @Select("select count(id) from taskinstance")
+    int getTotalCount();
 }

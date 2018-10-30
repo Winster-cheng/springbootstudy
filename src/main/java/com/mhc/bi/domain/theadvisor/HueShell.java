@@ -22,11 +22,12 @@ public class HueShell {
     private String shellContent;
     private String paraments;
     private int isHistory;
+    private String owner;
     public HueShell() {
         super();
     }
 
-    public HueShell(int id, String name, String type, String input,String output,String paraments ,String gmtCreate, String gmtModify, String executeTime, String executeRate, String shellName, String shellContent,int isHistory) {
+    public HueShell(int id, String name, String type, String input,String output,String paraments ,String gmtCreate, String gmtModify, String executeTime, String executeRate, String shellName, String shellContent,int isHistory,String owner) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -40,6 +41,7 @@ public class HueShell {
         this.shellContent = shellContent;
         this.paraments=paraments;
         this.isHistory=isHistory;
+        this.owner=owner;
     }
 
     public String getParaments() {
@@ -144,5 +146,13 @@ public class HueShell {
 
     public void setIsHistory(int isHistory) {
         this.isHistory = isHistory;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 }

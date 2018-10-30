@@ -1,4 +1,4 @@
-package com.mhc.bi.controller;
+package com.mhc.bi.controller.TableMessage;
 
 import com.mhc.bi.domain.theadvisor.JobPlan;
 import com.mhc.bi.Utils.JsonData;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/jobplan")
-public class JobPlanController {
+public class JobPlanController2 {
     @Autowired
     private JobPlanService jobPlanService;
 

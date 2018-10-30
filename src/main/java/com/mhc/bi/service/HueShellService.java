@@ -17,7 +17,7 @@ public interface HueShellService {
 
     public HueShell selectByName(String name);
 
-    public String submit(String name);
+    public boolean submit(int fileId);
 
     public HueShell selectAliveByName(String name);
 
@@ -41,4 +41,14 @@ public interface HueShellService {
      *@修改人和其它信息
      */
     public HueShell selectByOutput(String name);
+
+    /**
+     *@描述 返回HueShell的所有一级目录
+     *@参数
+     *@返回值
+     *@创建人  baiyan
+     *@创建时间  2018/10/22
+     *@修改人和其它信息
+     */
+    public List<String>  getDirectory();
 }

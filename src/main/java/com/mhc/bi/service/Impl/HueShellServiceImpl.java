@@ -45,16 +45,17 @@ public class HueShellServiceImpl implements HueShellService {
     ShellContent shellContent;
 
     @Override
-    public String submit(String name) {
+    public boolean submit(int fileId) {
+        String name=desktopDocument2Mapper.selectNameById(fileId);
         hueShell = hueShellService.selectByName(name);
         insertOrAddNewVersion(hueShell);//做一个备份到hueshell表
         String msg = check(hueShell);
         if (msg != "OK") {
-            return "提交" + name + "失败！！" + msg;
+            return false;
         } else {
-            jobPlan = new JobPlan(hueShell.getName(), hueShell.getInput(), hueShell.getShellName().replaceAll(".bi", ""), hueShell.getOutput(), hueShell.getExecuteRate(), hueShell.getExecuteTime(), hueShell.getParaments(), GetTime.getTimeStamp("yyyyMMdd"));
+            jobPlan = new JobPlan(hueShell.getName(), hueShell.getInput(), hueShell.getShellName().replaceAll(".bi", ""), hueShell.getOutput(), hueShell.getExecuteRate(), hueShell.getExecuteTime(), hueShell.getParaments(), GetTime.getTimeStamp("yyyyMMdd"),hueShell.getOwner());
             shellContent = new ShellContent(hueShell.getShellName(), hueShell.getShellContent(), hueShell.getType(), GetTime.getTimeStamp("yyyyMMdd"));
-            return name+" 插入jobPlan结果" + jobPlanService.insert(jobPlan) + "\n插入shellContent结果:" + shellContentService.insertShellContent(shellContent);
+            return true;
         }
     }
 
@@ -89,6 +90,11 @@ public class HueShellServiceImpl implements HueShellService {
     }
 
     @Override
+    public List<String> getDirectory() {
+        return null;
+    }
+
+    @Override
     public List<HueShell> selectAll() {
         return hueShellMapper.getAll();
     }
@@ -109,7 +115,8 @@ public class HueShellServiceImpl implements HueShellService {
     @Override
     public HueShell selectByName(String name) {
         String executorContent = desktopDocument2Mapper.selectByName(StringHandle.checkEnding(name, ".bi")).getSearch();
-
+        //TODO owner接入实际用户
+        String owner="测试用户";
         System.out.println("从hue2中取出的" + StringHandle.checkEnding(name, ".bi") + "内容是:\n" + executorContent);
         //name type executetime shellname shellcontent input output execute_rate paraments
         hueShell.setName(name.replace(".bi", ""));
@@ -150,6 +157,7 @@ public class HueShellServiceImpl implements HueShellService {
         if (fileMap.keySet().contains("executerate"))
             hueShell.setExecuteRate(fileMap.get("executerate"));
         hueShell.setIsHistory(1);
+        hueShell.setOwner(owner);
         return hueShell;
     }
 
@@ -167,7 +175,7 @@ public class HueShellServiceImpl implements HueShellService {
         int startHour = getEarliesTime(hueShell);
         HueShell parentHueShell;
         for (String x : hueShell.getInput().split(",")) {//检查每天父节点的最早执行时间
-            parentHueShell = hueShellService.selectByOutput(x);
+            parentHueShell = hueShellService.selectByName(x);
             if (startHour < getEarliesTime(parentHueShell)) {
                 return hueShell.getName() + "的执行时间早于" + parentHueShell.getName();
             }
@@ -185,6 +193,8 @@ public class HueShellServiceImpl implements HueShellService {
      */
 
     public int getEarliesTime(HueShell hueShell) {
+        System.out.println("hueShell.getExecuteTime():"+hueShell.getExecuteTime());
+        hueShell.getExecuteTime().split(",");
         List<String> timeList = Arrays.asList(hueShell.getExecuteTime().split(","));
         return Integer.parseInt(Collections.min(timeList));
     }

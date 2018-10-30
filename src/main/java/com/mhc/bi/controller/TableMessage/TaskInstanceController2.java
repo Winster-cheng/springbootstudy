@@ -1,4 +1,4 @@
-package com.mhc.bi.controller;
+package com.mhc.bi.controller.TableMessage;
 
 import com.mhc.bi.Utils.JsonData;
 import com.mhc.bi.domain.theadvisor.TaskInstance;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/taskinstance")
-public class TaskInstanceController {
+public class TaskInstanceController2 {
     @Autowired
     private TaskInstanceService taskInstanceService;
 

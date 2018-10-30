@@ -1,6 +1,7 @@
 package com.mhc.bi.service;
 
 import com.mhc.bi.domain.theadvisor.TaskInstance;
+import com.mhc.bi.vo.PageMessage;
 
 import java.util.List;
 
@@ -32,5 +33,7 @@ public interface TaskInstanceService {
     public List<TaskInstance> selectOutNode(String input, String day);
 
     public int updateStatus(TaskInstance taskInstance);
+
+    public PageMessage select(int pageSize, int pageNo, String date, String fileName, int status, int timingSortType, int bussinessDateSortType, int startTimeSortType);
 
 }

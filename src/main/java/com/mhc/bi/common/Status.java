@@ -6,14 +6,14 @@ package com.mhc.bi.common;
  * @description 状态枚举类
  */
 public enum Status {
-    COMMITTED, READY, RUNNING, SUCCESSED, FAIULRED;
+    COMMITTED, Waited, RUNNING, SUCCESSED, FAIULRED;
 
     public static Status getStatus(int statusCode) {
         switch (statusCode) {
             case 1:
                 return COMMITTED;
             case 2:
-                return READY;
+                return Waited;
             case 3:
                 return RUNNING;
             case 4:

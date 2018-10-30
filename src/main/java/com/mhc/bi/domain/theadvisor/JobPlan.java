@@ -16,13 +16,14 @@ public class JobPlan {
     private String paraments;
     private String gmtCreate;
     private String gmtModify;
+    private String owner;
 
 
     public JobPlan() {
         super();
     }
 
-    public JobPlan(String name, String input, String shellName, String output, String executeRate, String executeTime, String paraments, String gmtCreate) {
+    public JobPlan(String name, String input, String shellName, String output, String executeRate, String executeTime, String paraments, String gmtCreate,String owner) {
         this.name = name;
         this.shellName = shellName;
         this.input = input;
@@ -31,6 +32,7 @@ public class JobPlan {
         this.output = output;
         this.paraments = paraments;
         this.gmtCreate = gmtCreate;
+        this.owner=owner;
     }
 
     public int getId() {
@@ -111,5 +113,13 @@ public class JobPlan {
 
     public void setShellName(String shellName) {
         this.shellName = shellName;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 }

@@ -1,4 +1,4 @@
-package com.mhc.bi.controller;
+package com.mhc.bi.controller.TableMessage;
 
 import com.mhc.bi.domain.theadvisor.HueShell;
 import com.mhc.bi.mapper.theadvisor.HueShellMapper;
@@ -31,8 +31,8 @@ public class HueShellController {
 
     //将HueShell的内容导入到JobPlan和ShellContent,模拟提交操作 http://localhost:8080/hueshell/export?name=task1
     @GetMapping("submit")
-    public String export(String name) {
-        return hueShellService.submit(name);
+    public boolean export(int id) {
+        return hueShellService.submit(id);
     }
 
     //将HueShell的内容导入到JobPlan和ShellContent,模拟提交操作 http://localhost:8080/hueshell/export?name=task1

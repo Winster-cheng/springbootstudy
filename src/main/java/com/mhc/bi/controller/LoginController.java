@@ -2,6 +2,7 @@ package com.mhc.bi.controller;
 
 import com.mhc.framework.support.session.auth.CurrentUserHolder;
 import com.mhc.framework.support.session.base.User;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,9 +31,8 @@ public class LoginController {
 
     @ResponseBody
     @RequestMapping("/getUser")
-    public Object getUser() {
+    public User getUser() {
         User user = currentUserHolder.get(User.class);
-        return "当前用户为"+user.getName();
+        return user;
     }
 }
-

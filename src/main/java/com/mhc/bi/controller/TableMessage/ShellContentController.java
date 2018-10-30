@@ -1,4 +1,4 @@
-package com.mhc.bi.controller;
+package com.mhc.bi.controller.TableMessage;
 
 import com.mhc.bi.Utils.JsonData;
 import com.mhc.bi.domain.theadvisor.ShellContent;
