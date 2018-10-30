@@ -39,5 +39,5 @@ const jobs = [
 export default {
     'POST /job/getJobPlans': (req,res) => {
       setTimeout(()=>res.json(jobData),2000)
-    }
+    },
 }

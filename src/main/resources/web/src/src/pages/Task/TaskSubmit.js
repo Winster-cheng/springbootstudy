@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import router from 'umi/router';
-import { Tree, Row, Col, Button, Spin, Icon, Tabs, Menu, Dropdown } from 'antd';
+import { Tree, Row, Col, Button, Spin, Icon, Tabs, Menu, Dropdown, message, Modal } from 'antd';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
-import {UnControlled as CodeMirror} from 'react-codemirror2';
+import {Controlled as CodeMirror} from 'react-codemirror2';
 import Folder from "../../assets/icon_folder.svg";
 import OpenFolder from "../../assets/icon_folder_open.svg";
 
@@ -15,22 +15,21 @@ import styles from "./TaskSubmit.less"
 
 const { TreeNode } = Tree;
 const { TabPane } = Tabs;
+const { confirm } = Modal;
 
 @connect(({ task, loading }) => ({
   taskTreeData: task.treeData,
   treeDataLoading: loading.effects["task/fetchTaskTreeData"],
 }))
 class TaskSubmit extends Component {
+  editor = null;
+
   constructor(props, context) {
     super(props, context);
     this.state = {
-      initCode: 'const a = 0;',
-      codeValue: "",
-      panes: [
-        { title: '任务一', key: '1' },
-        { title: '任务一任务一任务一', key: '2' },
-        { title: '任务一', key: '3' },
-      ]
+      activeKey: 0,
+      panes: [],
+      currentCodeContent: "",
     };
   }
 
@@ -42,33 +41,107 @@ class TaskSubmit extends Component {
    const containerHeight = document.body.clientHeight - 152;
    document.getElementsByClassName("task-submit-container")[0].style.height = `${containerHeight}px`
   }
-
-  onSelect = (selectedKeys,{selected,node}) => {
-
-    console.log(node);
+  
+  onSelect = (selectedKeys,{node}) => {
+    const { title, shelltype, nodeid } = node.props;
+    const that = this;
+    const { panes, activeKey, currentCodeContent } = that.state;
+    panes.forEach(pane => {
+      if(pane.key == activeKey){
+        pane.content = currentCodeContent;
+      }
+    })
+    if(!this.state.panes.some(pane => pane.key == nodeid)){
+      this.props.dispatch({
+        type: 'task/fetchCodeContent',
+        payload: nodeid
+      }).then(content => {
+        if(content){
+          const newPane = {
+            title,
+            key: nodeid,
+            content
+          };
+          panes.push(newPane)
+          // 新增panel
+          that.setState({
+            panes,
+            activeKey: nodeid,
+            currentCodeContent: content
+          },() => {
+            that.editor && that.editor.focus();
+          })
+        }
+      })
+    }else{
+      // 显示当前id对应的panel
+      this.setState({
+        panes,
+        activeKey: nodeid,
+        currentCodeContent: this.state.panes.filter(pane => pane.key == nodeid)[0].content
+      })
+    }
   };
 
-  onExpand = () => {
-    console.log('Trigger Expand');
-  };
+  removePane = (targetKey) => {
+    let { activeKey } = this.state;
+    let lastIndex;
+    this.state.panes.forEach((pane, i) => {
+      if (pane.key == targetKey) {
+        lastIndex = i ? (i - 1) : (i + 1);
+      }
+    });
+    const panes = this.state.panes.filter(pane => pane.key !== targetKey);
+    if(activeKey == targetKey && panes[lastIndex]){
+        activeKey = panes[lastIndex].key;
+    }
+    this.setState({ panes, activeKey });
+  }
 
-  saveCode = () => {
-    const a = this.state.codeValue
-    console.log(`${a}`)
+  saveCode = (isSubmit) => {
+    const { activeKey, currentCodeContent: content } = this.state;
+    const { dispatch } = this.props;
+    dispatch({
+      type: `task/${isSubmit ? "submit" : "save"}TaskContent`,
+      payload: {
+            fileId: activeKey,
+            content
+          }
+    }).then( ({ result }) => {
+      if(result){
+        message.success("保存成功")
+      }
+    })
   }
 
   submitCode = () => {
-    console.log(this.state.codeValue)
+    const that = this;
+    confirm({
+      title: '确认提交',
+      content: '你确定要提交这个任务吗，如果确定的话，请点击确定按钮。',
+      onOk() {
+        that.saveCode(true);
+      },
+      onCancel() {
+      },
+    });
+  }
+
+  closeTab = (closeAll) => {
+    const { panes, activeKey } = this.state;
+    this.setState({
+      panes: closeAll ? [] : panes.filter(pane => pane.key == activeKey)
+    });
   }
 
   dropDownMenu = () => {
     const menu = (
       <Menu>
         <Menu.Item>
-          <a href="javascript:;" onClick={this.closeOtherTab}>关闭其他</a>
+          <a href="javascript:;" onClick={() => this.closeTab()}>关闭其他</a>
         </Menu.Item>
         <Menu.Item>
-          <a href="javascript:;" onClick={this.closeAllTab}>关闭所有</a>
+          <a href="javascript:;" onClick={() => this.closeTab(true)}>关闭所有</a>
         </Menu.Item>
       </Menu>
     );
@@ -84,7 +157,6 @@ class TaskSubmit extends Component {
   LeafIcon = () => <span className={styles.leafDot} />
 
   TreeNodeList = data =>
-  // data ? (
     data.map(node => {
       if (!node.type) {
         return (
@@ -98,13 +170,26 @@ class TaskSubmit extends Component {
           </TreeNode>
         );
       }
-      return <TreeNode key={node.id} icon={this.LeafIcon()} title={node.name} isLeaf />;
+      return <TreeNode key={node.id} nodeid={node.id} icon={this.LeafIcon()} shelltype={node.shelltype} title={node.name} isLeaf />;
     })
-  // ) : (
-    // <TreeNode title="加载中" icon={<Spin />} key={-1} isLeaf />
-  ;
 
-  onTabChange = () => {
+  onTabChange = (sourceKey) => {
+    let targetPane = {}
+    const { panes, activeKey, currentCodeContent } = this.state;
+    panes.forEach(pane => {
+      if(pane.key == activeKey){
+        pane.content = currentCodeContent;
+      }
+      if(pane.key == sourceKey){
+        targetPane = pane;
+      }
+    })
+    const { content = "" } = targetPane
+    this.setState({
+      panes,
+      currentCodeContent: content,
+      activeKey: sourceKey
+    })
 
   }
 
@@ -113,8 +198,8 @@ class TaskSubmit extends Component {
       treeDataLoading,
       taskTreeData,
     } = this.props;
-    const { initCode } = this.state;
-    
+    const rightSectionDisplay = this.state.panes.length > 0 ? "block":"none";
+    const editorDisplay = this.state.panes.length > 0 ? "visible":"hidden";
     return (
       <PageHeaderWrapper>
         <Row className="task-submit-container" style={{background: "#FFF"}}>
@@ -122,49 +207,57 @@ class TaskSubmit extends Component {
             {treeDataLoading ? <Spin /> : 
             <Tree
               onSelect={this.onSelect}
-              onExpand={this.onExpand}
               showIcon
+              selectedKeys={[this.state.activeKey.toString()]}
             >{this.TreeNodeList(taskTreeData)}
             </Tree>}
           </Col>
           <Col span={20} style={{height: "100%",background: "#FAFAFA",position: "relative"}}>
-            <Row className={styles.tabWrap}>
+            <Row style={{display: rightSectionDisplay}} className={styles.tabWrap}>
               <Tabs
                 type="card"
                 onChange={this.onTabChange}
+                activeKey={this.state.activeKey.toString()}
               >
                 {this.state.panes.map(pane =>
                   <TabPane
-                    tab={<span className={styles.tab}>
-                      {pane.title}
-                      <Icon
-                        className={styles['close-icon']}
-                        type="close-circle"
-                        theme="outlined"
-                      />
-                    </span>}
                     key={pane.key}
+                    tab={
+                      <span className={styles.tab}>
+                        {pane.title}
+                        <Icon
+                          className={styles['close-icon']}
+                          type="close-circle"
+                          theme="outlined"
+                          onClick={() => this.removePane(pane.key)}
+                        />
+                      </span>
+                    }
                   />)}
               </Tabs>
               {this.dropDownMenu()}
             </Row>
-            <Row style={{height: "calc(100% - 48px)"}}>
+            <Row style={{visibility: editorDisplay,height: "calc(100% - 48px)"}}>
               <CodeMirror
-                value={initCode}
+                value={this.state.currentCodeContent}
                 options={{
                       theme: 'neo',
-                      lineNumbers: true
+                      lineNumbers: true,
                     }}
+                editorDidMount={editor => {this.editor = editor}}
+                onBeforeChange={(editor, data, value) => {
+                  this.setState({currentCodeContent: value});
+                }}
                 onChange={(editor, data, value) => {
-                      this.setState({codeValue: value})
-                    }}
+                  console.log(data)
+                }}
               />
             </Row>
-          </Col>  
+          </Col>
         </Row>
-        <Row className={styles["btn-wrap"]}>
+        <Row style={{display: rightSectionDisplay}} className={styles["btn-wrap"]}>
           <Col span={24} className={styles.btnCol}>
-            <Button type="primary" onClick={this.saveCode} className={styles.btn}>保存</Button>
+            <Button type="primary" onClick={() => this.saveCode()} className={styles.btn}>保存</Button>
             <Button onClick={this.submitCode} className={styles.btn}>提交</Button>
             <Button onClick={() => router.push('/jobPlan?jobId=1')} className={styles.btn2}>查看依赖</Button>
           </Col>

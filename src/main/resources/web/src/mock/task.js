@@ -3,22 +3,26 @@ const treeData = [
     name: '任务名称01',
     id: 1,
     type: 0,
+    shelltype: 0,
     children: [
       {
         name: '任务名称02',
         id: 2,
         type: 0,
-        children: [{ name: '任务名称10', id: 10, type: 1 }],
+        shelltype: 0,
+        children: [{ name: '任务名称10', id: 10, type: 1, shelltype: 1, }],
       },
       {
         name: '任务名称04',
         id: 4,
-        type: 0
+        type: 0,
+        shelltype: 2
       },
       {
         name: '任务名称03',
         id: 3,
-        type: 1
+        type: 1,
+        shelltype: 0,
       },
     ],
   },
@@ -26,18 +30,21 @@ const treeData = [
     name: '任务名称05',
     id: 5,
     type: 0,
+    shelltype: 0,
     children: [
       {
         name: '任务名称06',
         id: 6,
-        type: 1
+        type: 1,
+        shelltype: 4,
       },
     ],
   },
   {
     name: '任务名称07',
     id: 7,
-    type: 0
+    type: 0,
+    shelltype: 3,
   },
 ]
 const dependenciesList = [
@@ -82,6 +89,26 @@ const dependenciesList = [
     output: [],
   },
 ]
+const instances = [
+  {
+    id: 1,
+    name: 'MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库',
+    owner: "test1",
+    status: 1,
+    owner: 3,
+    gmtModify: "2018-09-08",
+  },
+];
+const instanceListData = {
+  result: true,
+  dataValue: {
+    pageSize: 1,
+    pageNo: 1,
+    totalPage: 3,
+    totalCount: 3,
+    list: instances
+  }
+};
 export default {
   'POST /submit/getDirectory': (req, res) => {
     setTimeout(()=>{
@@ -92,7 +119,6 @@ export default {
     },2000)
   },
   'POST /taskPlan/getMoreDependencies': (req, res) => {
-    console.log(req)
     setTimeout(() => {
       // res.json({
       //   result: true,
@@ -120,21 +146,6 @@ export default {
         isTop: true,
         dataValue: {},
         list: [
-        //   {
-        //   id: 10,
-        //   name: "增加id10节点流程",
-        //   hasParent: true,
-        //   hasChildren: false,
-        //   input: [2],
-        //   output: []
-        // },{
-        //   id: 11,
-        //   name: "增加id11节点流程",
-        //   hasParent: true,
-        //   hasChildren: false,
-        //   input: [3],
-        //   output: []
-        // }
         {
           id: 2,
           name: '入 es 集群',
@@ -148,12 +159,32 @@ export default {
     },2000)
   },
   'POST /taskPlan/getDependencies': (req, res) => {
-    console.log(req)
     setTimeout(() => {
       res.json({
         result: true,
         list: dependenciesList
       })
     },2000)
-  }
+  },
+  'POST /submit/getContent': (req, res) => {
+    res.json({
+      result: true,
+      dataValue: {
+        content: "123"
+      }
+    })
+  },
+  'POST /submit/submit': (req, res) => {
+    res.json({
+      result: true,
+    })
+  },
+  'POST /submit/save': (req, res) => {
+    res.json({
+      result: true,
+    })
+  },
+  'POST /taskInstance/select': (req,res) => {
+    setTimeout(()=>res.json(instanceListData),2000)
+  },
 };
