@@ -51,7 +51,7 @@ export default class GlobalHeaderRight extends PureComponent {
     } = this.props;
     const menu = (
       <Menu className={styles.menu} selectedKeys={[]} onClick={onMenuClick}>
-        <Menu.Item key="userCenter">
+        {/* <Menu.Item key="userCenter">
           <Icon type="user" />
           <FormattedMessage id="menu.account.center" defaultMessage="account center" />
         </Menu.Item>
@@ -62,11 +62,14 @@ export default class GlobalHeaderRight extends PureComponent {
         <Menu.Item key="triggerError">
           <Icon type="close-circle" />
           <FormattedMessage id="menu.account.trigger" defaultMessage="Trigger Error" />
-        </Menu.Item>
+        </Menu.Item> */}
+        <Menu.Item>{currentUser.email}</Menu.Item>
+        <Menu.Item>{currentUser.mobile}</Menu.Item>
         <Menu.Divider />
         <Menu.Item key="logout">
-          <Icon type="logout" />
-          <FormattedMessage id="menu.account.logout" defaultMessage="logout" />
+          <a href="/logout.htm">
+            <Icon type="logout" /> 退出登录
+          </a>
         </Menu.Item>
       </Menu>
     );
@@ -77,7 +80,7 @@ export default class GlobalHeaderRight extends PureComponent {
     }
     return (
       <div className={className}>
-        <HeaderSearch
+        {/* <HeaderSearch
           className={`${styles.action} ${styles.search}`}
           placeholder={formatMessage({ id: 'component.globalHeader.search' })}
           dataSource={[
@@ -138,16 +141,16 @@ export default class GlobalHeaderRight extends PureComponent {
             emptyText={formatMessage({ id: 'component.globalHeader.event.empty' })}
             emptyImage="https://gw.alipayobjects.com/zos/rmsportal/HsIsxMZiWKrNUavQUXqx.svg"
           />
-        </NoticeIcon>
+        </NoticeIcon> */}
         {currentUser.name ? (
           <Dropdown overlay={menu}>
             <span className={`${styles.action} ${styles.account}`}>
-              <Avatar
+              {/* <Avatar
                 size="small"
                 className={styles.avatar}
                 src={currentUser.avatar}
                 alt="avatar"
-              />
+              /> */}
               <span className={styles.name}>{currentUser.name}</span>
             </span>
           </Dropdown>

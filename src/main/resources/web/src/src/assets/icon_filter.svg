@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="12px" height="12px" viewBox="0 0 12 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 51 (57462) - http://www.bohemiancoding.com/sketch -->
+    <title>icon_filter</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-4" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-opacity="0.65">
+        <g id="icon" transform="translate(-160.000000, -200.000000)" fill-rule="nonzero" stroke="#000000">
+            <g id="icon_filter" transform="translate(160.000000, 200.000000)">
+                <path d="M7,11.2639678 L7,4.808132 L10.8773188,0.5 L1.04031242,0.5 L4.5,4.82460947 L4.5,10.2730348 L7,11.2639678 Z" id="Shape"></path>
+            </g>
+        </g>
+    </g>
+</svg>

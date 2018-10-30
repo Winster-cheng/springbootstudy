@@ -1,0 +1,34 @@
+@import '~antd/lib/style/themes/default.less';
+
+:global{
+    #mountNode{
+        .card-container {
+            width: 170px;
+            height: 46px;
+            border: 1px solid #AFE3EF;
+            border-radius: 12px;
+          }
+          .ce-button{
+            display: none;
+            &:hover{
+              cursor: pointer;
+            }
+          }
+          .card-container .main-text{
+            text-align: center;
+            margin: 0;
+            font-size: 14px;
+            line-height: 22px;
+            color: rgba(0,0,0,.85);
+          }
+          .card-container .value-text{
+            text-align: center;
+            color: rgba(0,0,0,.45);
+          }
+          .card-container .percent-text{
+            margin-right: 12px;
+            float: right;
+            color: red
+          }
+    }
+}

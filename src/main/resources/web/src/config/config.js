@@ -51,6 +51,7 @@ export default {
     APP_TYPE: process.env.APP_TYPE || '',
   },
   // 路由配置
+  base: "center",
   routes: pageRoutes,
   // Theme for antd
   // https://ant.design/docs/react/customize-theme-cn
@@ -58,7 +59,7 @@ export default {
     'primary-color': defaultSettings.primaryColor,
   },
   externals: {
-    '@antv/data-set': 'DataSet',
+    // '@antv/data-set': 'DataSet',
   },
   // proxy: {
   //   '/server/api/': {
@@ -108,7 +109,7 @@ export default {
       },
     ],
   },
-
+  urlLoaderExcludes: [/icon_\w+.svg(\?v=\d+.\d+.\d+)?$/],
   chainWebpack: webpackPlugin,
   cssnano: {
     mergeRules: false,

@@ -13,6 +13,7 @@ import SiderMenu from '@/components/SiderMenu';
 import Authorized from '@/utils/Authorized';
 import SettingDrawer from '@/components/SettingDrawer';
 import logo from '../assets/logo.svg';
+import titleLogo from '../assets/titleLogo.svg';
 import Footer from './Footer';
 import Header from './Header';
 import Context from './MenuContext';
@@ -178,13 +179,13 @@ class BasicLayout extends React.PureComponent {
     const currRouterData = this.matchParamsPath(pathname);
 
     if (!currRouterData) {
-      return 'Ant Design Pro';
+      return 'BI底层调度';
     }
     const message = formatMessage({
       id: currRouterData.locale || currRouterData.name,
       defaultMessage: currRouterData.name,
     });
-    return `${message} - Ant Design Pro`;
+    return `${message} - BI底层调度`;
   };
 
   getLayoutStyle = () => {
@@ -201,7 +202,7 @@ class BasicLayout extends React.PureComponent {
   getContentStyle = () => {
     const { fixedHeader } = this.props;
     return {
-      margin: '24px 24px 0',
+      // margin: '24px 24px 0',
       paddingTop: fixedHeader ? 64 : 0,
     };
   };
@@ -239,6 +240,7 @@ class BasicLayout extends React.PureComponent {
         {isTop && !isMobile ? null : (
           <SiderMenu
             logo={logo}
+            titleLogo={titleLogo}
             Authorized={Authorized}
             theme={navTheme}
             onCollapse={this.handleMenuCollapse}

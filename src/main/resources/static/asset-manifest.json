@@ -7,9 +7,10 @@
   "2.async.js": "/2.async.js",
   "3.chunk.css": "/3.chunk.css",
   "3.async.js": "/3.async.js",
+  "4.chunk.css": "/4.chunk.css",
   "4.async.js": "/4.async.js",
+  "5.chunk.css": "/5.chunk.css",
   "5.async.js": "/5.async.js",
-  "favicon.png": "/favicon.png",
   "color.less": "/color.less",
   "index.html": "/index.html"
 }

@@ -25,6 +25,12 @@ module.exports = {
     'jsx-a11y/no-static-element-interactions': 0,
     'jsx-a11y/anchor-is-valid': 0,
     'linebreak-style': 0,
+    'react/destructuring-assignment': 0,
+    'import/first': 0,
+    'react/jsx-closing-tag-location': 1,
+    'no-script-url': 0,
+    'no-shadow': 1,
+    'eqeqeq': 1
   },
   settings: {
     polyfills: ['fetch', 'promises', 'url'],
