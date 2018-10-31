@@ -1,0 +1,6 @@
+2018-11-01 00:01:01.703 DEBUG[pool-4-thread-1]c.m.b.m.theadvisor.TaskInstanceMapper.selectStartNode.debug:159 -==>  Preparing: select * from taskinstance where name="project_etl_start" and execute_day=? 
+2018-11-01 00:01:01.729 DEBUG[pool-4-thread-1]c.m.b.m.theadvisor.TaskInstanceMapper.selectStartNode.debug:159 -==> Parameters: 20181101(String)
+2018-11-01 00:01:01.745 DEBUG[pool-4-thread-1]c.m.b.m.theadvisor.TaskInstanceMapper.selectStartNode.debug:159 -<==      Total: 0
+2018-11-01 00:02:10.184 INFO [Thread-9]o.s.b.c.e.AnnotationConfigEmbeddedWebApplicationContext.doClose:984 -Closing org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@2bd3b112: startup date [Wed Oct 31 23:59:43 CST 2018]; root of context hierarchy
+2018-11-01 00:02:10.199 INFO [Thread-9]o.s.jmx.export.annotation.AnnotationMBeanExporter.destroy:449 -Unregistering JMX-exposed beans on shutdown
+2018-11-01 00:02:10.288 INFO [localhost-startStop-2]com.mhc.framework.support.auth.filter.AcuraFilter.destroy:167 ------AcuraFilter destroy----
