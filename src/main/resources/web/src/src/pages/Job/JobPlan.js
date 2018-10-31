@@ -92,14 +92,14 @@ class JobPlan extends PureComponent {
           className={styles.tdEllisps}
         >
           {text}
-        </a>
+          </a>
         : <span
           href="javascript:;"
           style={{maxWidth: `${this.fixedWidth[dataIndex]}px`}}
           className={styles.tdEllisps}
         >
           {text}
-        </span>}
+          </span>}
     </Tooltip>
   );
 
@@ -206,7 +206,7 @@ class JobPlan extends PureComponent {
       const autoFooterHeight = 59 * (10 - list.length);
       return <div style={{height: `${autoFooterHeight}px`}}>
         <div style={{height: "100%",width: `${parseInt(this.fixedWidth.name,10)+33}px`,borderRight: "1px solid #e8e8e8"}} />
-      </div>
+             </div>
     }
       return false;
   }
@@ -246,7 +246,12 @@ class JobPlan extends PureComponent {
         <Card bordered={false} onClick={this.hideGraphContainer}>
           <div className={styles.fixedHeightTableList}>
             <div onClick={e => e.stopPropagation()} style={{right:`${this.graphContainerRight[this.state.showGraphContainer]}`,width: maskWidth}} className={styles.graphContainer}>
-              <GraphFlow loading={graphNodesFetchLoading} graphDependencies={graphDependencies} jobPlanId={this.state.jobId} />
+              <GraphFlow 
+                fetchEffectName="task/fetchGraphNode"
+                loading={graphNodesFetchLoading}
+                graphDependencies={graphDependencies} 
+                jobPlanId={this.state.jobId}
+              />
             </div>
             <div className="CommonTableList-Form">{this.renderForm ()}</div>
             <GeneralTable

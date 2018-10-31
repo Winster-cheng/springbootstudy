@@ -2211,6 +2211,32 @@ i.trigger:hover {
 .dark .action :global(.ant-badge) {
   color: rgba(255, 255, 255, 0.85);
 }
+:global #mountNode .card-container {
+  border: 1px solid #AFE3EF;
+  border-radius: 12px;
+}
+:global #mountNode .card-container .main-text {
+  color: rgba(0, 0, 0, 0.85);
+}
+:global #mountNode .card-container .value-text {
+  color: rgba(0, 0, 0, 0.45);
+}
+:global #mountNode .card-container .percent-text {
+  color: red;
+}
+:global #mountNode .card-container {
+  border: 1px solid #AFE3EF;
+  border-radius: 12px;
+}
+:global #mountNode .card-container .main-text {
+  color: rgba(0, 0, 0, 0.85);
+}
+:global #mountNode .card-container .value-text {
+  color: rgba(0, 0, 0, 0.45);
+}
+:global #mountNode .card-container .percent-text {
+  color: red;
+}
 .headerSearch .input {
   background: transparent;
   border-radius: 0;
@@ -2408,11 +2434,6 @@ i.trigger:hover {
 .trendItem.reverseColor .down {
   color: #f5222d;
 }
-html .CodeMirror,
-body .CodeMirror,
-#root .CodeMirror {
-  border: 1px solid #8f9aa3;
-}
 html .MHC-PageHeaderWrapper,
 body .MHC-PageHeaderWrapper,
 #root .MHC-PageHeaderWrapper {
@@ -2510,6 +2531,17 @@ a.listItemMetaTitle {
 .optional {
   color: rgba(0, 0, 0, 0.45);
 }
+.fixedHeightTableList :global .ant-table-footer {
+  background: #fff;
+}
+.fixedHeightTableList :global .ant-table-thead th:not(:first-child):not(:last-child),
+.fixedHeightTableList :global .ant-table-tbody td:not(:first-child):not(:last-child) {
+  border-right-color: transparent;
+}
+.fixedHeightTableList .graphContainer {
+  background: #fff;
+  box-shadow: -2px 0px 6px 0px rgba(176, 176, 176, 0.3);
+}
 a.listItemMetaTitle {
   color: rgba(0, 0, 0, 0.85);
 }
@@ -2525,12 +2557,46 @@ a.listItemMetaTitle {
 .title {
   color: rgba(0, 0, 0, 0.85);
 }
-.container .treeContainer {
+.fixedHeightTableList :global .ant-table-footer {
   background: #fff;
+}
+.fixedHeightTableList :global .ant-table-thead th:not(:nth-child(2)):not(:last-child),
+.fixedHeightTableList :global .ant-table-tbody td:not(:nth-child(2)):not(:last-child) {
+  border-right-color: transparent;
+}
+.fixedHeightTableList .graphContainer {
+  background: #fff;
+  box-shadow: -2px 0px 6px 0px rgba(176, 176, 176, 0.3);
+}
+:global .log-wrap .log-header {
+  border-top: 1px solid #E7E7E7;
+  background: #FAFAFA;
+  color: rgba(0, 0, 0, 0.65);
+}
+:global .log-wrap .log-content {
+  border-top: 1px solid #E7E7E7;
+}
+:global .log-wrap .log-content .log-content-left {
   border-right: 1px solid #E7E7E7;
 }
-.container .codeContainer {
-  background: #FAFAFA;
+:global .log-wrap .log-content .log-content-left ul li {
+  border-bottom: 1px solid #E7E7E7;
+}
+:global .ant-tabs-bar {
+  border-bottom: none;
+}
+.leafDot {
+  background-color: rgba(0, 0, 0, 0.45);
+  border-radius: 4px;
+}
+.tabWrap {
+  border-bottom: 1px solid #E7E7E7;
+}
+.btn-wrap {
+  box-shadow: 0px -2px 6px 0px rgba(176, 176, 176, 0.2);
+}
+.btn-wrap .btnCol {
+  background-color: #fff;
 }
 .main .icon {
   color: rgba(0, 0, 0, 0.2);
@@ -7847,6 +7913,32 @@ i.antd-pro-main-resources-web-src-src-components-global-header-index-trigger:hov
 .antd-pro-main-resources-web-src-src-components-global-header-index-dark .antd-pro-main-resources-web-src-src-components-global-header-index-action .ant-badge {
   color: rgba(255, 255, 255, 0.85);
 }
+#mountNode .card-container {
+  border: 1px solid #AFE3EF;
+  border-radius: 12px;
+}
+#mountNode .card-container .main-text {
+  color: rgba(0, 0, 0, 0.85);
+}
+#mountNode .card-container .value-text {
+  color: rgba(0, 0, 0, 0.45);
+}
+#mountNode .card-container .percent-text {
+  color: red;
+}
+#mountNode .card-container {
+  border: 1px solid #AFE3EF;
+  border-radius: 12px;
+}
+#mountNode .card-container .main-text {
+  color: rgba(0, 0, 0, 0.85);
+}
+#mountNode .card-container .value-text {
+  color: rgba(0, 0, 0, 0.45);
+}
+#mountNode .card-container .percent-text {
+  color: red;
+}
 .antd-pro-main-resources-web-src-src-components-header-search-index-headerSearch .antd-pro-main-resources-web-src-src-components-header-search-index-input {
   background: transparent;
   border-radius: 0;
@@ -8242,6 +8334,17 @@ font.weak {
 .antd-pro-main-resources-web-src-src-pages-forms-style-optional {
   color: rgba(0, 0, 0, 0.45);
 }
+.antd-pro-main-resources-web-src-src-pages-job-job-plan-fixedHeightTableList .ant-table-footer {
+  background: #fff;
+}
+.antd-pro-main-resources-web-src-src-pages-job-job-plan-fixedHeightTableList .ant-table-thead th:not(:first-child):not(:last-child),
+.antd-pro-main-resources-web-src-src-pages-job-job-plan-fixedHeightTableList .ant-table-tbody td:not(:first-child):not(:last-child) {
+  border-right-color: transparent;
+}
+.antd-pro-main-resources-web-src-src-pages-job-job-plan-fixedHeightTableList .graphContainer {
+  background: #fff;
+  box-shadow: -2px 0px 6px 0px rgba(176, 176, 176, 0.3);
+}
 .antd-pro-main-resources-web-src-src-pages-list-applications-filterCardList .ant-card-actions {
   background: #f7f9fa;
 }
@@ -8311,12 +8414,46 @@ a.antd-pro-main-resources-web-src-src-pages-list-articles-listItemMetaTitle {
 .antd-pro-main-resources-web-src-src-pages-profile-basic-profile-title {
   color: rgba(0, 0, 0, 0.85);
 }
-.antd-pro-main-resources-web-src-src-pages-task-task-submit-container .antd-pro-main-resources-web-src-src-pages-task-task-submit-treeContainer {
+.antd-pro-main-resources-web-src-src-pages-task-task-instance-fixedHeightTableList .ant-table-footer {
   background: #fff;
+}
+.antd-pro-main-resources-web-src-src-pages-task-task-instance-fixedHeightTableList .ant-table-thead th:not(:nth-child(2)):not(:last-child),
+.antd-pro-main-resources-web-src-src-pages-task-task-instance-fixedHeightTableList .ant-table-tbody td:not(:nth-child(2)):not(:last-child) {
+  border-right-color: transparent;
+}
+.antd-pro-main-resources-web-src-src-pages-task-task-instance-fixedHeightTableList .graphContainer {
+  background: #fff;
+  box-shadow: -2px 0px 6px 0px rgba(176, 176, 176, 0.3);
+}
+.log-wrap .log-header {
+  border-top: 1px solid #E7E7E7;
+  background: #FAFAFA;
+  color: rgba(0, 0, 0, 0.65);
+}
+.log-wrap .log-content {
+  border-top: 1px solid #E7E7E7;
+}
+.log-wrap .log-content .log-content-left {
   border-right: 1px solid #E7E7E7;
 }
-.antd-pro-main-resources-web-src-src-pages-task-task-submit-container .antd-pro-main-resources-web-src-src-pages-task-task-submit-codeContainer {
-  background: #FAFAFA;
+.log-wrap .log-content .log-content-left ul li {
+  border-bottom: 1px solid #E7E7E7;
+}
+.antd-pro-main-resources-web-src-src-pages-task-task-submit-ant-tabs-bar {
+  border-bottom: none;
+}
+.antd-pro-main-resources-web-src-src-pages-task-task-submit-leafDot {
+  background-color: rgba(0, 0, 0, 0.45);
+  border-radius: 4px;
+}
+.antd-pro-main-resources-web-src-src-pages-task-task-submit-tabWrap {
+  border-bottom: 1px solid #E7E7E7;
+}
+.btn-wrap {
+  box-shadow: 0px -2px 6px 0px rgba(176, 176, 176, 0.2);
+}
+.btn-wrap .btnCol {
+  background-color: #fff;
 }
 .antd-pro-main-resources-web-src-src-pages-user-login-main .antd-pro-main-resources-web-src-src-pages-user-login-icon {
   color: rgba(0, 0, 0, 0.2);

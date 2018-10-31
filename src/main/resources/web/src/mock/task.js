@@ -1,3 +1,109 @@
+
+const logs = [{
+  time: "2018-10-12 12:12:10",
+  content: `2018-10-12 12:12:10 我是日志内容1
+  2018-10-12 12:12:10 我是日志内容1
+  2018-10-12 12:12:10 我是日志内容1
+  2018-10-12 12:12:10 我是日志内容1
+  2018-10-12 12:12:10 我是日志内容1
+  2018-10-12 12:12:10 我是日志内容1
+  2018-10-12 12:12:10 我是日志内容1
+  2018-10-12 12:12:10 我是日志内容1
+  2018-10-12 12:12:10 我是日志内容12018-10-12 12:12:10 我是日志内容1
+  2018-10-12 12:12:10 我是日志内容1
+  2018-10-12 12:12:10 我是日志内容1
+  2018-10-12 12:12:10 我是日志内容1
+  2018-10-12 12:12:10 我是日志内容1
+  2018-10-12 12:12:10 我是日志内容1
+  2018-10-12 12:12:10 我是日志内容1
+  2018-10-12 12:12:10 我是日志内容1
+  2018-10-12 12:12:10 我是日志内容12018-10-12 12:12:10 我是日志内容1
+  2018-10-12 12:12:10 我是日志内容1
+  2018-10-12 12:12:10 我是日志内容1
+  2018-10-12 12:12:10 我是日志内容1
+  2018-10-12 12:12:10 我是日志内容1
+  2018-10-12 12:12:10 我是日志内容1
+  2018-10-12 12:12:10 我是日志内容1
+  2018-10-12 12:12:10 我是日志内容1
+  2018-10-12 12:12:10 我是日志内容1`,
+  status: {
+    id: 4,
+  }
+},
+{
+  time: "2018-10-12 12:12:10",
+  content: `2018-10-12 12:12:10 我是日志内容1
+  2018-10-12 12:12:10 我是日志内容1
+  2018-10-12 12:12:10 我是日志内容1
+  2018-10-12 12:12:10 我是日志内容1
+  2018-10-12 12:12:10 我是日志内容1
+  2018-10-12 12:12:10 我是日志内容1
+  2018-10-12 12:12:10 我是日志内容1
+  2018-10-12 12:12:10 我是日志内容1
+  2018-10-12 12:12:10 我是日志内容1`,
+  status: {
+    id: 4,
+  }
+},
+{
+  time: "2018-10-12 12:12:10",
+  content: `2018-10-12 12:12:10 我是日志内容1
+  2018-10-12 12:12:10 我是日志内容1
+  2018-10-12 12:12:10 我是日志内容1
+  2018-10-12 12:12:10 我是日志内容1
+  2018-10-12 12:12:10 我是日志内容1
+  2018-10-12 12:12:10 我是日志内容1
+  2018-10-12 12:12:10 我是日志内容1
+  2018-10-12 12:12:10 我是日志内容1
+  2018-10-12 12:12:10 我是日志内容1`,
+  status: {
+    id: 4,
+  }
+},
+{
+  time: "2018-10-12 12:12:10",
+  content: `2018-10-12 12:12:10 我是日志内容1
+  2018-10-12 12:12:10 我是日志内容1
+  2018-10-12 12:12:10 我是日志内容1
+  2018-10-12 12:12:10 我是日志内容1
+  2018-10-12 12:12:10 我是日志内容1
+  2018-10-12 12:12:10 我是日志内容1
+  2018-10-12 12:12:10 我是日志内容1
+  2018-10-12 12:12:10 我是日志内容1
+  2018-10-12 12:12:10 我是日志内容1`,
+  status: {
+    id: 4,
+  }
+},
+{
+  time: "2018-10-12 12:12:10",
+  content: `2018-10-12 12:12:10 我是日志内容1
+  2018-10-12 12:12:10 我是日志内容1
+  2018-10-12 12:12:10 我是日志内容1
+  2018-10-12 12:12:10 我是日志内容1
+  2018-10-12 12:12:10 我是日志内容1
+  2018-10-12 12:12:10 我是日志内容1
+  2018-10-12 12:12:10 我是日志内容1
+  2018-10-12 12:12:10 我是日志内容1
+  2018-10-12 12:12:10 我是日志内容1`,
+  status: {
+    id: 4,
+  }
+},
+{
+  time: "2018-10-12 12:12:10",
+  content: "2018-10-12 12:12:10 我是日志内容2",
+  status: {
+    id: 2,
+  }
+},
+{
+  time: "2018-10-12 12:12:10",
+  content: "2018-10-12 12:12:10 我是日志内容3",
+  status: {
+    id: 3,
+  }
+}]
 const treeData = [
   {
     name: '任务名称01',
@@ -43,6 +149,42 @@ const treeData = [
   {
     name: '任务名称07',
     id: 7,
+    type: 0,
+    shelltype: 3,
+  },
+  {
+    name: '任务名称071',
+    id: 71,
+    type: 0,
+    shelltype: 3,
+  },
+  {
+    name: '任务名称072',
+    id: 7,
+    type: 0,
+    shelltype: 3,
+  },
+  {
+    name: '任务名称072',
+    id: 72,
+    type: 0,
+    shelltype: 3,
+  },
+  {
+    name: '任务名称073',
+    id: 73,
+    type: 0,
+    shelltype: 3,
+  },
+  {
+    name: '任务名称0721',
+    id: 721,
+    type: 0,
+    shelltype: 3,
+  },
+  {
+    name: '任务名称0731',
+    id: 73,
     type: 0,
     shelltype: 3,
   },
@@ -94,17 +236,74 @@ const instances = [
     id: 1,
     name: 'MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库',
     owner: "test1",
-    status: 1,
-    owner: 3,
-    gmtModify: "2018-09-08",
+    status: {
+      id:1,
+      chineseName: "已提交"
+    },
+    type: 1,
+    bussinessTime: "2019-23-11",
+    startTime: "2018-09-08",
+    executeTime: "2018-09-08 12:12:12",
+  },
+  {
+    id: 2,
+    name: 'MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库',
+    owner: "test1",
+    status: {
+      id:2,
+      chineseName: "等待中"
+    },
+    type: 1,
+    bussinessTime: "2019-23-11",
+    startTime: "2018-09-08",
+    executeTime: "2018-09-08 12:12:12",
+  },
+  {
+    id: 3,
+    name: 'MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库',
+    owner: "test1",
+    status: {
+      id:3,
+      chineseName: "运行中"
+    },
+    type: 1,
+    bussinessTime: "2019-23-11",
+    startTime: "2018-09-08",
+    executeTime: "2018-09-08 12:12:12",
+  },
+  {
+    id: 4,
+    name: 'MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库',
+    owner: "test1",
+    status: {
+      id:4,
+      chineseName: "成功"
+    },
+    type: 1,
+    bussinessTime: "2019-23-11",
+    startTime: "2018-09-08",
+    executeTime: "2018-09-08 12:12:12",
+  },
+  {
+    id: 5,
+    name: 'MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库MOCK测试仓库',
+    owner: "test1",
+    status: {
+      id:5,
+      chineseName: "失败"
+    },
+    type: 1,
+    bussinessTime: "2019-23-11",
+    startTime: "2018-09-08",
+    executeTime: "2018-09-08 12:12:12",
   },
 ];
 const instanceListData = {
   result: true,
   dataValue: {
-    pageSize: 1,
+    pageSize: 10,
     pageNo: 1,
-    totalPage: 3,
+    totalPage: 1,
     totalCount: 3,
     list: instances
   }
@@ -166,6 +365,14 @@ export default {
       })
     },2000)
   },
+  'POST /taskInstance/getDependencies': (req, res) => {
+    setTimeout(() => {
+      res.json({
+        result: true,
+        list: dependenciesList
+      })
+    },2000)
+  },
   'POST /submit/getContent': (req, res) => {
     res.json({
       result: true,
@@ -184,7 +391,34 @@ export default {
       result: true,
     })
   },
+  'POST /taskInstance/getLogs': (req, res) => {
+    res.json({
+      result: true,
+      list: logs
+    })
+  },
   'POST /taskInstance/select': (req,res) => {
     setTimeout(()=>res.json(instanceListData),2000)
+  },
+  'POST /taskInstance/getStatus': (req,res) => {
+    setTimeout(()=>res.json({
+      result: true,
+      list: [{
+        id: 1,
+        chineseName: "已提交"
+      },{
+        id: 2,
+        chineseName: "等待中"
+      },{
+        id: 3,
+        chineseName: "运行中"
+      },{
+      id: 4,
+      chineseName: "成功"
+    },{
+    id: 5,
+    chineseName: "失败"
+    }]
+    }),2000)
   },
 };

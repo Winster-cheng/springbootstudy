@@ -35,7 +35,7 @@ export default {
     saveCurrentUser(state, action) {
       return {
         ...state,
-        currentUser: action.payload || {},
+        currentUser: action.payload.dataValue || {},
       };
     },
     changeNotifyCount(state, action) {

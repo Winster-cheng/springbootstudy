@@ -9,6 +9,7 @@ import {
   queryAllInstanceNodes,
   queryInstanceNode,
   queryLogs,
+  queryAllStatuss,
 } from '@/services/task';
 import { message } from "antd";
 
@@ -35,7 +36,9 @@ export default {
     newNodes: [],
     instanceNodes: {},
     newInstanceNodes: [],
-    data: []
+    data: [],
+    allStatus: [],
+    logs: []
   },
 
   effects: {
@@ -82,10 +85,9 @@ export default {
           date: "",
           filename: "",
           status: "",
-          timingSortType: 0,
-          bussinessDateSortType: 0,
-          startTimeSortType: 0,
-          ...payload 
+          sortName: "",
+          sortType: 0,
+          ...payload
         };
         const response = yield call(queryTaskInstance, params);
         yield put({
@@ -107,9 +109,33 @@ export default {
           payload,
         })
       },
+      *fetchLogs(_, { call, put }){
+        const payload = yield call(queryLogs, _.payload);
+        yield put({
+          type: 'saveLogs',
+          payload
+        })
+      },
+      *fetchAllStatus(_, { call, put }){
+        const payload = yield call(queryAllStatuss, _.payload);
+        yield put({
+          type: 'saveStatus',
+          payload,
+        })
+      }
   },
 
   reducers: {
+    saveLogs(state, { payload }){
+      const { result, list: logs } = payload
+      if(result){
+        return {
+          ...state,
+          logs
+        }
+      }
+      return state
+    },
     saveInstances(state, action) {
       return {
         ...state,
@@ -123,6 +149,16 @@ export default {
           }
         }
       };
+    },
+    saveStatus(state, { payload }){
+      const { result, list: allStatus } = payload
+      if(result){
+        return {
+          ...state,
+          allStatus
+        }
+      }
+      return state
     },
     saveTreeData(state, { payload }) {
       const { result, list } = payload;

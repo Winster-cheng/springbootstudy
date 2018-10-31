@@ -1,7 +1,8 @@
 // 代码中会兼容本地 service mock 以及部署站点的静态数据
 export default {
   // 支持值为 Object 和 Array
-  'GET /api/currentUser': {
+  'POST /user/getUser': {
+    dataValue:{
     name: 'Serati Ma',
     avatar: 'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png',
     userid: '00000001',
@@ -49,7 +50,7 @@ export default {
     },
     address: '西湖区工专路 77 号',
     phone: '0752-268888888',
-  },
+  },result:true},
   // GET POST 可省略
   'GET /api/users': [
     {
