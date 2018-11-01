@@ -23,5 +23,8 @@ public interface JobPlanService {
 
     public JobPlan selectJobPlanByOutput(String output);
 
-    public PageMessage select(int pageSize, int pageNo, String fileName, int orderByModifyTime);
+
+    public List<JobPlan> selectJobPlanListByPage(int pageSize, int pageNo, String fileName, int orderByModifyTime);
+
+    public int getNumbers();
 }

@@ -46,11 +46,14 @@ public class JobPlanServiceImpl implements JobPlanService {
         return jobPlanMapper.selectJobPlanByOutput(output);
     }
 
+
+    public int getNumbers(){
+        return jobPlanMapper.getNumbers();
+    }
+
     //对应接口文档2.1 搜索功能
     @Override
-    public PageMessage select(int pageSize, int pageNo, String fileName, int orderByModifyTime) {
-        int totalCount=jobPlanMapper.getNumbers();
-        PageMessage pageMessage = new PageMessage();
+    public List<JobPlan> selectJobPlanListByPage(int pageSize, int pageNo, String fileName, int orderByModifyTime) {
         List<JobPlan> jobPlanList;
         if (fileName.equals("")) {
             if (orderByModifyTime == 1)
@@ -68,12 +71,7 @@ public class JobPlanServiceImpl implements JobPlanService {
                 jobPlanList = jobPlanMapper.selectByNameLike(fileName, (pageNo - 1) * pageSize, pageSize);
             }
         }
-        pageMessage.setList(jobPlanList);
-        pageMessage.setPageNo(pageNo);
-        pageMessage.setPageSize(pageSize);
-        pageMessage.setTotalPage(totalCount%pageSize==0?totalCount/pageSize:totalCount/pageSize+1);
-        pageMessage.setTotalCount(totalCount);
-        return pageMessage;
+        return jobPlanList;
     }
 
     @Override
