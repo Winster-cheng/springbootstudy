@@ -13,9 +13,11 @@ import java.util.List;
 public interface DesktopDocument2Service {
     public DesktopDocument2 getDesktopDocument2(String name);
 
-    public List<File> getDirectory();
+    public List<DesktopDocument2> getAllAlive();
 
-    public File getContent(int id);
+    public String getContent(int id);
 
     public boolean save(int id,String content);
+
+    public List<Integer> getChildrenList(int id);
 }

@@ -19,6 +19,7 @@ public class JobPlan {
     private String owner;
 
 
+
     public JobPlan() {
         super();
     }

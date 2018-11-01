@@ -2,6 +2,7 @@ package com.mhc.bi.vo.taskplan;
 
 import com.mhc.bi.domain.theadvisor.JobPlan;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -12,12 +13,10 @@ import java.util.List;
 public class JobPlanView {
     private int id;
     private String name;
-    private boolean hasParent;
-    private boolean hasChildre;
-    private List<Integer> parentList;
-    private List<Integer> childrenList;
-    private boolean isTop;
-    private List<JobPlanView> list;
+    private String gmtModify;
+    private String owner;
+    private String executeRate;
+    private String type;
 
     public int getId() {
         return id;
@@ -35,57 +34,47 @@ public class JobPlanView {
         this.name = name;
     }
 
-    public boolean isHasParent() {
-        return hasParent;
+
+    public String getExecuteRate() {
+        return executeRate;
     }
 
-    public void setHasParent(boolean hasParent) {
-        this.hasParent = hasParent;
+    public void setExecuteRate(String executeRate) {
+        this.executeRate = executeRate;
     }
 
-    public boolean isHasChildre() {
-        return hasChildre;
+    public String getGmtModify() {
+        return gmtModify;
     }
 
-    public void setHasChildre(boolean hasChildre) {
-        this.hasChildre = hasChildre;
+    public void setGmtModify(String gmtModify) {
+        this.gmtModify = gmtModify;
     }
 
-    public List<Integer> getParentList() {
-        return parentList;
+    public String getOwner() {
+        return owner;
     }
 
-    public void setParentList(List<Integer> parentList) {
-        this.parentList = parentList;
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 
-    public List<Integer> getChildrenList() {
-        return childrenList;
+    public String getType() {
+        return type;
     }
 
-    public void setChildrenList(List<Integer> childrenList) {
-        this.childrenList = childrenList;
-    }
-
-    public boolean isTop() {
-        return isTop;
-    }
-
-    public void setTop(boolean top) {
-        isTop = top;
-    }
-
-    public List<JobPlanView> getList() {
-        return list;
-    }
-
-    public void setList(List<JobPlanView> list) {
-        this.list = list;
+    public void setType(String type) {
+        this.type = type;
     }
 
     public void initByJobPlan(JobPlan jobPlan) {
-        this.name=jobPlan.getName();
-        this.id=jobPlan.getId();
-//        this
+        this.id = jobPlan.getId();
+        this.name = jobPlan.getName();
+        this.gmtModify = jobPlan.getGmtModify();
+        this.owner = jobPlan.getOwner();
+        this.executeRate = jobPlan.getExecuteRate();
+        this.type = "hiveshell";
     }
+
+
 }

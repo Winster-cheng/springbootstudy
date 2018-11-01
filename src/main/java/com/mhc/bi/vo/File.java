@@ -1,5 +1,10 @@
 package com.mhc.bi.vo;
 
+import com.mhc.bi.domain.hue.DesktopDocument2;
+import com.mhc.bi.service.DesktopDocument2Service;
+import com.mhc.bi.service.Impl.DesktopDocument2Impl;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import java.util.List;
 
 /**
@@ -8,18 +13,20 @@ import java.util.List;
  * @description File类表示文件的存储结构，包括文件的类型（文件夹or目录），文件的id,文件的名称，文件的子集合，文件的父目录id
  */
 public class File {
-    private String type;
+
+
+    private int type;
     private int id;
     private String name;
     private List<Integer> children;
     private Integer parent;
-    private String content;
+    private String shelltype;
 
-    public String getType() {
+    public int getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(int type) {
         this.type = type;
     }
 
@@ -55,11 +62,29 @@ public class File {
         this.parent = parent;
     }
 
-    public String getContent() {
-        return content;
+    public String getShelltype() {
+        return shelltype;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setShelltype(String shelltype) {
+        this.shelltype = shelltype;
+    }
+
+    public void initByDesktopDocument2(DesktopDocument2 desktopDocument2,DesktopDocument2Service desktopDocument2Service ) {
+        if (!desktopDocument2.getType().equals("directory")) {
+            //先设置shelltype
+            if (desktopDocument2.getName().endsWith(".bi")) this.setShelltype("bi");
+            else if (desktopDocument2.getType().equals("query-hive"))
+                this.setShelltype("hiveshell");
+            else if (desktopDocument2.getType().contains("shell")) this.setShelltype("shell");
+            else this.setShelltype(desktopDocument2.getType());
+
+            this.setType(1);
+        } else this.setType(0);
+        this.id = desktopDocument2.getId();
+        this.name = desktopDocument2.getName();
+        this.children = desktopDocument2Service.getChildrenList(this.id);
+        this.parent = desktopDocument2.getParentDirectoryId();
     }
 }
+

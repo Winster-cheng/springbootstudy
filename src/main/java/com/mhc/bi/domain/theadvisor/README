@@ -55,7 +55,8 @@ execute_day:执行时间（天）
 paraments：参数
 start_time: 开始时间
 end_time :结束时间
-create table taskinstance(id INT UNSIGNED AUTO_INCREMENT,name varchar(50),shellname varchar(50),input varchar(100),output varchar(10),gmt_create datetime,gmt_modify datetime,status int,execute_time varchar(50),execute_day varchar(10),paraments varchar(50),PRIMARY KEY (id),start_time datetime,end_time datetime);
+owner:责任人
+create table taskinstance(id INT UNSIGNED AUTO_INCREMENT,name varchar(50),shellname varchar(50),input varchar(100),output varchar(10),gmt_create datetime,gmt_modify datetime,status int,execute_time varchar(50),execute_day varchar(10),paraments varchar(50),PRIMARY KEY (id),start_time datetime,end_time datetime,owner varchar(30));
 
 
 执行实例表（ExecuteInstance）

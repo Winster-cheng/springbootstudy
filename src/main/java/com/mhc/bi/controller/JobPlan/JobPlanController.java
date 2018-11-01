@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,19 +30,28 @@ public class JobPlanController {
     public ActionResult select(Integer pageSize, Integer pageNo, String fileName, Integer timeSortType) {
         actionResult = new ActionResult();
         try {
-            JobPlanView jobPlanView;
-            int totalCount = jobPlanService.getNumbers();
+            int totalCount;
+            if (fileName == "") {
+                totalCount = jobPlanService.getNumbers();
+            } else {
+                totalCount = jobPlanService.getNumbersByName(fileName);
+            }
             PageMessage pageMessage = new PageMessage();
+            JobPlanView jobPlanView;
+            List<JobPlanView> jobPlanViewList = new ArrayList<JobPlanView>();
             List<JobPlan> jobPlanList = jobPlanService.selectJobPlanListByPage(pageSize, pageNo, fileName, timeSortType);
             for (JobPlan jobPlan : jobPlanList) {
-                jobPlanView=new JobPlanView();
-//                jobPlanView
+                jobPlanView = new JobPlanView();
+                jobPlanView.initByJobPlan(jobPlan);
+                jobPlanViewList.add(jobPlanView);
             }
+
+            pageMessage.setList(jobPlanViewList);
             pageMessage.setPageNo(pageNo);
             pageMessage.setPageSize(pageSize);
             pageMessage.setTotalPage(totalCount % pageSize == 0 ? totalCount / pageSize : totalCount / pageSize + 1);
             pageMessage.setTotalCount(totalCount);
-//            PageMessage pageMessage = jobPlanService.select(pageSize, pageNo, fileName, timeSortType);
+
             actionResult.setDataValue(pageMessage);
             actionResult.success();
         } catch (Exception e) {

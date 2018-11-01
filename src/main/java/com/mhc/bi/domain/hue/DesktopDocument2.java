@@ -19,7 +19,7 @@ public class DesktopDocument2 {
     private Date lastModified;
     private int version;
     private int isHistory;
-    private String parentDirectoryId;
+    private int parentDirectoryId;
     private String search;
     private int isManaged;
     private int isTrashed;
@@ -112,14 +112,6 @@ public class DesktopDocument2 {
         this.isHistory = isHistory;
     }
 
-    public String getParentDirectoryId() {
-        return parentDirectoryId;
-    }
-
-    public void setParentDirectoryId(String parentDirectoryId) {
-        this.parentDirectoryId = parentDirectoryId;
-    }
-
     public String getSearch() {
         return search;
     }
@@ -142,5 +134,13 @@ public class DesktopDocument2 {
 
     public void setIsTrashed(int isTrashed) {
         this.isTrashed = isTrashed;
+    }
+
+    public int getParentDirectoryId() {
+        return parentDirectoryId;
+    }
+
+    public void setParentDirectoryId(int parentDirectoryId) {
+        this.parentDirectoryId = parentDirectoryId;
     }
 }

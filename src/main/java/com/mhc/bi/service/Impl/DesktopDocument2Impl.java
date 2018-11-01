@@ -25,35 +25,25 @@ public class DesktopDocument2Impl implements DesktopDocument2Service {
         return desktopDocument2Mapper.selectByName(name);
     }
 
-    //获取所有id>3的目录，并且如果是文件，那么file.type改成file
+    //获取所有的没被抛弃的desktopdocument2对象
     @Override
-    public List<File> getDirectory() {
-        List<File> directoryList = desktopDocument2Mapper.getDirectory();
-        List<File> removeList = new ArrayList<>();
-        for (File file : directoryList) {
-            if (file.getId() > 3)
-                file.setChildren(desktopDocument2Mapper.getChildrenList(file.getId()));
-            else
-                removeList.add(file);
-            if (file.getType() != "directory") file.setType("file");
-
-        }
-        directoryList.removeAll(removeList);
-        return directoryList;
-    }
-
-    //TODO 现在默认都是hiveshell类型
-    @Override
-    public File getContent(int id) {
-        File file = desktopDocument2Mapper.getContent(id);
-        file.setType("hiveshell");
-        return file;
+    public List<DesktopDocument2> getAllAlive() {
+        return desktopDocument2Mapper.getAllAlive();
     }
 
     @Override
     public boolean save(int id, String content) {
-        return desktopDocument2Mapper.updateContentById(id,content);
+        return desktopDocument2Mapper.updateContentById(id, content);
     }
 
 
+    @Override
+    public String getContent(int id) {
+        return desktopDocument2Mapper.getContent(id);
+    }
+
+    @Override
+    public List<Integer> getChildrenList(int id) {
+        return desktopDocument2Mapper.getChildrenList(id);
+    }
 }

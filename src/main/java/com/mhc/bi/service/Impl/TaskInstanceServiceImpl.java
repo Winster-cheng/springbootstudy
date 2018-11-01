@@ -89,6 +89,7 @@ public class TaskInstanceServiceImpl implements TaskInstanceService {
                 taskInstance.setExecuteTime(time);
                 taskInstance.setExecuteDay(day);
                 taskInstance.setParaments(jobPlan.getParaments());
+                taskInstance.setOwner(jobPlan.getOwner());
                 taskInstanceService.insertTaskInstance(taskInstance); //注入到数据库中
             }
         }
@@ -196,5 +197,13 @@ public class TaskInstanceServiceImpl implements TaskInstanceService {
         }
         return map;
     }
+
+    //给接口3.2返回的List<TaskInstance>
+    public List<TaskInstance> selectByPage(int pageSize, int pageNo, String date, String fileName, int[] status, String sortName, String sortType) {
+        int start = (pageNo - 1) * pageSize;
+//        taskInstanceService
+        return null;
+    }
+
 
 }

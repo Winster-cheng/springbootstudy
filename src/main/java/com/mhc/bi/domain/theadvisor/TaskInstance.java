@@ -31,12 +31,14 @@ public class TaskInstance {
     private String paraments;
     private String startTime;
     private String endTime;
+    private String owner;
+    private String type;
 
     public TaskInstance() {
 
     }
 
-    public TaskInstance(int id, String name, String input, String output, String gmtCreate, String gmtModify, int status, String executeTime, String executeDay, String paraments) {
+    public TaskInstance(int id, String name, String input, String output, String gmtCreate, String gmtModify, int status, String executeTime, String executeDay, String paraments, String owner) {
         this.id = id;
         this.name = name;
         this.input = input;
@@ -47,6 +49,15 @@ public class TaskInstance {
         this.executeTime = executeTime;
         this.executeDay = executeDay;
         this.paraments = paraments;
+        this.owner = owner;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 
     public int getId() {
@@ -155,6 +166,14 @@ public class TaskInstance {
 
     public void setEndTime(String endTime) {
         this.endTime = endTime;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getRealName() {

@@ -5,6 +5,7 @@ import com.mhc.bi.domain.theadvisor.JobPlan;
 import com.mhc.bi.mapper.theadvisor.JobPlanMapper;
 import com.mhc.bi.service.JobPlanService;
 import com.mhc.bi.vo.PageMessage;
+import com.mhc.bi.vo.taskplan.JobPlanView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -46,37 +47,45 @@ public class JobPlanServiceImpl implements JobPlanService {
         return jobPlanMapper.selectJobPlanByOutput(output);
     }
 
-
-    public int getNumbers(){
+    //获取JobPlan的总条数
+    @Override
+    public int getNumbers() {
         return jobPlanMapper.getNumbers();
     }
 
+    @Override
+    public int getNumbersByName(String name) {
+      return   jobPlanMapper.getNumbersByName(name);
+    }
+
     //对应接口文档2.1 搜索功能
-    @Override
-    public List<JobPlan> selectJobPlanListByPage(int pageSize, int pageNo, String fileName, int orderByModifyTime) {
-        List<JobPlan> jobPlanList;
-        if (fileName.equals("")) {
-            if (orderByModifyTime == 1)
-                jobPlanList = jobPlanMapper.getJobPlanListOrderByModifyAscLimit((pageNo - 1) * pageSize, pageSize);
-            else if (orderByModifyTime == 2)
-                jobPlanList = jobPlanMapper.getJobPlanListOrderByModifyDescLimit((pageNo - 1) * pageSize, pageSize);
-            else
-                jobPlanList = jobPlanMapper.getJobPlanListLimit((pageNo - 1) * pageSize, pageSize);
-        } else {
-            if (orderByModifyTime == 1) {
-                jobPlanList = jobPlanMapper.getJobPlanListOrderByModifyNameLikeAscLimit(fileName, (pageNo - 1) * pageSize, pageSize);
-            } else if (orderByModifyTime == 2) {
-                jobPlanList = jobPlanMapper.getJobPlanListOrderByModifyNameLikeDescLimit(fileName, (pageNo - 1) * pageSize, pageSize);
+        @Override
+        public List<JobPlan> selectJobPlanListByPage ( int pageSize, int pageNo, String fileName,int orderByModifyTime){
+            int start = (pageNo - 1) * pageSize;
+            List<JobPlan> jobPlanList;
+            if (fileName.equals("")) {
+                if (orderByModifyTime == 1)
+                    //把JobPlanList包装成JobPlanViewList
+                    jobPlanList = jobPlanMapper.getJobPlanListOrderByModifyAscLimit(start, pageSize);
+                else if (orderByModifyTime == 2)
+                    jobPlanList = jobPlanMapper.getJobPlanListOrderByModifyDescLimit(start, pageSize);
+                else
+                    jobPlanList = jobPlanMapper.getJobPlanListLimit(start, pageSize);
             } else {
-                jobPlanList = jobPlanMapper.selectByNameLike(fileName, (pageNo - 1) * pageSize, pageSize);
+                if (orderByModifyTime == 1) {
+                    jobPlanList = jobPlanMapper.getJobPlanListOrderByModifyNameLikeAscLimit(fileName, start, pageSize);
+                } else if (orderByModifyTime == 2) {
+                    jobPlanList = jobPlanMapper.getJobPlanListOrderByModifyNameLikeDescLimit(fileName, start, pageSize);
+                } else {
+                    jobPlanList = jobPlanMapper.selectByNameLike(fileName, start, pageSize);
+                }
             }
+            return jobPlanList;
         }
-        return jobPlanList;
-    }
 
-    @Override
-    public JobPlan selectJobPlan(String name) {
-        return jobPlanMapper.selectJobPlan(name);
-    }
+        @Override
+        public JobPlan selectJobPlan (String name){
+            return jobPlanMapper.selectJobPlan(name);
+        }
 
-}
+    }

@@ -1,8 +1,6 @@
 package com.mhc.bi.service;
 
 import com.mhc.bi.domain.theadvisor.JobPlan;
-import com.mhc.bi.vo.PageMessage;
-
 import java.util.List;
 
 /**
@@ -23,8 +21,9 @@ public interface JobPlanService {
 
     public JobPlan selectJobPlanByOutput(String output);
 
-
     public List<JobPlan> selectJobPlanListByPage(int pageSize, int pageNo, String fileName, int orderByModifyTime);
 
     public int getNumbers();
+
+    public int getNumbersByName(String name);
 }

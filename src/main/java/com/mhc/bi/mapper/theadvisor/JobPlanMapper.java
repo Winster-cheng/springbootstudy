@@ -164,4 +164,8 @@ public interface JobPlanMapper {
     //查询总条数
     @Select("select count(*) from jobplan")
     int getNumbers();
+
+    //查询包含某个字段的总条数
+    @Select("select count(*) from jobplan where name like concat('%', #{name}, '%')")
+    public int getNumbersByName(String name);
 }
