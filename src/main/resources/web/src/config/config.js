@@ -65,7 +65,16 @@ export default {
     '/api': {
       target: 'http://127.0.0.1:8088/',
       changeOrigin: true,
-      // bypass: req => req.method !== 'POST' ? false : undefined,
+      // bypass: (req, res, proxyOptions) => {
+      //   if(req.url.indexOf("/user/getUser") > -1){
+      //     console.log(req.url,11)
+      //     return false
+      //   }
+      //   if(req.method !== 'POST'){
+      //     console.log(req.url,2)
+      //     return false;
+      //   }
+      // },
       pathRewrite: { '^/api': '' },
     },
   },

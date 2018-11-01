@@ -6,6 +6,7 @@ import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import {Controlled as CodeMirror} from 'react-codemirror2';
 import Folder from "../../assets/icon_folder.svg";
 import OpenFolder from "../../assets/icon_folder_open.svg";
+import DropdownIcon from "../../assets/icon_dropdown.svg";
 
 require('codemirror/mode/javascript/javascript');
 require('codemirror/lib/codemirror.css');
@@ -83,8 +84,9 @@ class TaskSubmit extends Component {
     }
   };
 
-  removePane = (targetKey) => {
-    let { activeKey } = this.state;
+  removePane = (e,targetKey) => {
+    e.stopPropagation();
+    let { activeKey, currentCodeContent } = this.state;
     let lastIndex;
     this.state.panes.forEach((pane, i) => {
       if (pane.key == targetKey) {
@@ -93,9 +95,11 @@ class TaskSubmit extends Component {
     });
     const panes = this.state.panes.filter(pane => pane.key !== targetKey);
     if(activeKey == targetKey && panes[lastIndex]){
-        activeKey = panes[lastIndex].key;
+      const { key, content } = panes[lastIndex];
+        activeKey = key;
+        currentCodeContent = content;
     }
-    this.setState({ panes, activeKey });
+    this.setState({ panes, activeKey, currentCodeContent });
   }
 
   saveCode = (isSubmit) => {
@@ -148,7 +152,7 @@ class TaskSubmit extends Component {
     return (
       <Dropdown overlay={menu} className={styles.dropDownMenu}>
         <a className="ant-dropdown-link" href="#">
-          <Icon type="ellipsis" theme="outlined" className={styles.dropDownMenuIcon} />
+          <Icon component={DropdownIcon} className={styles.dropDownMenuIcon} />
         </a>
       </Dropdown>
     )
@@ -203,7 +207,7 @@ class TaskSubmit extends Component {
     return (
       <PageHeaderWrapper>
         <Row className="task-submit-container" style={{background: "#FFF"}}>
-          <Col span={4} style={{height: "100%",background: "#fff",borderRight: "1px solid #E7E7E7"}}>
+          <Col span={4} style={{height: "100%",background: "#fff",borderRight: "1px solid #E7E7E7",overflow: "auto"}}>
             {treeDataLoading ? <Spin /> : 
             <Tree
               onSelect={this.onSelect}
@@ -229,7 +233,7 @@ class TaskSubmit extends Component {
                           className={styles['close-icon']}
                           type="close-circle"
                           theme="outlined"
-                          onClick={() => this.removePane(pane.key)}
+                          onClick={e => this.removePane(e,pane.key)}
                         />
                       </span>
                     }
@@ -247,9 +251,6 @@ class TaskSubmit extends Component {
                 editorDidMount={editor => {this.editor = editor}}
                 onBeforeChange={(editor, data, value) => {
                   this.setState({currentCodeContent: value});
-                }}
-                onChange={(editor, data, value) => {
-                  console.log(data)
                 }}
               />
             </Row>

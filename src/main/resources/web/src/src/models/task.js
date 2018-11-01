@@ -11,7 +11,6 @@ import {
   queryLogs,
   queryAllStatuss,
 } from '@/services/task';
-import { message } from "antd";
 
 const getEdges = list => {
   const edges = [];
@@ -66,10 +65,10 @@ export default {
     *fetchCodeContent({ payload }, { call }){
       const { result, dataValue } = yield call(queryContent, payload);
       if(result){
-        const { content } = dataValue;
-        return content;
+        console.log(dataValue)
+        const { fileContent } = dataValue;
+        return fileContent;
       }
-      message.error(`请求出错`)
       return null;
     },
     *submitTaskContent({ payload }, { call }){

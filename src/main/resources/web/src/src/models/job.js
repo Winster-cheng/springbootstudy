@@ -10,29 +10,32 @@ export default {
 
   effects: {
     *fetchJobs({ payload }, { call, put }) {
-      const params = { pageNo: 1, pageSize: 10, orderByTime: "", filename: "", ...payload };
-        const response = yield call(queryJobs, params);
-        yield put({
-          type: 'queryJobs',
-          payload: response,
-        });
+      const params = { pageNo: 1, pageSize: 10, timeSortType: 0, fileName: "", ...payload };
+        const { result, dataValue = {}, message } = yield call(queryJobs, params);
+        if(result){
+          yield put({
+            type: 'queryJobs',
+            payload: dataValue,
+          });
+        }else{
+          return null
+        }
       },
   },
-
   reducers: {
-    queryJobs(state, action) {
-      return {
-        ...state,
-        data: {
-          ...state.data,
-          list: action.payload.dataValue.list,
-          pagination: {
-            current: action.payload.dataValue.pageNo,
-            pageSize: action.payload.dataValue.pageSize,
-            total: action.payload.dataValue.totalCount
+    queryJobs(state, { payload }) {
+        return {
+          ...state,
+          data: {
+            ...state.data,
+            list: payload.list,
+            pagination: {
+              current: payload.pageNo,
+              pageSize: payload.pageSize,
+              total: payload.totalCount
+            }
           }
-        }
-      };
+        };
     },
   },
 };

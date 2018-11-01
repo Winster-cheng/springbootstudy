@@ -20,7 +20,7 @@ class JobPlan extends PureComponent {
     formValues: {},
     pagination: {
       pageNo: 1,
-      orderByTime: ""
+      timeSortType: ""
     },
     showGraphContainer: "hide",
     jobId: 0
@@ -155,7 +155,7 @@ class JobPlan extends PureComponent {
         >
           <Col md={6} sm={24}>
             <Item label="脚本名称">
-              {getFieldDecorator ('filename') (
+              {getFieldDecorator ('fileName') (
                 <Input placeholder="请输入" />
               )}
             </Item>
@@ -179,12 +179,12 @@ class JobPlan extends PureComponent {
     const param = {}
     if(sorter.order){
       if(sorter.order === "descend"){
-        param.orderByTime = 2;
+        param.timeSortType = 2;
       }else{
-        param.orderByTime = 1;
+        param.timeSortType = 1;
       }
     }else{
-      param.orderByTime = "";
+      param.timeSortType = 0;
     }
     param.pageNo = pagination.current;
     this.setState({

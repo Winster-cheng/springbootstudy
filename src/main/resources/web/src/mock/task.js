@@ -160,7 +160,7 @@ const treeData = [
   },
   {
     name: '任务名称072',
-    id: 7,
+    id: 744,
     type: 0,
     shelltype: 3,
   },
@@ -172,7 +172,7 @@ const treeData = [
   },
   {
     name: '任务名称073',
-    id: 73,
+    id: 713,
     type: 0,
     shelltype: 3,
   },
@@ -309,7 +309,7 @@ const instanceListData = {
   }
 };
 export default {
-  'POST /submit/getDirectory': (req, res) => {
+  'POST /api/submit/getDirectory': (req, res) => {
     setTimeout(()=>{
       res.json({
         result: true,
@@ -317,7 +317,7 @@ export default {
       })      
     },2000)
   },
-  'POST /taskPlan/getMoreDependencies': (req, res) => {
+  'POST /api/taskPlan/getMoreDependencies': (req, res) => {
     setTimeout(() => {
       // res.json({
       //   result: true,
@@ -357,7 +357,7 @@ export default {
       })
     },2000)
   },
-  'POST /taskPlan/getDependencies': (req, res) => {
+  'POST /api/taskPlan/getDependencies': (req, res) => {
     setTimeout(() => {
       res.json({
         result: true,
@@ -365,7 +365,7 @@ export default {
       })
     },2000)
   },
-  'POST /taskInstance/getDependencies': (req, res) => {
+  'POST /api/taskInstance/getDependencies': (req, res) => {
     setTimeout(() => {
       res.json({
         result: true,
@@ -373,7 +373,7 @@ export default {
       })
     },2000)
   },
-  'POST /submit/getContent': (req, res) => {
+  'POST /api/submit/getContent': (req, res) => {
     res.json({
       result: true,
       dataValue: {
@@ -381,26 +381,26 @@ export default {
       }
     })
   },
-  'POST /submit/submit': (req, res) => {
+  'POST /api/submit/submit': (req, res) => {
     res.json({
       result: true,
     })
   },
-  'POST /submit/save': (req, res) => {
+  'POST /api/submit/save': (req, res) => {
     res.json({
       result: true,
     })
   },
-  'POST /taskInstance/getLogs': (req, res) => {
+  'POST /api/taskInstance/getLogs': (req, res) => {
     res.json({
       result: true,
       list: logs
     })
   },
-  'POST /taskInstance/select': (req,res) => {
+  'POST /api/taskInstance/select': (req,res) => {
     setTimeout(()=>res.json(instanceListData),2000)
   },
-  'POST /taskInstance/getStatus': (req,res) => {
+  'POST /api/taskInstance/getStatus': (req,res) => {
     setTimeout(()=>res.json({
       result: true,
       list: [{

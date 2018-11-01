@@ -1,12 +1,12 @@
 import request from '@/utils/request';
 
 export async function queryTaskTreeData() {
-    return request(`/api/submit/getDirectory`,{
+    return request(`/taskSubmit/getDirectory`,{
       method: 'POST',
     });
   }
 export async function queryGraphNode(params){
-  return request('/api/taskPlan/getMoreDependencies', {
+  return request('/taskPlan/getMoreDependencies', {
     method: 'POST',
     body: {
       ...params,
@@ -14,7 +14,7 @@ export async function queryGraphNode(params){
   });
 }
 export async function queryAllGraphNodes(jobPlanId){
-  return request('/api/taskPlan/getDependencies', {
+  return request('/taskPlan/getDependencies', {
     method: 'POST',
     body: {
       jobPlanId,
@@ -22,7 +22,7 @@ export async function queryAllGraphNodes(jobPlanId){
   });
 }
 export async function queryContent(fileId){
-  return request('/api/submit/getContent', {
+  return request('/taskSubmit/getContent', {
     method: 'POST',
     body: {
       fileId,
@@ -30,7 +30,7 @@ export async function queryContent(fileId){
   });
 }
 export async function saveContent(params){
-  return request('/api/submit/save', {
+  return request('/taskSubmit/save', {
     method: 'POST',
     body: {
       ...params
@@ -38,7 +38,7 @@ export async function saveContent(params){
   });
 }
 export async function submitContent(params){
-  return request('/api/submit/submit', {
+  return request('/taskSubmit/submit', {
     method: 'POST',
     body: {
       ...params
@@ -47,25 +47,25 @@ export async function submitContent(params){
 }
 // 任务实例接口
 export async function queryTaskInstance(params) {
-  return request(`/api/taskInstance/select`, {
+  return request(`/taskInstance/select`, {
     method: 'POST',
     body: params,
   });
 }
 export async function queryAllInstanceNodes(params) {
-  return request(`/api/taskInstance/getDependencies`, {
+  return request(`/taskInstance/getDependencies`, {
     method: 'POST',
     body: params,
   });
 }
 export async function queryInstanceNode(params) {
-  return request(`/api/taskPlan/getMoreDependencies`, {
+  return request(`/taskPlan/getMoreDependencies`, {
     method: 'POST',
     body: params,
   });
 }
 export async function queryLogs(taskInstanceId) {
-  return request(`/api/taskInstance/getLogs`, {
+  return request(`/taskInstance/getLogs`, {
     method: 'POST',
     body: {
       taskInstanceId
@@ -73,7 +73,7 @@ export async function queryLogs(taskInstanceId) {
   });
 }
 export async function queryAllStatuss() {
-  return request(`/api/taskInstance/getStatus`, {
+  return request(`/taskInstance/getStatus`, {
     method: 'POST',
   });
 }
