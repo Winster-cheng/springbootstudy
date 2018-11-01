@@ -1,6 +1,9 @@
 package com.mhc.bi.controller.TaskSubmit;
 
 import com.mhc.bi.common.ActionResult;
+import com.mhc.bi.controller.TaskSubmit.BeamForm.TaskSubmitGetContent;
+import com.mhc.bi.controller.TaskSubmit.BeamForm.TaskSubmitSave;
+import com.mhc.bi.controller.TaskSubmit.BeamForm.TaskSubmitSubmit;
 import com.mhc.bi.domain.hue.DesktopDocument2;
 import com.mhc.bi.service.DesktopDocument2Service;
 import com.mhc.bi.service.HueShellService;
@@ -8,6 +11,7 @@ import com.mhc.bi.vo.File;
 import com.mhc.bi.vo.FileContent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -53,10 +57,10 @@ public class TaskSubmitController {
     }
 
     @PostMapping("/getContent")
-    public ActionResult getContent(int fileId) {
+    public ActionResult getContent(@RequestBody TaskSubmitGetContent taskSubmitGetContent) {
         actionResult = new ActionResult();
         FileContent fileContent = new FileContent();
-        fileContent.setFileContent(desktopDocument2Service.getContent(fileId));
+        fileContent.setFileContent(desktopDocument2Service.getContent(taskSubmitGetContent.getFileId()));
         try {
             actionResult.success();
             actionResult.setDataValue(fileContent);
@@ -68,10 +72,10 @@ public class TaskSubmitController {
     }
 
     @PostMapping("/save")
-    public ActionResult save(int fileId, String content) {
+    public ActionResult save(@RequestBody TaskSubmitSave taskSubmitSave) {
         actionResult = new ActionResult();
         try {
-            boolean flag = desktopDocument2Service.save(fileId, content);
+            boolean flag = desktopDocument2Service.save(taskSubmitSave.getFileId(), taskSubmitSave.getContent());
             if (flag) actionResult.success();
             else actionResult.fail();
         } catch (Exception e) {
@@ -82,10 +86,10 @@ public class TaskSubmitController {
     }
 
     @PostMapping("/submit")
-    public ActionResult submit(Integer fileId) {
+    public ActionResult submit(@RequestBody TaskSubmitSubmit taskSubmitSubmit) {
         actionResult = new ActionResult();
         try {
-            boolean flag = hueShellService.submit(fileId);
+            boolean flag = hueShellService.submit(taskSubmitSubmit.getFileId());
             if (flag) actionResult.success();
             else
                 actionResult.fail();

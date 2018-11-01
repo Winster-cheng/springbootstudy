@@ -168,4 +168,32 @@ public interface JobPlanMapper {
     //查询包含某个字段的总条数
     @Select("select count(*) from jobplan where name like concat('%', #{name}, '%')")
     public int getNumbersByName(String name);
+
+    //输入output，返回可能input包含该output的子节点列表(主要是input包含多个的时候，like不好判断)
+    @Select("select * from jobplan where input like concat('%', #{name}, '%')")
+    @Results({
+            @Result(column = "id", property = "id"),
+            @Result(column = "name", property = "name"),
+            @Result(column = "input", property = "input"),
+            @Result(column = "execute_rate", property = "executeRate"),
+            @Result(column = "execute_time", property = "executeTime"),
+            @Result(column = "output", property = "output"),
+            @Result(column = "paraments", property = "paraments"),
+            @Result(column = "gmt_create", property = "gmtCreate"),
+            @Result(column = "gmt_modify", property = "gmtModify"),
+            @Result(column = "owner", property = "owner")
+    })
+    public List<JobPlan> getPossibleChildrenList(String name);
+
+    //根据output查询ID
+    @Select("select id from jobplan where output=#{name}")
+    public int getParentId(String name);
+
+    //根据ID获取output
+    @Select("select output from jobplan where id=#{id}")
+    public String getOutputById(int id);
+
+    //根据ID获取iutput
+    @Select("select input from jobplan where id=#{id}")
+    public String getInputById(int id);
 }

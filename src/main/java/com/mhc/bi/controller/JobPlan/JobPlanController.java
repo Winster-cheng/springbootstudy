@@ -1,14 +1,15 @@
 package com.mhc.bi.controller.JobPlan;
 
 import com.mhc.bi.common.ActionResult;
+import com.mhc.bi.common.AddParm;
 import com.mhc.bi.domain.theadvisor.JobPlan;
 import com.mhc.bi.service.JobPlanService;
 import com.mhc.bi.vo.PageMessage;
 import com.mhc.bi.vo.taskplan.JobPlanView;
+import org.apache.http.HttpRequest;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,20 +27,21 @@ public class JobPlanController {
 
     ActionResult actionResult;
 
+
     @PostMapping("/select")
-    public ActionResult select(Integer pageSize, Integer pageNo, String fileName, Integer timeSortType) {
+    public ActionResult select(@RequestBody TaskPlanSelect taskPlanSelect) {
         actionResult = new ActionResult();
         try {
             int totalCount;
-            if (fileName == "") {
+            if (taskPlanSelect.getFileName() == "") {
                 totalCount = jobPlanService.getNumbers();
             } else {
-                totalCount = jobPlanService.getNumbersByName(fileName);
+                totalCount = jobPlanService.getNumbersByName(taskPlanSelect.getFileName());
             }
             PageMessage pageMessage = new PageMessage();
             JobPlanView jobPlanView;
             List<JobPlanView> jobPlanViewList = new ArrayList<JobPlanView>();
-            List<JobPlan> jobPlanList = jobPlanService.selectJobPlanListByPage(pageSize, pageNo, fileName, timeSortType);
+            List<JobPlan> jobPlanList = jobPlanService.selectJobPlanListByPage(taskPlanSelect.getPageSize(), taskPlanSelect.getPageNo(), taskPlanSelect.getFileName(), taskPlanSelect.getTimeSortType());
             for (JobPlan jobPlan : jobPlanList) {
                 jobPlanView = new JobPlanView();
                 jobPlanView.initByJobPlan(jobPlan);
@@ -47,9 +49,9 @@ public class JobPlanController {
             }
 
             pageMessage.setList(jobPlanViewList);
-            pageMessage.setPageNo(pageNo);
-            pageMessage.setPageSize(pageSize);
-            pageMessage.setTotalPage(totalCount % pageSize == 0 ? totalCount / pageSize : totalCount / pageSize + 1);
+            pageMessage.setPageNo(taskPlanSelect.getPageNo());
+            pageMessage.setPageSize(taskPlanSelect.getPageSize());
+            pageMessage.setTotalPage(totalCount % taskPlanSelect.getPageSize() == 0 ? totalCount / taskPlanSelect.getPageSize() : totalCount / taskPlanSelect.getPageSize() + 1);
             pageMessage.setTotalCount(totalCount);
 
             actionResult.setDataValue(pageMessage);
@@ -64,6 +66,7 @@ public class JobPlanController {
     @PostMapping("/getDependencies")
     public ActionResult getDependencies(int jobPlanId) {
         actionResult = new ActionResult();
+
         return actionResult;
     }
 

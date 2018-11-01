@@ -1,6 +1,7 @@
 package com.mhc.bi.service;
 
 import com.mhc.bi.domain.theadvisor.JobPlan;
+
 import java.util.List;
 
 /**
@@ -26,4 +27,12 @@ public interface JobPlanService {
     public int getNumbers();
 
     public int getNumbersByName(String name);
+
+    public List<Integer> getChildrenList(int id);
+
+    public List<Integer> getParentList(int id);
+
+    public String getOutputById(int id);
+
+    public String getInputById(int id);
 }

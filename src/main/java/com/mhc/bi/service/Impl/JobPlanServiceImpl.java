@@ -9,6 +9,7 @@ import com.mhc.bi.vo.taskplan.JobPlanView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -55,37 +56,72 @@ public class JobPlanServiceImpl implements JobPlanService {
 
     @Override
     public int getNumbersByName(String name) {
-      return   jobPlanMapper.getNumbersByName(name);
+        return jobPlanMapper.getNumbersByName(name);
+    }
+
+    //输入ID，返回子节点ID列表
+    @Override
+    public List<Integer> getChildrenList(int id) {
+        List<Integer> childrenList = new ArrayList<>();
+
+        List<JobPlan> jobPlanList = jobPlanMapper.getPossibleChildrenList(jobPlanMapper.getOutputById(id));
+        for (JobPlan jobPlan : jobPlanList) {
+            String input[] = jobPlan.getInput().split(",");
+            for (String in : input) {
+                if (in.equals(this.getOutputById(id))) {
+                    childrenList.add(jobPlan.getId());
+                    continue;
+                }
+            }
+        }
+        return childrenList;
+    }
+
+    @Override
+    public String getOutputById(int id) {
+        return jobPlanMapper.getOutputById(id);
+    }
+
+    @Override
+    public String getInputById(int id) {
+        return jobPlanMapper.getInputById(id);
+    }
+
+    @Override
+    public List<Integer> getParentList(int id) {
+        String output = this.getOutputById(id);
+
+        return null;
     }
 
     //对应接口文档2.1 搜索功能
-        @Override
-        public List<JobPlan> selectJobPlanListByPage ( int pageSize, int pageNo, String fileName,int orderByModifyTime){
-            int start = (pageNo - 1) * pageSize;
-            List<JobPlan> jobPlanList;
-            if (fileName.equals("")) {
-                if (orderByModifyTime == 1)
-                    //把JobPlanList包装成JobPlanViewList
-                    jobPlanList = jobPlanMapper.getJobPlanListOrderByModifyAscLimit(start, pageSize);
-                else if (orderByModifyTime == 2)
-                    jobPlanList = jobPlanMapper.getJobPlanListOrderByModifyDescLimit(start, pageSize);
-                else
-                    jobPlanList = jobPlanMapper.getJobPlanListLimit(start, pageSize);
+    @Override
+    public List<JobPlan> selectJobPlanListByPage(int pageSize, int pageNo, String fileName, int orderByModifyTime) {
+        int start = (pageNo - 1) * pageSize;
+        List<JobPlan> jobPlanList;
+        if (fileName.equals("")) {
+            if (orderByModifyTime == 1)
+                //把JobPlanList包装成JobPlanViewList
+                jobPlanList = jobPlanMapper.getJobPlanListOrderByModifyAscLimit(start, pageSize);
+            else if (orderByModifyTime == 2)
+                jobPlanList = jobPlanMapper.getJobPlanListOrderByModifyDescLimit(start, pageSize);
+            else
+                jobPlanList = jobPlanMapper.getJobPlanListLimit(start, pageSize);
+        } else {
+            if (orderByModifyTime == 1) {
+                jobPlanList = jobPlanMapper.getJobPlanListOrderByModifyNameLikeAscLimit(fileName, start, pageSize);
+            } else if (orderByModifyTime == 2) {
+                jobPlanList = jobPlanMapper.getJobPlanListOrderByModifyNameLikeDescLimit(fileName, start, pageSize);
             } else {
-                if (orderByModifyTime == 1) {
-                    jobPlanList = jobPlanMapper.getJobPlanListOrderByModifyNameLikeAscLimit(fileName, start, pageSize);
-                } else if (orderByModifyTime == 2) {
-                    jobPlanList = jobPlanMapper.getJobPlanListOrderByModifyNameLikeDescLimit(fileName, start, pageSize);
-                } else {
-                    jobPlanList = jobPlanMapper.selectByNameLike(fileName, start, pageSize);
-                }
+                jobPlanList = jobPlanMapper.selectByNameLike(fileName, start, pageSize);
             }
-            return jobPlanList;
         }
-
-        @Override
-        public JobPlan selectJobPlan (String name){
-            return jobPlanMapper.selectJobPlan(name);
-        }
-
+        return jobPlanList;
     }
+
+    @Override
+    public JobPlan selectJobPlan(String name) {
+        return jobPlanMapper.selectJobPlan(name);
+    }
+
+}
