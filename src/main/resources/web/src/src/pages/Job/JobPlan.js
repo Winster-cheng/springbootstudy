@@ -12,7 +12,7 @@ const {Item} = Form;
   data: job.data,
   loading: loading.models.job,
   graphDependencies: task.graphNodes,
-  graphNodesFetchLoading: loading.effects["task/fetchAllGraphNodes"],
+  graphNodesFetchLoading: loading.effects['task/fetchAllGraphNodes'],
 }))
 @Form.create ()
 class JobPlan extends PureComponent {
@@ -20,16 +20,16 @@ class JobPlan extends PureComponent {
     formValues: {},
     pagination: {
       pageNo: 1,
-      timeSortType: ""
+      timeSortType: '',
     },
-    showGraphContainer: "hide",
-    jobId: 0
+    showGraphContainer: 'hide',
+    jobId: 0,
   };
 
   graphContainerRight = {
-    show: "33px",
-    hide: ""
-  }
+    show: '33px',
+    hide: '',
+  };
 
   scroll = {x: false};
 
@@ -78,7 +78,7 @@ class JobPlan extends PureComponent {
   componentDidMount () {
     const {dispatch} = this.props;
     dispatch ({
-      type: 'job/fetchJobs'
+      type: 'job/fetchJobs',
     });
   }
 
@@ -88,31 +88,31 @@ class JobPlan extends PureComponent {
         ? <a
           href="javascript:;"
           style={{maxWidth: `${this.fixedWidth[dataIndex]}px`}}
-          onClick={e => this.showGraph (e,jobId)}
+          onClick={e => this.showGraph (e, jobId)}
           className={styles.tdEllisps}
         >
           {text}
-          </a>
+        </a>
         : <span
           href="javascript:;"
           style={{maxWidth: `${this.fixedWidth[dataIndex]}px`}}
           className={styles.tdEllisps}
         >
           {text}
-          </span>}
+        </span>}
     </Tooltip>
   );
 
-  showGraph = (e,jobId) => {
-    e.stopPropagation();
-    this.setState({
-      showGraphContainer: "show",
-      jobId
-    })
-    this.props.dispatch({
+  showGraph = (e, jobId) => {
+    e.stopPropagation ();
+    this.setState ({
+      showGraphContainer: 'show',
+      jobId,
+    });
+    this.props.dispatch ({
       type: 'task/fetchAllGraphNodes',
-      payload: jobId
-    })
+      payload: jobId,
+    });
   };
 
   handleSearch = e => {
@@ -123,25 +123,24 @@ class JobPlan extends PureComponent {
       this.setState ({
         formValues: fieldsValue,
       });
-
       dispatch ({
         type: 'job/fetchJobs',
         payload: {
           ...this.state.pagination,
-          ...fieldsValue
+          ...fieldsValue,
         },
       });
     });
   };
 
   handleFormReset = () => {
-    const { form, dispatch } = this.props;
-    form.resetFields();
-    this.setState({
+    const {form, dispatch} = this.props;
+    form.resetFields ();
+    this.setState ({
       formValues: {},
     });
-    dispatch({
-      type: 'job/fetchJobs'
+    dispatch ({
+      type: 'job/fetchJobs',
     });
   };
 
@@ -155,9 +154,7 @@ class JobPlan extends PureComponent {
         >
           <Col md={6} sm={24}>
             <Item label="脚本名称">
-              {getFieldDecorator ('fileName') (
-                <Input placeholder="请输入" />
-              )}
+              {getFieldDecorator ('fileName') (<Input placeholder="请输入" />)}
             </Item>
           </Col>
           <Col md={8} sm={24}>
@@ -176,80 +173,108 @@ class JobPlan extends PureComponent {
   };
 
   handleGeneralTableChange = (pagination, filters, sorter) => {
-    const param = {}
-    if(sorter.order){
-      if(sorter.order === "descend"){
+    const param = {};
+    if (sorter.order) {
+      if (sorter.order === 'descend') {
         param.timeSortType = 2;
-      }else{
+      } else {
         param.timeSortType = 1;
       }
-    }else{
+    } else {
       param.timeSortType = 0;
     }
     param.pageNo = pagination.current;
-    this.setState({
-      pagination: param
-    })
+    this.setState ({
+      pagination: param,
+    });
     this.props.dispatch ({
       type: 'job/fetchJobs',
       payload: {
         ...param,
-        ...this.state.formValues
+        ...this.state.formValues,
       },
     });
   };
 
   autoFooter = () => {
-    const { data = {} } = this.props;
-    const { list = [] } = data;
-    if(list.length > 0 && list.length < 11){
+    const {data = {}} = this.props;
+    const {list = []} = data;
+    if (list.length > 0 && list.length < 11) {
       const autoFooterHeight = 59 * (10 - list.length);
-      return <div style={{height: `${autoFooterHeight}px`}}>
-        <div style={{height: "100%",width: `${parseInt(this.fixedWidth.name,10)+33}px`,borderRight: "1px solid #e8e8e8"}} />
-             </div>
+      return (
+        <div style={{height: `${autoFooterHeight}px`}}>
+          <div
+            style={{
+              height: '100%',
+              width: `${parseInt (this.fixedWidth.name, 10) + 33}px`,
+              borderRight: '1px solid #e8e8e8',
+            }}
+          />
+        </div>
+      );
     }
-      return false;
-  }
+    return false;
+  };
 
   hideGraphContainer = () => {
-    this.setState({
-      showGraphContainer: "hide"
-    })
-  }
+    this.setState ({
+      showGraphContainer: 'hide',
+    });
+  };
 
   render () {
-    const {loading, data = {}, graphDependencies, graphNodesFetchLoading} = this.props;
+    const {
+      loading,
+      data = {},
+      graphDependencies,
+      graphNodesFetchLoading,
+    } = this.props;
     const tableFullWidth =
       document.body.clientWidth -
       (document.getElementsByClassName ('ant-layout-sider')[0]
         ? document
             .getElementsByClassName ('ant-layout-sider')[0]
             .style.width.replace ('px', '')
-        : 0) - 48 - 64;
+        : 0) -
+      48 -
+      64;
     this.columns = this.columns.map (item => {
-      if(item.dataIndex === "executeRate"){// 最后一列 宽度取rest
+      if (item.dataIndex === 'executeRate') {
+        // 最后一列 宽度取rest
         delete this.fixedWidth.executeRate;
-        item.width = tableFullWidth - Object.values(this.fixedWidth).reduce((pre,value=0) => pre + value,0);
+        item.width =
+          tableFullWidth -
+          Object.values (this.fixedWidth).reduce (
+            (pre, value = 0) => pre + value,
+            0
+          );
         this.fixedWidth[item.dataIndex] = `${item.width - 32}`;
-      }else{
-        item.width = Math.floor(item.percent / 100 * tableFullWidth);
+      } else {
+        item.width = Math.floor (item.percent / 100 * tableFullWidth);
         this.fixedWidth[item.dataIndex] = `${item.width - 32}`;
       }
       return item;
     });
-    const { name = 0 } = this.fixedWidth;
+    const {name = 0} = this.fixedWidth;
     const maskWidthNumber = tableFullWidth - name - 36;
     const maskWidth = `${maskWidthNumber}px`;
-    this.graphContainerRight.hide = `-${maskWidthNumber + 33}px`
+    this.graphContainerRight.hide = `-${maskWidthNumber + 33}px`;
     return (
       <PageHeaderWrapper>
         <Card bordered={false} onClick={this.hideGraphContainer}>
           <div className={styles.fixedHeightTableList}>
-            <div onClick={e => e.stopPropagation()} style={{right:`${this.graphContainerRight[this.state.showGraphContainer]}`,width: maskWidth}} className={styles.graphContainer}>
-              <GraphFlow 
+            <div
+              onClick={e => e.stopPropagation ()}
+              style={{
+                right: `${this.graphContainerRight[this.state.showGraphContainer]}`,
+                width: maskWidth,
+              }}
+              className={styles.graphContainer}
+            >
+              <GraphFlow
                 fetchEffectName="task/fetchGraphNode"
                 loading={graphNodesFetchLoading}
-                graphDependencies={graphDependencies} 
+                graphDependencies={graphDependencies}
                 jobPlanId={this.state.jobId}
               />
             </div>

@@ -37,7 +37,7 @@ const jobs = [
   };
    
 export default {
-    'POST /job/getJobPlans': (req,res) => {
+    'POST /api/taskPlan/select': (req,res) => {
       setTimeout(()=>res.json(jobData),2000)
     },
 }

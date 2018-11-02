@@ -59,7 +59,7 @@ export async function queryAllInstanceNodes(params) {
   });
 }
 export async function queryInstanceNode(params) {
-  return request(`/taskPlan/getMoreDependencies`, {
+  return request(`/taskInstance/getMoreDependencies`, {
     method: 'POST',
     body: params,
   });

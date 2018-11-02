@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Spin } from "antd";
+import { Spin, Icon } from "antd";
 import { uniq, isEqual } from "lodash";
 import './g6';
 import G6 from '@antv/g6';
 import G6Plugins from '@antv/g6/build/plugins';
+import { statusClassName, statuslogo } from "@/utils/constant";
 import './index.less';
 import collapseButton from '../../assets/collapse_btn.svg';
 import expandButton from '../../assets/expand_btn.svg';
@@ -23,6 +24,14 @@ class GraphFlow4Instance extends Component {
       graphDependencies: {},
       taskInstanceId: 0,
     }
+  }
+
+  statusClassName = {
+    1: "stop",
+    2: "waitting",
+    3: "running",
+    4: "success",
+    5: "fail"
   }
 
   componentDidMount () {
@@ -243,8 +252,10 @@ class GraphFlow4Instance extends Component {
           hasParent,
           input = [],
           output = [],
+          status = {},
         } = item.getModel ();
-        const width = 170;
+        const { id: statusId, chineseName } = status;
+        const width = 188;
         const height = 46;
         const buttonWidth = 14;
         const buttonHeight = 14;
@@ -257,9 +268,14 @@ class GraphFlow4Instance extends Component {
           topButton = `<img class="ce-button ce-button-${id} top" src=${input.length > 0 ? collapseButton : expandButton}>`;
         }
         const html = G6.Util.createDOM (`
-          <div class="card-container">
-            <h1 class="main-text">${name}</h1>
-              <p class="value-text">${name}</p>
+          <div class="card-container ${statusClassName[statusId] || ""}">
+            <h1 class="main-text ellipsis">
+            <span class="status-icon"></span>
+            ${name}
+            </h1>
+            <p class="value-text ellipsis">
+            ${chineseName}
+            </p>
           </div>
         `);
         const keyShape = group.addShape ('dom', {

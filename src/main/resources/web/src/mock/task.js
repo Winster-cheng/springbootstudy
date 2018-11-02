@@ -197,14 +197,22 @@ const dependenciesList = [
     hasChildren: true,
     input: [],
     output: [2, 3],
+    status: {
+      id: 1,
+      chineseName: "未启动"
+    }
   },
   {
     id: 2,
-    name: '入 es 集群',
+    name: '入 es 集群入 es 集群入 es 集群入 es 集群入 es 集群',
     hasParent: true,
     hasChildren: true,
     input: [1],
     output: [4],
+    status: {
+      id: 2,
+      chineseName: "等待中"
+    }
   },
   {
     id: 3,
@@ -213,6 +221,10 @@ const dependenciesList = [
     hasChildren: true,
     input: [1],
     output: [4],
+    status: {
+      id: 3,
+      chineseName: "运行中"
+    }
   },
   {
     id: 4,
@@ -221,6 +233,10 @@ const dependenciesList = [
     hasChildren: true,
     input: [2, 3],
     output: [5],
+    status: {
+      id: 4,
+      chineseName: "成功"
+    }
   },
   {
     id: 5,
@@ -229,6 +245,10 @@ const dependenciesList = [
     hasChildren: false,
     input: [4],
     output: [],
+    status: {
+      id: 5,
+      chineseName: "失败"
+    }
   },
 ]
 const instances = [
@@ -357,6 +377,46 @@ export default {
       })
     },2000)
   },
+  'POST /api/taskInstance/getMoreDependencies': (req, res) => {
+    setTimeout(() => {
+      // res.json({
+      //   result: true,
+      //   isTop: false,
+      //   dataValue: {},
+      //   list: [{
+      //     id: 10,
+      //     name: "增加id10节点流程",
+      //     hasParent: true,
+      //     hasChildren: false,
+      //     input: [2],
+      //     output: []
+      //   },{
+      //     id: 11,
+      //     name: "增加id11节点流程",
+      //     hasParent: true,
+      //     hasChildren: false,
+      //     input: [3],
+      //     output: []
+      //   }]
+      // })
+
+      res.json({
+        result: true,
+        isTop: true,
+        dataValue: {},
+        list: [
+        {
+          id: 2,
+          name: '入 es 集群',
+          hasParent: false,
+          hasChildren: true,
+          input: [],
+          output: [4],
+        }
+      ]
+      })
+    },2000)
+  },
   'POST /api/taskPlan/getDependencies': (req, res) => {
     setTimeout(() => {
       res.json({
@@ -398,6 +458,7 @@ export default {
     })
   },
   'POST /api/taskInstance/select': (req,res) => {
+    console.log(1111)
     setTimeout(()=>res.json(instanceListData),2000)
   },
   'POST /api/taskInstance/getStatus': (req,res) => {

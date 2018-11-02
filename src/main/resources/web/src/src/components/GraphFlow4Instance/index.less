@@ -3,32 +3,75 @@
 :global{
     #mountNode{
         .card-container {
-            width: 170px;
+            width: 188px;
             height: 46px;
             border: 1px solid #AFE3EF;
             border-radius: 12px;
+            position: relative;
+            &.stop,
+            &.waitting{
+              background: #E7E7E7;
+              border-color: #B2B2B2;
+            }
+            &.stop .status-icon{
+              background-image: url(../../assets/icon_no.png);
+            }
+            &.waitting .status-icon{
+              background-image: url(../../assets/icon_wait.png);
+            }
+            &.running{
+              background: #E5F0FF;
+              border-color: #73AFFF;
+            }
+            &.running .status-icon{
+              background-image: url(../../assets/icon_run.png);
+            }
+            &.success{
+              background: #ECFFE3;
+              border-color: #A0E281;
+            }
+            &.success .status-icon{
+              background-image: url(../../assets/icon_success.png);
+            }
+            &.fail{
+              background: #FFE8EA;
+              border-color: #FA848B;
+            }
+            &.fail .status-icon{
+              background-image: url(../../assets/icon_fail.png);
+            }
+            .ellipsis{
+              width: 100%;
+              overflow: hidden;
+              display: inline-block;
+              white-space: nowrap;
+              text-overflow: ellipsis;
+              text-align: center;
+            }
+            .main-text{
+              margin: 0;
+              font-size: 14px;
+              padding: 0 24px;
+              color: rgba(0,0,0,.85);
+              .status-icon{
+                width: 14px;
+                height: 14px;
+                display: inline-block;
+                background-size: contain;
+                vertical-align: middle;
+              }
+            }
+            .value-text{
+              font-size: 12px;
+              padding: 0 4px;
+              color: rgba(0,0,0,.45);
+            }
           }
           .ce-button{
             display: none;
             &:hover{
               cursor: pointer;
             }
-          }
-          .card-container .main-text{
-            text-align: center;
-            margin: 0;
-            font-size: 14px;
-            line-height: 22px;
-            color: rgba(0,0,0,.85);
-          }
-          .card-container .value-text{
-            text-align: center;
-            color: rgba(0,0,0,.45);
-          }
-          .card-container .percent-text{
-            margin-right: 12px;
-            float: right;
-            color: red
           }
     }
 }

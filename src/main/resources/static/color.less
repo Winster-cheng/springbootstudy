@@ -2228,14 +2228,46 @@ i.trigger:hover {
   border: 1px solid #AFE3EF;
   border-radius: 12px;
 }
+:global #mountNode .card-container.stop,
+:global #mountNode .card-container.waitting {
+  background: #E7E7E7;
+  border-color: #B2B2B2;
+}
+:global #mountNode .card-container.stop .status-icon {
+  background-image: url(../../assets/icon_no.png);
+}
+:global #mountNode .card-container.waitting .status-icon {
+  background-image: url(../../assets/icon_wait.png);
+}
+:global #mountNode .card-container.running {
+  background: #E5F0FF;
+  border-color: #73AFFF;
+}
+:global #mountNode .card-container.running .status-icon {
+  background-image: url(../../assets/icon_run.png);
+}
+:global #mountNode .card-container.success {
+  background: #ECFFE3;
+  border-color: #A0E281;
+}
+:global #mountNode .card-container.success .status-icon {
+  background-image: url(../../assets/icon_success.png);
+}
+:global #mountNode .card-container.fail {
+  background: #FFE8EA;
+  border-color: #FA848B;
+}
+:global #mountNode .card-container.fail .status-icon {
+  background-image: url(../../assets/icon_fail.png);
+}
 :global #mountNode .card-container .main-text {
   color: rgba(0, 0, 0, 0.85);
 }
+:global #mountNode .card-container .main-text .status-icon {
+  background-size: contain;
+}
 :global #mountNode .card-container .value-text {
   color: rgba(0, 0, 0, 0.45);
-}
-:global #mountNode .card-container .percent-text {
-  color: red;
 }
 .headerSearch .input {
   background: transparent;
@@ -7930,14 +7962,46 @@ i.antd-pro-main-resources-web-src-src-components-global-header-index-trigger:hov
   border: 1px solid #AFE3EF;
   border-radius: 12px;
 }
+#mountNode .card-container.stop,
+#mountNode .card-container.waitting {
+  background: #E7E7E7;
+  border-color: #B2B2B2;
+}
+#mountNode .card-container.stop .status-icon {
+  background-image: url(../../assets/icon_no.png);
+}
+#mountNode .card-container.waitting .status-icon {
+  background-image: url(../../assets/icon_wait.png);
+}
+#mountNode .card-container.running {
+  background: #E5F0FF;
+  border-color: #73AFFF;
+}
+#mountNode .card-container.running .status-icon {
+  background-image: url(../../assets/icon_run.png);
+}
+#mountNode .card-container.success {
+  background: #ECFFE3;
+  border-color: #A0E281;
+}
+#mountNode .card-container.success .status-icon {
+  background-image: url(../../assets/icon_success.png);
+}
+#mountNode .card-container.fail {
+  background: #FFE8EA;
+  border-color: #FA848B;
+}
+#mountNode .card-container.fail .status-icon {
+  background-image: url(../../assets/icon_fail.png);
+}
 #mountNode .card-container .main-text {
   color: rgba(0, 0, 0, 0.85);
 }
+#mountNode .card-container .main-text .status-icon {
+  background-size: contain;
+}
 #mountNode .card-container .value-text {
   color: rgba(0, 0, 0, 0.45);
-}
-#mountNode .card-container .percent-text {
-  color: red;
 }
 .antd-pro-main-resources-web-src-src-components-header-search-index-headerSearch .antd-pro-main-resources-web-src-src-components-header-search-index-input {
   background: transparent;

@@ -125,6 +125,7 @@ class GraphFlow extends Component {
             })
         }
       }
+      graph.setFitView("cc");
     });
     this.setState({
       graph
@@ -244,7 +245,7 @@ class GraphFlow extends Component {
           input = [],
           output = [],
         } = item.getModel ();
-        const width = 170;
+        const width = 188;
         const height = 46;
         const buttonWidth = 14;
         const buttonHeight = 14;
