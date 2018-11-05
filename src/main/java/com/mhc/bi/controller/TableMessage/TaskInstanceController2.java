@@ -6,8 +6,10 @@ import com.mhc.bi.domain.theadvisor.TaskInstance;
 import com.mhc.bi.exec.ExecServer;
 import com.mhc.bi.exec.FlowControl;
 import com.mhc.bi.service.TaskInstanceService;
+import org.apache.ibatis.annotations.Select;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -77,10 +79,31 @@ public class TaskInstanceController2 {
         return taskInstanceService.updateStatus(t);
     }
 
-//    @GetMapping
-//    public ActionResult getTotalCountByDate(String date) {
-//        ActionResult actionResult = new ActionResult();
-//        actionResult.setDataValue(taskInstanceService.getTotalCountByDate(date));
-//    }
+    @GetMapping("getTotalCountByDate")
+    public ActionResult getTotalCountByDate(String date) {
+        ActionResult actionResult = new ActionResult();
+        try {
+            actionResult.setDataValue(taskInstanceService.getTotalCountByDate(date));
+            actionResult.success();
+        } catch (Exception e) {
+            actionResult.fail();
+            e.printStackTrace();
+        }
+        return actionResult;
+    }
+
+    @GetMapping("getTotalCountByFileName")
+    public ActionResult getTotalCountByFileName(String name) {
+        ActionResult actionResult = new ActionResult();
+        try {
+            actionResult.setDataValue(taskInstanceService.getTotalCountByFileName(name));
+            actionResult.success();
+        } catch (Exception e) {
+            actionResult.fail();
+            e.printStackTrace();
+        }
+        return actionResult;
+    }
+
 
 }

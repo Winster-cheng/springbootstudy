@@ -100,6 +100,7 @@ public class JobPlanController {
             List<Integer> childrenList=jobPlanService.getChildrenIdById(centerId);
             jobPlanDependency.init(centerJobPlan,parentList ,childrenList );
             jobPlanDependencyList.add(jobPlanDependency);
+
             actionResult.success();
             actionResult.setList(jobPlanDependencyList);
         } catch (Exception e) {

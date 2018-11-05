@@ -15,8 +15,8 @@ public class JobPlanDependency {
     private String name;
     private boolean hasParent;
     private boolean hasChildren;
-    List<Integer> parentList;
-    List<Integer> childrenList;
+    List<Integer> input;
+    List<Integer> output;
 
     public int getId() {
         return id;
@@ -50,29 +50,29 @@ public class JobPlanDependency {
         this.hasChildren = hasChildren;
     }
 
-    public List<Integer> getParentList() {
-        return parentList;
+    public List<Integer> getInput() {
+        return input;
     }
 
-    public void setParentList(List<Integer> parentList) {
-        this.parentList = parentList;
+    public void setInput(List<Integer> input) {
+        this.input = input;
     }
 
-    public List<Integer> getChildrenList() {
-        return childrenList;
+    public List<Integer> getOutput() {
+        return output;
     }
 
-    public void setChildrenList(List<Integer> childrenList) {
-        this.childrenList = childrenList;
+    public void setOutput(List<Integer> output) {
+        this.output = output;
     }
 
     //如果这个节点是父节点，那么我们就把他的父节点列表设置为空，子节点列表写死
     public void initAsParentNode(JobPlan jobPlan, boolean hasChildren, boolean hasParent, int centerId) {
         this.hasParent = hasParent;
         this.hasChildren = hasChildren;
-        this.childrenList = new ArrayList();
-        this.childrenList.add(centerId);
-        this.parentList = new ArrayList<>();
+        this.output = new ArrayList();
+        this.output.add(centerId);
+        this.input = new ArrayList<>();
         this.id = jobPlan.getId();
         this.name = jobPlan.getName();
 
@@ -83,9 +83,9 @@ public class JobPlanDependency {
     public void initAsChildNode(JobPlan jobPlan, boolean hasParent, boolean hasChildren, int centerId) {
         this.hasParent = hasParent;
         this.hasChildren = hasChildren;
-        this.childrenList = new ArrayList();
-        this.parentList = new ArrayList<>();
-        parentList.add(centerId);
+        this.output = new ArrayList();
+        this.input = new ArrayList<>();
+        input.add(centerId);
         this.id = jobPlan.getId();
         this.name = jobPlan.getName();
 
@@ -102,8 +102,8 @@ public class JobPlanDependency {
         else
             this.hasChildren = false;
 
-        this.childrenList = childrenList;
-        this.parentList = parentList;
+        this.output = childrenList;
+        this.input = parentList;
         this.id = jobPlan.getId();
         this.name = jobPlan.getName();
 

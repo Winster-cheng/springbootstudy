@@ -1,5 +1,6 @@
 package com.mhc.bi.vo.taskinstance;
 
+import com.mhc.bi.Utils.GetTime;
 import com.mhc.bi.domain.theadvisor.TaskInstance;
 
 import java.util.ArrayList;
@@ -85,10 +86,10 @@ public class TaskInstanceView {
     }
 
     public List<TaskInstanceView> getTaskInstanceViewListByTaskInstanceList(List<TaskInstance> taskInstanceList) {
-        List<TaskInstanceView> taskInstanceViewList=new ArrayList<TaskInstanceView>();
+        List<TaskInstanceView> taskInstanceViewList = new ArrayList<TaskInstanceView>();
         TaskInstanceView taskInstanceView;
         for (TaskInstance taskInstance : taskInstanceList) {
-            taskInstanceView=new TaskInstanceView();
+            taskInstanceView = new TaskInstanceView();
             taskInstanceView.initByTaskInstance(taskInstance);
             taskInstanceViewList.add(taskInstanceView);
         }
@@ -101,13 +102,16 @@ public class TaskInstanceView {
         this.setStatus(Status.getStatus(taskInstance.getStatus()));
         this.setName(taskInstance.getName());
         this.setOwner(taskInstance.getOwner());
-        this.setExecuteTime(taskInstance.getExecuteDay() + " " + taskInstance.getExecuteTime());
-//TODO 业务时间
-        this.setBussinessTime("NULL");
+        String executeTime = taskInstance.getExecuteTime();
+        if (executeTime.length() == 1) {
+            this.setExecuteTime(taskInstance.getExecuteDay() + ":0" + taskInstance.getExecuteTime()+":00:00");
+        } else this.setExecuteTime(taskInstance.getExecuteDay() + ":" + taskInstance.getExecuteTime()+":00:00");
+
+//TODO 业务时间目前默认executeTime-1
+        this.setBussinessTime(GetTime.getTimeWithCount(taskInstance.getExecuteDay(), "yyyyMMdd", -1));
         this.setStartTime(taskInstance.getStartTime());
         this.setId(taskInstance.getId());
         this.setType(taskInstance.getType());
-
         return this;
     }
 }

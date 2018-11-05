@@ -2,6 +2,8 @@ package com.mhc.bi.service.Impl;
 
 import com.mhc.bi.Utils.Algorithm;
 import com.mhc.bi.Utils.GetTime;
+import com.mhc.bi.common.ActionResult;
+import com.mhc.bi.common.JDBC;
 import com.mhc.bi.domain.theadvisor.JobPlan;
 import com.mhc.bi.domain.theadvisor.TaskInstance;
 import com.mhc.bi.mapper.theadvisor.TaskInstanceMapper;
@@ -266,7 +268,30 @@ public class TaskInstanceServiceImpl implements TaskInstanceService {
 
     @Override
     public int getTotalCountByStatus(int[] status) {
-        return taskInstanceMapper.getTotalCountByStatus(status);
+        StringBuffer sb = new StringBuffer();//拼接数组
+        sb.append("(");
+        int count = 0;
+        for (int i : status) {
+            if (count == 0) sb.append(" " + i);
+            else sb.append("," + i);
+            count++;
+        }
+        sb.append(")");
+
+        JDBC jdbc = new JDBC();
+        ActionResult actionResult = new ActionResult();
+        try {
+            count = jdbc.getTotalCountByStatus("select count(*) from taskinstance where status in " + sb.toString() + ";");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return count;
     }
+
+    @Override
+    public int getTotalCount() {
+        return taskInstanceMapper.getTotalCount();
+    }
+
 
 }

@@ -55,4 +55,7 @@ public interface TaskInstanceService {
 
     //获得总条数-状态数组筛选
     public int getTotalCountByStatus(int[] status);
+
+    //获得总条数-无任何筛选条件
+    public int getTotalCount();
 }

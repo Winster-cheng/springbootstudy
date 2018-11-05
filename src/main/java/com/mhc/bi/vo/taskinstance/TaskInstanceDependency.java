@@ -17,8 +17,8 @@ public class TaskInstanceDependency {
     private String name;
     private boolean hasParent;
     private boolean hasChildren;
-    private List<Integer> parentList;
-    private List<Integer> childrenList;
+    private List<Integer> input;
+    private List<Integer> output;
     private Status status;
 
     public Status getStatus() {
@@ -61,22 +61,22 @@ public class TaskInstanceDependency {
         this.hasChildren = hasChildren;
     }
 
-    public List<Integer> getParentList() {
-        return parentList;
+
+    public List<Integer> getInput() {
+        return input;
     }
 
-    public void setParentList(List<Integer> parentList) {
-        this.parentList = parentList;
+    public void setInput(List<Integer> input) {
+        this.input = input;
     }
 
-    public List<Integer> getChildrenList() {
-        return childrenList;
+    public List<Integer> getOutput() {
+        return output;
     }
 
-    public void setChildrenList(List<Integer> childrenList) {
-        this.childrenList = childrenList;
+    public void setOutput(List<Integer> output) {
+        this.output = output;
     }
-
 
     public void init(TaskInstance taskInstance, List<TaskInstance> parentList, List<TaskInstance> childrenList) {
         if (parentList.size() != 0)
@@ -88,14 +88,14 @@ public class TaskInstanceDependency {
             this.hasChildren = true;
         else
             this.hasChildren = false;
-        this.childrenList = new ArrayList<>();
-        this.parentList = new ArrayList<>();
+        this.output = new ArrayList<>();
+        this.input = new ArrayList<>();
         for (TaskInstance t1 : parentList) {
-            this.parentList.add(t1.getId());
+            this.input.add(t1.getId());
         }
 
         for (TaskInstance t2 : childrenList) {
-            this.childrenList.add(t2.getId());
+            this.output.add(t2.getId());
         }
         this.id = taskInstance.getId();
         this.name = taskInstance.getName();
@@ -107,9 +107,9 @@ public class TaskInstanceDependency {
     public void initAsParentNode(TaskInstance taskInstance, boolean hasChildren, boolean hasParent, int centerId) {
         this.hasParent = hasParent;
         this.hasChildren = hasChildren;
-        this.childrenList = new ArrayList();
-        this.childrenList.add(centerId);
-        this.parentList = new ArrayList<>();
+        this.output = new ArrayList();
+        this.output.add(centerId);
+        this.input = new ArrayList<>();
         this.id = taskInstance.getId();
         this.name = taskInstance.getName();
         this.status = Status.getStatus(taskInstance.getStatus());
@@ -120,9 +120,9 @@ public class TaskInstanceDependency {
     public void initAsChildNode(TaskInstance taskInstance, boolean hasChildren, boolean hasParent, int centerId) {
         this.hasParent = hasParent;
         this.hasChildren = hasChildren;
-        this.childrenList = new ArrayList();
-        this.parentList = new ArrayList<>();
-        this.parentList.add(centerId);
+        this.output = new ArrayList();
+        this.input = new ArrayList<>();
+        this.input.add(centerId);
         this.id = taskInstance.getId();
         this.name = taskInstance.getName();
         this.status = Status.getStatus(taskInstance.getStatus());

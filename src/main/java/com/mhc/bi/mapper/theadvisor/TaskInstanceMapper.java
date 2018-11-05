@@ -188,9 +188,10 @@ public interface TaskInstanceMapper {
     @Select("select count(*) from  taskinstance where execute_day=#{date}")
     public int getTotalCountByDate(String date);
 
-    @Select("select count(*) from taskinstance where name like '%name%'")
+    @Select("select count(*) from taskinstance where name like  concat('%', #{name}, '%')")
     public int getTotalCountByFileName(String name);
 
     @Select("select count(*) from taskinstance where status in #{status}")
-    public int getTotalCountByStatus(int[] status);
+    public int getTotalCountByStatus(String status);
+
 }
