@@ -65,7 +65,6 @@ export default {
     *fetchCodeContent({ payload }, { call }){
       const { result, dataValue } = yield call(queryContent, payload);
       if(result){
-        console.log(dataValue)
         const { fileContent } = dataValue;
         return fileContent;
       }

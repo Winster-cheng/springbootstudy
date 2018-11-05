@@ -4,9 +4,11 @@ import {Row, Col, Button, Form, Input, Card, Tooltip} from 'antd';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import GeneralTable from '@/components/GeneralTable';
 import GraphFlow from '@/components/GraphFlow';
+import GraphCustomTool from '@/components/GraphFlow/GraphCustomTool';
 import styles from './JobPlan.less';
 
 const {Item} = Form;
+const GraphFlowCustomed = GraphCustomTool()(GraphFlow)
 
 @connect (({job, task, loading}) => ({
   data: job.data,
@@ -271,11 +273,11 @@ class JobPlan extends PureComponent {
               }}
               className={styles.graphContainer}
             >
-              <GraphFlow
-                fetchEffectName="task/fetchGraphNode"
+              <GraphFlowCustomed
                 loading={graphNodesFetchLoading}
                 graphDependencies={graphDependencies}
-                jobPlanId={this.state.jobId}
+                nodeId={this.state.jobId}
+                payloadKey="jobPlanId"
               />
             </div>
             <div className="CommonTableList-Form">{this.renderForm ()}</div>

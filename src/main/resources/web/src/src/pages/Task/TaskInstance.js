@@ -14,13 +14,15 @@ import {
 } from 'antd';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import GeneralTable from '@/components/GeneralTable';
-import GraphFlow from '@/components/GraphFlow4Instance';
+import GraphFlow from '@/components/GraphFlow';
+import GraphCustomTool from '@/components/GraphFlow/GraphCustomTool';
 import TaskLog from './TaskLog';
 import styles from './TaskInstance.less';
 import {statusColor, statuslogo} from '@/utils/constant';
 
 const {Item} = Form;
 const {Option} = Select;
+const GraphFlowCustomed = GraphCustomTool(true)(GraphFlow)
 
 @connect (({task, loading}) => ({
   data: task.data,
@@ -146,14 +148,14 @@ class TaskInstance extends PureComponent {
           className={styles.tdEllisps}
         >
           {text}
-        </a>
+          </a>
         : <span
           href="javascript:;"
           style={{maxWidth: `${this.fixedWidth[dataIndex]}px`}}
           className={styles.tdEllisps}
         >
           {text}
-        </span>}
+          </span>}
     </Tooltip>
   );
 
@@ -383,10 +385,11 @@ class TaskInstance extends PureComponent {
                   width: '100%',
                 }}
               >
-                <GraphFlow
+                <GraphFlowCustomed
                   loading={graphNodesFetchLoading}
                   graphDependencies={graphDependencies}
-                  taskInstanceId={this.state.taskId}
+                  nodeId={this.state.taskId}
+                  payloadKey="taskInstanceId"
                 />
               </div>
               <div

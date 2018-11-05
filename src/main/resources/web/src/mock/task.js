@@ -458,7 +458,6 @@ export default {
     })
   },
   'POST /api/taskInstance/select': (req,res) => {
-    console.log(1111)
     setTimeout(()=>res.json(instanceListData),2000)
   },
   'POST /api/taskInstance/getStatus': (req,res) => {

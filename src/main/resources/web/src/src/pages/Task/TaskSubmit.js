@@ -29,7 +29,6 @@ import styles from './TaskSubmit.less';
 const {TreeNode} = Tree;
 const {TabPane} = Tabs;
 const {confirm} = Modal;
-
 @connect (({task, loading}) => ({
   taskTreeData: task.treeData,
   treeDataLoading: loading.effects['task/fetchTaskTreeData'],
@@ -132,9 +131,11 @@ class TaskSubmit extends Component {
         fileId: activeKey,
         content,
       },
-    }).then (({result}) => {
+    }).then (({result, message:msg}) => {
       if (result) {
         message.success ('保存成功');
+      } else {
+        message.error (msg);
       }
     });
   };
@@ -251,7 +252,7 @@ class TaskSubmit extends Component {
                 selectedKeys={[this.state.activeKey.toString ()]}
               >
                 {this.TreeNodeList (taskTreeData)}
-              </Tree>}
+                </Tree>}
           </Col>
           <Col
             span={20}

@@ -8,9 +8,7 @@ export async function queryTaskTreeData() {
 export async function queryGraphNode(params){
   return request('/taskPlan/getMoreDependencies', {
     method: 'POST',
-    body: {
-      ...params,
-    },
+    body: params,
   });
 }
 export async function queryAllGraphNodes(jobPlanId){
@@ -52,10 +50,12 @@ export async function queryTaskInstance(params) {
     body: params,
   });
 }
-export async function queryAllInstanceNodes(params) {
+export async function queryAllInstanceNodes(taskInstanceId) {
   return request(`/taskInstance/getDependencies`, {
     method: 'POST',
-    body: params,
+    body: {
+      taskInstanceId
+    },
   });
 }
 export async function queryInstanceNode(params) {
