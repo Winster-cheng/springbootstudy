@@ -293,5 +293,25 @@ public class TaskInstanceServiceImpl implements TaskInstanceService {
         return taskInstanceMapper.getTotalCount();
     }
 
+    @Override
+    public List<Integer> getParentIdByJobPlan(int id) {
+        List<Integer> idList = new ArrayList<>();
+        List<TaskInstance> l = this.getParentListById(id);
+        for (TaskInstance taskInstance : l) {
+            idList.add(taskInstance.getId());
+        }
+        return idList;
+    }
+
+    @Override
+    public List<Integer> getChildrenIdByJobPlan(int id) {
+        List<Integer> idList = new ArrayList<>();
+        List<TaskInstance> l = this.getChildrenListById(id);
+        for (TaskInstance taskInstance : l) {
+            idList.add(taskInstance.getId());
+        }
+        return idList;
+    }
+
 
 }

@@ -1,16 +1,19 @@
 package com.mhc.bi.controller.taskInstance;
 
 import com.mhc.bi.common.ActionResult;
+import com.mhc.bi.common.ActionResult2;
 import com.mhc.bi.common.JDBC;
 import com.mhc.bi.controller.JobPlan.TaskPlanGetDependencies;
 import com.mhc.bi.controller.taskInstance.FormBean.TaskInstanceGetDependency;
+import com.mhc.bi.controller.taskInstance.FormBean.TaskInstanceGetLog;
+import com.mhc.bi.controller.taskInstance.FormBean.TaskInstanceGetMoreDependencies;
 import com.mhc.bi.controller.taskInstance.FormBean.TaskInstanceSelect;
+import com.mhc.bi.domain.theadvisor.JobPlan;
 import com.mhc.bi.domain.theadvisor.TaskInstance;
 import com.mhc.bi.service.TaskInstanceService;
 import com.mhc.bi.vo.PageMessage;
-import com.mhc.bi.vo.taskinstance.Status;
-import com.mhc.bi.vo.taskinstance.TaskInstanceDependency;
-import com.mhc.bi.vo.taskinstance.TaskInstanceView;
+import com.mhc.bi.vo.taskinstance.*;
+import com.mhc.bi.vo.taskplan.JobPlanExtend;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -173,6 +176,100 @@ public class TaskInstanceController {
         } catch (Exception e) {
             e.printStackTrace();
             actionResult.fail();
+        }
+        return actionResult;
+    }
+
+    @PostMapping("/getMoreDependencies")
+    public ActionResult2 getMoreDependencies(@RequestBody TaskInstanceGetMoreDependencies taskInstanceGetMoreDependencies) {
+        int taskInstanceId = taskInstanceGetMoreDependencies.getTaskInstanceId();
+        boolean isTop = taskInstanceGetMoreDependencies.isTop();
+        ActionResult2 actionResult = new ActionResult2();
+        try {
+            List<TaskInstance> taskInstanceList;
+            List<TaskInstanceExtend> taskInstanceExtends = new ArrayList<>();
+            TaskInstanceExtend taskInstanceExtend;
+            if (isTop) {
+                taskInstanceList = taskInstanceService.getParentListById(taskInstanceId);
+            } else
+                taskInstanceList = taskInstanceService.getChildrenListById(taskInstanceId);
+            for (TaskInstance taskInstance : taskInstanceList) {
+                taskInstanceExtend = new TaskInstanceExtend();
+                taskInstanceExtend.initByTaskInstance(taskInstance, taskInstanceService.getParentIdByJobPlan(taskInstance.getId()), taskInstanceService.getChildrenIdByJobPlan(taskInstance.getId()));
+                taskInstanceExtends.add(taskInstanceExtend);
+            }
+            actionResult.setList(taskInstanceList);
+            actionResult.setIsTop(isTop);
+            actionResult.setDataValue(taskInstanceId);
+            actionResult.success();
+        } catch (Exception e) {
+            e.printStackTrace();
+            actionResult.fail();
+        }
+        return actionResult;
+
+    }
+
+    //TODO 目前日志模块未完成，先返回模拟的数据
+    @PostMapping("/getLogs")
+    public ActionResult getLogs(TaskInstanceGetLog taskInstanceGetLog) {
+        ActionResult actionResult = new ActionResult();
+        try {
+            List<LogVO> logVoList = new ArrayList<>();
+            LogVO logVO1 = new LogVO();
+            logVO1.setStatus(Status.getStatus(1));
+            logVO1.setContent("模拟日志1：Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@1ad53dee]\n" +
+                    "Creating a new SqlSession\n" +
+                    "SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7b4dfa22] was not registered for synchronization because synchronization is not active\n" +
+                    "JDBC Connection [ProxyConnection[PooledConnection[com.mysql.jdbc.JDBC4Connection@5ec35d94]]] will not be managed by Spring\n" +
+                    "==>  Preparing: select * from taskinstance where input like concat('%', ?, '%') ");
+            logVO1.setTime("2018 11-01");
+
+            LogVO logVO2 = new LogVO();
+            logVO2.setStatus(Status.getStatus(2));
+            logVO2.setContent("模拟日志2：Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@2ad53dee]\n" +
+                    "Creating a new SqlSession\n" +
+                    "SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7b4dfa22] was not registered for synchronization because synchronization is not active\n" +
+                    "JDBC Connection [ProxyConnection[PooledConnection[com.mysql.jdbc.JDBC4Connection@5ec35d94]]] will not be managed by Spring\n" +
+                    "==>  Preparing: select * from taskinstance where input like concat('%', ?, '%') ");
+            logVO2.setTime("2018 11-01");
+
+            LogVO logVO3 = new LogVO();
+            logVO3.setStatus(Status.getStatus(3));
+            logVO3.setContent("模拟日志3：Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@3ad53dee]\n" +
+                    "Creating a new SqlSession\n" +
+                    "SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7b4dfa33] was not registered for synchronization because synchronization is not active\n" +
+                    "JDBC Connection [ProxyConnection[PooledConnection[com.mysql.jdbc.JDBC4Connection@5ec35d94]]] will not be managed by Spring\n" +
+                    "==>  Preparing: select * from taskinstance where input like concat('%', ?, '%') ");
+            logVO3.setTime("2018 11-03");
+
+            LogVO logVO4 = new LogVO();
+            logVO4.setStatus(Status.getStatus(4));
+            logVO4.setContent("模拟日志4：Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@4ad54dee]\n" +
+                    "Creating a new SqlSession\n" +
+                    "SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7b4dfa44] was not registered for synchronization because synchronization is not active\n" +
+                    "JDBC Connection [ProxyConnection[PooledConnection[com.mysql.jdbc.JDBC4Connection@5ec45d94]]] will not be managed by Spring\n" +
+                    "==>  Preparing: select * from taskinstance where input like concat('%', ?, '%') ");
+            logVO4.setTime("2018 11-04");
+
+            LogVO logVO5 = new LogVO();
+            logVO5.setStatus(Status.getStatus(5));
+            logVO5.setContent("模拟日志5：Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@5ad55dee]\n" +
+                    "Creating a new SqlSession\n" +
+                    "SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7b5dfa55] was not registered for synchronization because synchronization is not active\n" +
+                    "JDBC Connection [ProxyConnection[PooledConnection[com.mysql.jdbc.JDBC5Connection@5ec55d95]]] will not be managed by Spring\n" +
+                    "==>  Preparing: select * from taskinstance where input like concat('%', ?, '%') ");
+            logVO5.setTime("2018 11-05");
+            logVoList.add(logVO1);
+            logVoList.add(logVO2);
+            logVoList.add(logVO3);
+            logVoList.add(logVO4);
+            logVoList.add(logVO5);
+            actionResult.setList(logVoList);
+            actionResult.success();
+        }catch (Exception e){
+            actionResult.fail();
+            e.printStackTrace();
         }
         return actionResult;
     }
