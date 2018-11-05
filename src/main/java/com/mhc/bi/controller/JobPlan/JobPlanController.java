@@ -1,6 +1,7 @@
 package com.mhc.bi.controller.JobPlan;
 
 import com.mhc.bi.common.ActionResult;
+import com.mhc.bi.common.ActionResult2;
 import com.mhc.bi.domain.theadvisor.JobPlan;
 import com.mhc.bi.service.JobPlanService;
 import com.mhc.bi.vo.PageMessage;
@@ -94,7 +95,10 @@ public class JobPlanController {
 
             //给中心节点生产VO类
             jobPlanDependency = new JobPlanDependency();
-            jobPlanDependency.init(jobPlanService.getJobPlanById(centerId), jobPlanService.getParentIdById(centerId), jobPlanService.getChildrenIdById(centerId));
+            JobPlan centerJobPlan=jobPlanService.getJobPlanById(centerId);
+            List<Integer> parentList=jobPlanService.getParentIdById(centerId);
+            List<Integer> childrenList=jobPlanService.getChildrenIdById(centerId);
+            jobPlanDependency.init(centerJobPlan,parentList ,childrenList );
             jobPlanDependencyList.add(jobPlanDependency);
             actionResult.success();
             actionResult.setList(jobPlanDependencyList);
@@ -106,9 +110,9 @@ public class JobPlanController {
     }
 
     @PostMapping("/getMoreDependencies")
-    public ActionResult getMoreDependencies(@RequestBody  TaskPlanGetMoreDependencies taskPlanGetMoreDependencies) {
+    public ActionResult2 getMoreDependencies(@RequestBody  TaskPlanGetMoreDependencies taskPlanGetMoreDependencies) {
 
-        ActionResult actionResult = new ActionResult();
+        ActionResult2 actionResult = new ActionResult2();
         try {
             int jobPlanId = taskPlanGetMoreDependencies.getJobPlanId();
             boolean isTop = taskPlanGetMoreDependencies.getIsTop();
@@ -125,7 +129,7 @@ public class JobPlanController {
                 jobPlanExtendList.add(jobPlanExtend);
             }
             actionResult.setList(jobPlanExtendList);
-            actionResult.setFlag(isTop);
+            actionResult.setIsTop(isTop);
             actionResult.setDataValue(jobPlanId);
             actionResult.success();
         } catch (Exception e) {

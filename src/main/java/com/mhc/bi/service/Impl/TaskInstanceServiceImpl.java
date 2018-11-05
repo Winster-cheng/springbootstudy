@@ -256,17 +256,17 @@ public class TaskInstanceServiceImpl implements TaskInstanceService {
 
     @Override
     public int getTotalCountByDate(String date) {
-        return 0;
+        return taskInstanceMapper.getTotalCountByDate(date);
     }
 
     @Override
     public int getTotalCountByFileName(String name) {
-        return 0;
+        return taskInstanceMapper.getTotalCountByFileName(name);
     }
 
     @Override
     public int getTotalCountByStatus(int[] status) {
-        return 0;
+        return taskInstanceMapper.getTotalCountByStatus(status);
     }
 
 }

@@ -1,6 +1,7 @@
 package com.mhc.bi.controller.TableMessage;
 
 import com.mhc.bi.Utils.JsonData;
+import com.mhc.bi.common.ActionResult;
 import com.mhc.bi.domain.theadvisor.TaskInstance;
 import com.mhc.bi.exec.ExecServer;
 import com.mhc.bi.exec.FlowControl;
@@ -38,7 +39,6 @@ public class TaskInstanceController2 {
     }
 
 
-
     @GetMapping("update")
     public Object updateShellContent() {
         TaskInstance taskInstance = new TaskInstance();
@@ -46,7 +46,7 @@ public class TaskInstanceController2 {
         taskInstance.setInput("我是input_更新版本");
         taskInstance.setInput("我是output——更新版本");
         taskInstance.setExecuteTime("这里是更新时间的测试");
-        return "更新了" + taskInstanceService.updateTaskInstance(taskInstance)+ "条数据";
+        return "更新了" + taskInstanceService.updateTaskInstance(taskInstance) + "条数据";
     }
 
     @GetMapping("delete")
@@ -59,25 +59,28 @@ public class TaskInstanceController2 {
 
     //手动生成任务实例，慎用
     @GetMapping("createTaskInstance")
-    public void createTaskInstance(){
+    public void createTaskInstance() {
         taskInstanceService.createTaskInstance();
     }
 
     @GetMapping("/start1")
-    public Object start(){
+    public Object start() {
         return flowControl.start();
     }
 
     @GetMapping("/updatestatus")
-    public Object start2(){
-        TaskInstance t=new TaskInstance();
+    public Object start2() {
+        TaskInstance t = new TaskInstance();
         t.setStatus(2);
         t.setExecuteDay("20180927");
         t.setName("test_0");
         return taskInstanceService.updateStatus(t);
     }
 
-
-
+//    @GetMapping
+//    public ActionResult getTotalCountByDate(String date) {
+//        ActionResult actionResult = new ActionResult();
+//        actionResult.setDataValue(taskInstanceService.getTotalCountByDate(date));
+//    }
 
 }
