@@ -1,7 +1,6 @@
 package com.mhc.bi.service;
 
 import com.mhc.bi.domain.hue.DesktopDocument2;
-import com.mhc.bi.vo.File;
 
 import java.util.List;
 
@@ -19,5 +18,15 @@ public interface DesktopDocument2Service {
 
     public boolean save(int id,String content);
 
+
+    public String selectNameById(int id);
+
+    public DesktopDocument2 getDesktopDocumentById(int Id);
+
+    //输入id,返回它的子目录ID
     public List<Integer> getChildrenList(int id);
+
+//    public List<DesktopDocument2>
+
+    public String getNameById(int id);
 }

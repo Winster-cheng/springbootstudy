@@ -59,23 +59,6 @@ public class JobPlanServiceImpl implements JobPlanService {
         return jobPlanMapper.getNumbersByName(name);
     }
 
-    //输入ID，返回子节点ID列表
-    @Override
-    public List<Integer> getChildrenList(int id) {
-        List<Integer> childrenList = new ArrayList<>();
-
-        List<JobPlan> jobPlanList = jobPlanMapper.getPossibleChildrenList(jobPlanMapper.getOutputById(id));
-        for (JobPlan jobPlan : jobPlanList) {
-            String input[] = jobPlan.getInput().split(",");
-            for (String in : input) {
-                if (in.equals(this.getOutputById(id))) {
-                    childrenList.add(jobPlan.getId());
-                    continue;
-                }
-            }
-        }
-        return childrenList;
-    }
 
     @Override
     public String getOutputById(int id) {
@@ -88,13 +71,59 @@ public class JobPlanServiceImpl implements JobPlanService {
     }
 
     @Override
-    public List<Integer> getParentList(int id) {
-        String output = this.getOutputById(id);
-
-        return null;
+    public List<Integer> getParentIdByJobPlan(JobPlan jobPlan) {
+        return getParentIdById(jobPlan.getId());
     }
 
-    //对应接口文档2.1 搜索功能
+    @Override
+    public List<Integer> getParentIdById(int id) {
+        String x = jobPlanMapper.getInputById(id);
+        if (x == null) return new ArrayList<>();
+        String parents[] = x.split(",");
+        List<Integer> list = new ArrayList<>();
+        for (String p : parents) {
+            list.add(jobPlanMapper.getParentId(p));
+        }
+        return list;
+    }
+
+    @Override
+    public List<Integer> getChildrenIdByJobPlan(JobPlan jobPlan) {
+        return getChildrenIdById(jobPlan.getId());
+    }
+
+    //输入id，返回这个JobPlan的子节点的id
+    @Override
+    public List<Integer> getChildrenIdById(int id) {
+        List<JobPlan> jobPlanList = this.getChildrenList(id);
+        List<Integer> jobPlanIdList = new ArrayList<>();
+        for (JobPlan jobPlan : jobPlanList) {
+            jobPlanIdList.add(jobPlan.getId());
+        }
+        return jobPlanIdList;
+    }
+
+    @Override
+    public JobPlan getJobPlanById(int id) {
+        return jobPlanMapper.getJobPlanById(id);
+    }
+
+    //输入id,返回父节点列表
+    @Override
+    public List<JobPlan> getParentList(int id) {
+        List<JobPlan> jobPlanList = new ArrayList<>();
+        String input = this.getInputById(id);
+        if (!(input==null)) { //考虑到最顶上到节点
+            String[] in = input.split(",");
+            JobPlan jobPlan;
+            for (String o : in) {
+                jobPlan = jobPlanMapper.getJobPlanByOutput(o);
+                jobPlanList.add(jobPlan);
+            }
+        }
+        return jobPlanList;
+    }
+
     @Override
     public List<JobPlan> selectJobPlanListByPage(int pageSize, int pageNo, String fileName, int orderByModifyTime) {
         int start = (pageNo - 1) * pageSize;
@@ -123,5 +152,24 @@ public class JobPlanServiceImpl implements JobPlanService {
     public JobPlan selectJobPlan(String name) {
         return jobPlanMapper.selectJobPlan(name);
     }
+
+    //输入ID，返回子节点JobPlan列表
+    @Override
+    public List<JobPlan> getChildrenList(int id) {
+        List<JobPlan> childrenList = new ArrayList<>();
+        String output = jobPlanMapper.getOutputById(id);
+        List<JobPlan> jobPlanList = jobPlanMapper.getPossibleChildrenList(output);
+        for (JobPlan jobPlan : jobPlanList) {
+            String input[] = jobPlan.getInput().split(",");
+            for (String in : input) {
+                if (in.equals(output)) {
+                    childrenList.add(jobPlan);
+                    continue;
+                }
+            }
+        }
+        return childrenList;
+    }
+
 
 }

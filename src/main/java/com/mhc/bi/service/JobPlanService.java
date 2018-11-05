@@ -28,11 +28,21 @@ public interface JobPlanService {
 
     public int getNumbersByName(String name);
 
-    public List<Integer> getChildrenList(int id);
+    public List<JobPlan> getChildrenList(int id);
 
-    public List<Integer> getParentList(int id);
+    public List<JobPlan> getParentList(int id);
 
     public String getOutputById(int id);
 
     public String getInputById(int id);
+
+    public List<Integer> getParentIdByJobPlan(JobPlan jobPlan);
+
+    public List<Integer> getParentIdById(int id);
+
+    public List<Integer> getChildrenIdByJobPlan(JobPlan jobPlan);
+
+    public List<Integer> getChildrenIdById(int id);
+
+    public JobPlan getJobPlanById(int id);
 }

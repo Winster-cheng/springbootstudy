@@ -1,7 +1,9 @@
 package com.mhc.bi.controller.TableMessage;
 
+import com.mhc.bi.domain.hue.DesktopDocument2;
 import com.mhc.bi.domain.theadvisor.HueShell;
 import com.mhc.bi.mapper.theadvisor.HueShellMapper;
+import com.mhc.bi.service.DesktopDocument2Service;
 import com.mhc.bi.service.HueShellService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,15 +26,23 @@ public class HueShellController {
     private HueShellMapper hueShellMapper;
 
 
+    @Autowired
+    private DesktopDocument2Service desktopDocument2Service;
+
     @GetMapping("select")
     public Object select() {
         return hueShellService.selectAll();
     }
 
     //将HueShell的内容导入到JobPlan和ShellContent,模拟提交操作 http://localhost:8080/hueshell/export?name=task1
-    @GetMapping("submit")
-    public boolean export(int id) {
-        return hueShellService.submit(id);
+    @GetMapping("submitById")
+    public boolean submitById(int id) {
+        String name =desktopDocument2Service.selectNameById(id);
+        return hueShellService.submit(name);
+    }
+    @GetMapping("submitByName")
+    public boolean submitByName(String name) {
+        return hueShellService.submit(name);
     }
 
     //将HueShell的内容导入到JobPlan和ShellContent,模拟提交操作 http://localhost:8080/hueshell/export?name=task1

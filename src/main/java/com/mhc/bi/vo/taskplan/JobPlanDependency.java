@@ -2,6 +2,7 @@ package com.mhc.bi.vo.taskplan;
 
 import com.mhc.bi.domain.theadvisor.JobPlan;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -65,12 +66,46 @@ public class JobPlanDependency {
         this.childrenList = childrenList;
     }
 
-    public void init(JobPlan jobPlan, List<Integer> parentList, boolean hasParent, List<Integer> childrenList, boolean hasChildren) {
+    //如果这个节点是父节点，那么我们就把他的父节点列表设置为空，子节点列表写死
+    public void initAsParentNode(JobPlan jobPlan, boolean hasChildren, boolean hasParent, int centerId) {
+        this.hasParent = hasParent;
+        this.hasChildren = hasChildren;
+        this.childrenList = new ArrayList();
+        this.childrenList.add(centerId);
+        this.parentList = new ArrayList<>();
+        this.id = jobPlan.getId();
+        this.name = jobPlan.getName();
+
+    }
+
+
+    //如果这个节点是父节点，那么我们就把他的父节点列表设置为空，子节点列表写死
+    public void initAsChildNode(JobPlan jobPlan, boolean hasParent, boolean hasChildren, int centerId) {
+        this.hasParent = hasParent;
+        this.hasChildren = hasChildren;
+        this.childrenList = new ArrayList();
+        this.parentList = new ArrayList<>();
+        parentList.add(centerId);
+        this.id = jobPlan.getId();
+        this.name = jobPlan.getName();
+
+    }
+
+    public void init(JobPlan jobPlan, List<Integer> parentList, List<Integer> childrenList) {
+        if (parentList.size() != 0)
+            this.hasParent = true;
+        else
+            this.hasParent = false;
+
+        if (childrenList.size() != 0)
+            this.hasChildren = true;
+        else
+            this.hasChildren = false;
+
         this.childrenList = childrenList;
         this.parentList = parentList;
         this.id = jobPlan.getId();
         this.name = jobPlan.getName();
-        this.hasParent = hasParent;
-        this.hasChildren = hasChildren;
+
     }
 }

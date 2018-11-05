@@ -1,5 +1,9 @@
 package com.mhc.bi.vo.taskplan;
 
+import com.mhc.bi.domain.theadvisor.JobPlan;
+
+import java.util.List;
+
 /**
  * @author baiyan
  * @date 2018/10/31
@@ -42,4 +46,16 @@ public class JobPlanExtend {
     public void setHasChildren(boolean hasChildren) {
         this.hasChildren = hasChildren;
     }
+
+    public void init(JobPlan jobPlan, List<Integer> parentList, List<Integer> childrenList) {
+        this.name = jobPlan.getName();
+        this.id = jobPlan.getId();
+        if (parentList.size() != 0) {
+            this.hasParent = true;
+        }
+        if (childrenList.size() != 0) {
+            this.hasChildren = true;
+        }
+    }
+
 }

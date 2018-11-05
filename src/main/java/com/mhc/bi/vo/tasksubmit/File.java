@@ -1,4 +1,4 @@
-package com.mhc.bi.vo;
+package com.mhc.bi.vo.tasksubmit;
 
 import com.mhc.bi.domain.hue.DesktopDocument2;
 import com.mhc.bi.service.DesktopDocument2Service;
@@ -18,7 +18,8 @@ public class File {
     private int type;
     private int id;
     private String name;
-    private List<Integer> children;
+    private List<Integer> childrenId;
+    private List<File> children;
     private Integer parent;
     private String shelltype;
 
@@ -46,11 +47,19 @@ public class File {
         this.name = name;
     }
 
-    public List<Integer> getChildren() {
+    public List<Integer> getChildrenId() {
+        return childrenId;
+    }
+
+    public void setChildrenId(List<Integer> childrenId) {
+        this.childrenId = childrenId;
+    }
+
+    public List<File> getChildren() {
         return children;
     }
 
-    public void setChildren(List<Integer> children) {
+    public void setChildren(List<File> children) {
         this.children = children;
     }
 
@@ -83,8 +92,7 @@ public class File {
         } else this.setType(0);
         this.id = desktopDocument2.getId();
         this.name = desktopDocument2.getName();
-        this.children = desktopDocument2Service.getChildrenList(this.id);
+        this.childrenId = desktopDocument2Service.getChildrenList(this.id);
         this.parent = desktopDocument2.getParentDirectoryId();
     }
 }
-

@@ -10,4 +10,5 @@ import lombok.Data;
 @Data
 public class TaskSubmitSubmit {
     private int fileId;
+    private String content;
 }

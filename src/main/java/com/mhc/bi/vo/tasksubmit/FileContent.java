@@ -1,4 +1,4 @@
-package com.mhc.bi.vo;
+package com.mhc.bi.vo.tasksubmit;
 
 /**
  * @author baiyan

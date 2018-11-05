@@ -1,13 +1,12 @@
 package com.mhc.bi.controller.JobPlan;
 
 import com.mhc.bi.common.ActionResult;
-import com.mhc.bi.common.AddParm;
 import com.mhc.bi.domain.theadvisor.JobPlan;
 import com.mhc.bi.service.JobPlanService;
 import com.mhc.bi.vo.PageMessage;
+import com.mhc.bi.vo.taskplan.JobPlanDependency;
+import com.mhc.bi.vo.taskplan.JobPlanExtend;
 import com.mhc.bi.vo.taskplan.JobPlanView;
-import org.apache.http.HttpRequest;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -64,10 +63,75 @@ public class JobPlanController {
     }
 
     @PostMapping("/getDependencies")
-    public ActionResult getDependencies(int jobPlanId) {
+    public ActionResult getDependencies(@RequestBody TaskPlanGetDependencies taskPlanGetDependencies) {
         actionResult = new ActionResult();
+        try {
+            int centerId = taskPlanGetDependencies.getJobPlanId();
+            JobPlanDependency jobPlanDependency;
+            List<JobPlanDependency> jobPlanDependencyList = new ArrayList<JobPlanDependency>();
+            List<JobPlan> jobPlanParentList = jobPlanService.getParentList(centerId);
+            //给父节点生成VO类
+            for (JobPlan jobPlanParent : jobPlanParentList) {
+                boolean hasChildren = false;
+                boolean hasParent = false;
+                jobPlanDependency = new JobPlanDependency();
+                if (jobPlanService.getChildrenIdByJobPlan(jobPlanParent).size() != 0) hasParent = true;
+                if (jobPlanService.getParentIdByJobPlan(jobPlanParent).size() != 0) hasChildren = true;
+                jobPlanDependency.initAsParentNode(jobPlanParent, hasParent, hasChildren, centerId);
+                jobPlanDependencyList.add(jobPlanDependency);
+            }
+            //给子节点生成VO类
+            List<JobPlan> jobPlanChildrenList = jobPlanService.getChildrenList(centerId);
+            for (JobPlan jobPlanchild : jobPlanChildrenList) {
+                boolean hasChildren = false;
+                boolean hasParent = false;
+                jobPlanDependency = new JobPlanDependency();
+                if (jobPlanService.getParentIdByJobPlan(jobPlanchild).size() != 0) hasParent = true;
+                if (jobPlanService.getChildrenIdByJobPlan(jobPlanchild).size() != 0) hasChildren = true;
+                jobPlanDependency.initAsChildNode(jobPlanchild, hasParent, hasChildren, centerId);
+                jobPlanDependencyList.add(jobPlanDependency);
+            }
 
+            //给中心节点生产VO类
+            jobPlanDependency = new JobPlanDependency();
+            jobPlanDependency.init(jobPlanService.getJobPlanById(centerId), jobPlanService.getParentIdById(centerId), jobPlanService.getChildrenIdById(centerId));
+            jobPlanDependencyList.add(jobPlanDependency);
+            actionResult.success();
+            actionResult.setList(jobPlanDependencyList);
+        } catch (Exception e) {
+            e.printStackTrace();
+            actionResult.fail();
+        }
         return actionResult;
     }
 
+    @PostMapping("/getMoreDependencies")
+    public ActionResult getMoreDependencies(@RequestBody  TaskPlanGetMoreDependencies taskPlanGetMoreDependencies) {
+
+        ActionResult actionResult = new ActionResult();
+        try {
+            int jobPlanId = taskPlanGetMoreDependencies.getJobPlanId();
+            boolean isTop = taskPlanGetMoreDependencies.getIsTop();
+            List<JobPlan> jobPlanList;
+            List<JobPlanExtend> jobPlanExtendList = new ArrayList<>();
+            JobPlanExtend jobPlanExtend;
+            if (isTop) {
+                jobPlanList = jobPlanService.getParentList(jobPlanId);
+            } else
+                jobPlanList = jobPlanService.getChildrenList(jobPlanId);
+            for (JobPlan jobPlan : jobPlanList) {
+                jobPlanExtend = new JobPlanExtend();
+                jobPlanExtend.init(jobPlan, jobPlanService.getParentIdByJobPlan(jobPlan), jobPlanService.getChildrenIdByJobPlan(jobPlan));
+                jobPlanExtendList.add(jobPlanExtend);
+            }
+            actionResult.setList(jobPlanExtendList);
+            actionResult.setFlag(isTop);
+            actionResult.setDataValue(jobPlanId);
+            actionResult.success();
+        } catch (Exception e) {
+            e.printStackTrace();
+            actionResult.fail();
+        }
+        return actionResult;
+    }
 }

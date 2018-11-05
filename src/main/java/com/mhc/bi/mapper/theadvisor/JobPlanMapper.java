@@ -11,7 +11,7 @@ import java.util.List;
  * @description
  */
 public interface JobPlanMapper {
-    @Insert("insert into jobplan(name,input,execute_rate,execute_time,output,paraments,gmt_create,gmt_modify,shellname) values(#{jobPlan.name},#{jobPlan.input},#{jobPlan.executeRate},#{jobPlan.executeTime},#{jobPlan.output},#{jobPlan.paraments},#{createTime},#{createTime},#{jobPlan.shellName})")
+    @Insert("insert into jobplan(name,input,execute_rate,execute_time,output,paraments,gmt_create,gmt_modify,shellname,type) values(#{jobPlan.name},#{jobPlan.input},#{jobPlan.executeRate},#{jobPlan.executeTime},#{jobPlan.output},#{jobPlan.paraments},#{createTime},#{createTime},#{jobPlan.shellName},#{jobPlan.type})")
     @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
     int insertIntoJobPlan(@Param("jobPlan") JobPlan jobPlan, @Param("createTime") String creatTime);
 
@@ -26,7 +26,8 @@ public interface JobPlanMapper {
             @Result(column = "paraments", property = "paraments"),
             @Result(column = "gmt_create", property = "gmtCreate"),
             @Result(column = "gmt_modify", property = "gmtModify"),
-            @Result(column = "owner", property = "owner")
+            @Result(column = "owner", property = "owner"),
+            @Result(column = "type",property = "type")
     })
     List<JobPlan> getAll();
 
@@ -185,6 +186,11 @@ public interface JobPlanMapper {
     })
     public List<JobPlan> getPossibleChildrenList(String name);
 
+
+    //根据List<output>查询所有在该output列表的jobplan
+    @Select("select * from jobplan where output in #{outputList}")
+    public JobPlan getListByOutput(List<String> outputList);
+
     //根据output查询ID
     @Select("select id from jobplan where output=#{name}")
     public int getParentId(String name);
@@ -196,4 +202,11 @@ public interface JobPlanMapper {
     //根据ID获取iutput
     @Select("select input from jobplan where id=#{id}")
     public String getInputById(int id);
+
+    //根据output获取JobPlan对象
+    @Select("select * from jobplan where output=#{output}")
+    public JobPlan getJobPlanByOutput(String output);
+
+    @Select("select * from jobplan where id=#{id}")
+    public JobPlan getJobPlanById(int id);
 }

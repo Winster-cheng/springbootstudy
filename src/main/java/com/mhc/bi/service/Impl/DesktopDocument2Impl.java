@@ -1,13 +1,11 @@
 package com.mhc.bi.service.Impl;
 
 import com.mhc.bi.domain.hue.DesktopDocument2;
-import com.mhc.bi.vo.File;
 import com.mhc.bi.mapper.hue.DesktopDocument2Mapper;
 import com.mhc.bi.service.DesktopDocument2Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -46,4 +44,22 @@ public class DesktopDocument2Impl implements DesktopDocument2Service {
     public List<Integer> getChildrenList(int id) {
         return desktopDocument2Mapper.getChildrenList(id);
     }
+
+    @Override
+    public String getNameById(int id) {
+        return desktopDocument2Mapper.getNameById(id);
+    }
+
+    @Override
+    public String selectNameById(int id) {
+        return desktopDocument2Mapper.selectNameById(id);
+    }
+
+    @Override
+    public DesktopDocument2 getDesktopDocumentById(int Id) {
+
+        return null;
+    }
+
+
 }

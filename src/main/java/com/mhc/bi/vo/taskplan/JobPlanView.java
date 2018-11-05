@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * @author baiyan
  * @date 2018/10/30
- * @description 这个类用来提供给 2.1
+ * @description 这个类用来提供给 2.2
  */
 public class JobPlanView {
     private int id;

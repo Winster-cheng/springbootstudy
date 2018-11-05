@@ -83,4 +83,50 @@ public interface DesktopDocument2Mapper {
 
     @Select("select name from desktop_document2 where id=#{fileId}")
     String selectNameById(int fileId);
+
+    @Select("select * from hue2.desktop_document2 where is_trashed=0 and id>3 and id=#{id}")
+    @Results({
+            @Result(column = "id", property = "id"),
+            @Result(column = "owner_id", property = "ownerId"),
+            @Result(column = "name", property = "name"),
+            @Result(column = "description", property = "description"),
+            @Result(column = "uuid", property = "uuid"),
+            @Result(column = "type", property = "type"),
+            @Result(column = "data", property = "data"),
+            @Result(column = "extra", property = "extra"),
+            @Result(column = "last_modified", property = "lastModified"),
+            @Result(column = "version", property = "version"),
+            @Result(column = "is_history", property = "isHistory"),
+            @Result(column = "parent_directory_id", property = "parentDirectoryId"),
+            @Result(column = "search", property = "search"),
+            @Result(column = "is_managed", property = "isManaged"),
+            @Result(column = "is_trashed", property = "isTrashed")
+    }
+    )
+    DesktopDocument2 getById(int id);
+
+    @Select("select * from hue2.desktop_document2 where is_trashed=0 and id>3 and parent_directory_id=#{id}")
+    @Results({
+            @Result(column = "id", property = "id"),
+            @Result(column = "owner_id", property = "ownerId"),
+            @Result(column = "name", property = "name"),
+            @Result(column = "description", property = "description"),
+            @Result(column = "uuid", property = "uuid"),
+            @Result(column = "type", property = "type"),
+            @Result(column = "data", property = "data"),
+            @Result(column = "extra", property = "extra"),
+            @Result(column = "last_modified", property = "lastModified"),
+            @Result(column = "version", property = "version"),
+            @Result(column = "is_history", property = "isHistory"),
+            @Result(column = "parent_directory_id", property = "parentDirectoryId"),
+            @Result(column = "search", property = "search"),
+            @Result(column = "is_managed", property = "isManaged"),
+            @Result(column = "is_trashed", property = "isTrashed")
+    }
+    )
+    List<DesktopDocument2> getChildrenListById(int id);
+
+    @Select("select name from hue2.desktop_document2 where is_trashed=0 and id=#{id}")
+    String getNameById(int id);
+
 }

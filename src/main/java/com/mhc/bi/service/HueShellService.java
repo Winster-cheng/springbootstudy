@@ -17,7 +17,7 @@ public interface HueShellService {
 
     public HueShell selectByName(String name);
 
-    public boolean submit(int fileId);
+    public boolean submit(String name);
 
     public HueShell selectAliveByName(String name);
 
