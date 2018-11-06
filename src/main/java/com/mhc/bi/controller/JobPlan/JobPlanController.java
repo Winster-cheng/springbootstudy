@@ -116,34 +116,34 @@ public class JobPlanController {
     @PostMapping("/getMoreDependencies")
     public ActionResult2 getMoreDependencies(@RequestBody TaskPlanGetMoreDependencies taskPlanGetMoreDependencies) {
         JobPlanExtend jobPlanExtend;
-        List<JobPlan> jobPlanParentsList;
-        List<JobPlan> jobPlanChildrenList;
+
         ActionResult2 actionResult = new ActionResult2();
         try {
-            jobPlanExtend = new JobPlanExtend();
             int jobPlanId = taskPlanGetMoreDependencies.getJobPlanId();
             List<JobPlan> jobPlanList;
             boolean isTop = taskPlanGetMoreDependencies.getIsTop();
             JobPlan jobPlan = jobPlanService.getJobPlanById(jobPlanId);
 
             List<JobPlanExtend> jobPlanExtendList = new ArrayList<>();
-            if (isTop) {
+            if (isTop) {//获取中心节点父节点列表->遍历列表生成jobPlanExtend对象并且插入jobPlanExtend列表
                 jobPlanList = jobPlanService.getParentList(jobPlanId);
-                for (JobPlan jobPlan1 : jobPlanList) { //对被点击节点
-                    jobPlanParentsList = jobPlanService.getParentList(jobPlanId);
-                    jobPlanChildrenList = jobPlanService.getChildrenList(jobPlanId);
-//                    if (jobPlanParentsList.size() != 0) hasParent = true;
-//                    if (jobPlanChildrenList.size() != 0) hasParent = true;
-//                    jobPlanExtend.initAsParent(jobPlan, jobPlanParentsList, jobPlanChildrenList);
+                for (JobPlan jobPlan1 : jobPlanList) {
+                    jobPlanExtend = new JobPlanExtend();
+                    List<Integer> jobPlanParentsList = jobPlanService.getParentIdByJobPlan(jobPlan1);
+                    List<Integer> jobPlanChildrenList = jobPlanService.getChildrenIdByJobPlan(jobPlan1);
+                    jobPlanExtend.initAsParent(jobPlan1, jobPlanParentsList, jobPlanChildrenList);
+                    jobPlanExtendList.add(jobPlanExtend);
                 }
-            } else {
-                jobPlanParentsList = jobPlanService.getParentList(jobPlanId);
-                jobPlanChildrenList = jobPlanService.getChildrenList(jobPlanId);
-//                if (jobPlanParentsList.size() != 0) hasParent = true;
-//                if (jobPlanChildrenList.size() != 0) hasParent = true;
-//                jobPlanExtend.initAsChildren(jobPlan, jobPlanParentsList, jobPlanChildrenList);
+            } else {//获取中心节点子节点列表->遍历列表生成jobPlanExtend对象并且插入jobPlanExtend列表
+                jobPlanList = jobPlanService.getChildrenList(jobPlanId);
+                for (JobPlan jobPlan1 : jobPlanList) {
+                    jobPlanExtend = new JobPlanExtend();
+                    List<Integer> jobPlanParentsList = jobPlanService.getParentIdByJobPlan(jobPlan1);
+                    List<Integer> jobPlanChildrenList = jobPlanService.getChildrenIdByJobPlan(jobPlan1);
+                    jobPlanExtend.initAsChildren(jobPlan1, jobPlanParentsList, jobPlanChildrenList);
+                    jobPlanExtendList.add(jobPlanExtend);
+                }
             }
-            jobPlanExtendList.add(jobPlanExtend);
 
             actionResult.setList(jobPlanExtendList);
             actionResult.setIsTop(isTop);

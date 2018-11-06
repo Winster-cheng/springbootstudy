@@ -51,7 +51,7 @@ public class JobPlanExtend {
     }
 
     public List<Integer> getInput() {
-        return input;
+        return this.input;
     }
 
     public void setInput(List<Integer> input) {
@@ -66,36 +66,31 @@ public class JobPlanExtend {
         this.output = output;
     }
 
-    public void initAsParent(JobPlan jobPlan, List<JobPlan> parentList, List<JobPlan> childrenList) {
+    public void initAsParent(JobPlan jobPlan, List<Integer> parentList, List<Integer> childrenList) {
+        boolean hasParent = false;
+        boolean hasChildren = false;
+        if (parentList.size() != 0) hasParent = true;
+        if (childrenList.size() != 0) hasChildren = true;
+
         this.input = new ArrayList<>();
-        this.output = new ArrayList<>();
+        this.output = childrenList;
         this.name = jobPlan.getName();
         this.id = jobPlan.getId();
-        if (parentList.size() != 0) {
-            this.hasParent = true;
-        } else this.hasParent = false;
-        for (JobPlan jobPlan1 : parentList) {
-            input.add(jobPlan1.getId());
-        }
-        if (childrenList.size() != 0) {
-            this.hasChildren = true;
-        } else this.hasChildren = false;
-
+        this.hasParent = hasParent;
+        this.hasChildren = hasChildren;
     }
 
-    public void initAsChildren(JobPlan jobPlan, List<JobPlan> parentList, List<JobPlan> childrenList) {
-        this.input = new ArrayList<>();
+    public void initAsChildren(JobPlan jobPlan, List<Integer> parentList, List<Integer> childrenList) {
+        boolean hasParent = false;
+        boolean hasChildren = false;
+        if (parentList.size() != 0) hasParent = true;
+        if (childrenList.size() != 0) hasChildren = true;
+
+        this.input = parentList;
         this.output = new ArrayList<>();
         this.name = jobPlan.getName();
         this.id = jobPlan.getId();
-        if (parentList.size() != 0) {
-            this.hasParent = true;
-        } else this.hasParent = false;
-        if (childrenList.size() != 0) {
-            this.hasChildren = true;
-        } else this.hasChildren = false;
-        for (JobPlan jobPlan1 : childrenList) {
-            this.output.add(jobPlan1.getId());
-        }
+        this.hasParent = hasParent;
+        this.hasChildren = hasChildren;
     }
 }

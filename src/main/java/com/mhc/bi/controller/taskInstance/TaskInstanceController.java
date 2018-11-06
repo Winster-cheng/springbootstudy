@@ -187,17 +187,23 @@ public class TaskInstanceController {
             TaskInstanceExtend taskInstanceExtend;
             if (isTop) {
                 taskInstanceList = taskInstanceService.getParentListById(taskInstanceId);
-            } else
+                for (TaskInstance taskInstance : taskInstanceList) {
+                    taskInstanceExtend = new TaskInstanceExtend();
+                    taskInstanceExtend.initAsParent(taskInstance, taskInstanceService.getParentIdByTaskInstance(taskInstance.getId()), taskInstanceService.getChildrenIdByTaskInstance(taskInstance.getId()));
+                    taskInstanceExtends.add(taskInstanceExtend);
+                }
+            } else {
                 taskInstanceList = taskInstanceService.getChildrenListById(taskInstanceId);
-            for (TaskInstance taskInstance : taskInstanceList) {
-                taskInstanceExtend = new TaskInstanceExtend();
-                taskInstanceExtend.initByTaskInstance(taskInstance, taskInstanceService.getParentIdByJobPlan(taskInstance.getId()), taskInstanceService.getChildrenIdByJobPlan(taskInstance.getId()));
-                taskInstanceExtends.add(taskInstanceExtend);
+                for (TaskInstance taskInstance : taskInstanceList) {
+                    taskInstanceExtend = new TaskInstanceExtend();
+                    taskInstanceExtend.initAsChild(taskInstance, taskInstanceService.getParentIdByTaskInstance(taskInstance.getId()), taskInstanceService.getChildrenIdByTaskInstance(taskInstance.getId()));
+                    taskInstanceExtends.add(taskInstanceExtend);
+                }
             }
-            actionResult.setList(taskInstanceList);
+            actionResult.success();
+            actionResult.setList(taskInstanceExtends);
             actionResult.setIsTop(isTop);
             actionResult.setDataValue(taskInstanceId);
-            actionResult.success();
         } catch (Exception e) {
             e.printStackTrace();
             actionResult.fail();

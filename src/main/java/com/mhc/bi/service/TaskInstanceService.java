@@ -60,8 +60,8 @@ public interface TaskInstanceService {
     public int getTotalCount();
 
     //输入,返回父节点列表,注意这里要加一个execute_day判断
-    public List<Integer> getParentIdByJobPlan(int id);
+    public List<Integer> getParentIdByTaskInstance(int id);
 
     //输入ID，返回子节点列表，注意这里要加一个execute_day判断
-    public List<Integer> getChildrenIdByJobPlan(int id);
+    public List<Integer> getChildrenIdByTaskInstance(int id);
 }

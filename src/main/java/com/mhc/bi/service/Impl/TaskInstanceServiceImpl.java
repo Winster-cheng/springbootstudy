@@ -294,7 +294,7 @@ public class TaskInstanceServiceImpl implements TaskInstanceService {
     }
 
     @Override
-    public List<Integer> getParentIdByJobPlan(int id) {
+    public List<Integer> getParentIdByTaskInstance(int id) {
         List<Integer> idList = new ArrayList<>();
         List<TaskInstance> l = this.getParentListById(id);
         for (TaskInstance taskInstance : l) {
@@ -304,7 +304,7 @@ public class TaskInstanceServiceImpl implements TaskInstanceService {
     }
 
     @Override
-    public List<Integer> getChildrenIdByJobPlan(int id) {
+    public List<Integer> getChildrenIdByTaskInstance(int id) {
         List<Integer> idList = new ArrayList<>();
         List<TaskInstance> l = this.getChildrenListById(id);
         for (TaskInstance taskInstance : l) {

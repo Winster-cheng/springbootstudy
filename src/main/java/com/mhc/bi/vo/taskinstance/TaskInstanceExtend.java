@@ -2,6 +2,7 @@ package com.mhc.bi.vo.taskinstance;
 
 import com.mhc.bi.domain.theadvisor.TaskInstance;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,6 +16,8 @@ public class TaskInstanceExtend {
     private boolean hasParent;
     private boolean hasChildren;
     private Status status;
+    private List<Integer> input;
+    private List<Integer> output;
 
     public int getId() {
         return id;
@@ -56,7 +59,23 @@ public class TaskInstanceExtend {
         this.status = status;
     }
 
-    public void initByTaskInstance(TaskInstance taskInstance, List<Integer> parentList, List<Integer> childrenList) {
+    public List<Integer> getInput() {
+        return input;
+    }
+
+    public void setInput(List<Integer> input) {
+        this.input = input;
+    }
+
+    public List<Integer> getOutput() {
+        return output;
+    }
+
+    public void setOutput(List<Integer> output) {
+        this.output = output;
+    }
+
+    public void initAsParent(TaskInstance taskInstance, List<Integer> parentList, List<Integer> childrenList) {
         this.id = taskInstance.getId();
         this.name = taskInstance.getName();
         if (parentList.size() != 0) {
@@ -65,6 +84,22 @@ public class TaskInstanceExtend {
         if (childrenList.size() != 0) {
             this.hasChildren = true;
         }
-        this.status = Status.getStatus(taskInstance.getStatus());
+        this.output = parentList;
+        this.input = new ArrayList<>();
+        this.status=Status.getStatus(taskInstance.getStatus());
+    }
+
+    public void initAsChild(TaskInstance taskInstance, List<Integer> parentList, List<Integer> childrenList) {
+        this.id = taskInstance.getId();
+        this.name = taskInstance.getName();
+        if (parentList.size() != 0) {
+            this.hasParent = true;
+        }
+        if (childrenList.size() != 0) {
+            this.hasChildren = true;
+        }
+        this.input = parentList;
+        this.output = new ArrayList<>();
+        this.status=Status.getStatus(taskInstance.getStatus());
     }
 }
