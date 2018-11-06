@@ -179,7 +179,7 @@ public class TaskInstanceController {
     @PostMapping("/getMoreDependencies")
     public ActionResult2 getMoreDependencies(@RequestBody TaskInstanceGetMoreDependencies taskInstanceGetMoreDependencies) {
         int taskInstanceId = taskInstanceGetMoreDependencies.getTaskInstanceId();
-        boolean isTop = taskInstanceGetMoreDependencies.isTop();
+        boolean isTop = taskInstanceGetMoreDependencies.getIsTop();
         ActionResult2 actionResult = new ActionResult2();
         try {
             List<TaskInstance> taskInstanceList;

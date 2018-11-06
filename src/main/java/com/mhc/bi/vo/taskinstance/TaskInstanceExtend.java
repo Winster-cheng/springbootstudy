@@ -84,7 +84,7 @@ public class TaskInstanceExtend {
         if (childrenList.size() != 0) {
             this.hasChildren = true;
         }
-        this.output = parentList;
+        this.output = childrenList;
         this.input = new ArrayList<>();
         this.status=Status.getStatus(taskInstance.getStatus());
     }

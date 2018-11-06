@@ -12,4 +12,11 @@ public class TaskInstanceGetMoreDependencies {
     private int taskInstanceId;
     private boolean isTop;
 
+    public boolean getIsTop() {
+        return this.isTop;
+    }
+
+    public void setIsTop(boolean isTop) {
+        this.isTop=isTop;
+    }
 }
