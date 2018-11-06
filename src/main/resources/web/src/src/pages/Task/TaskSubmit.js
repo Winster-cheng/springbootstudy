@@ -106,20 +106,20 @@ class TaskSubmit extends Component {
 
   removePane = (e, targetKey) => {
     e.stopPropagation ();
-    let {activeKey, currentCodeContent} = this.state;
+    let {activeKey, currentCodeContent, panes} = this.state;
     let lastIndex;
-    this.state.panes.forEach ((pane, i) => {
+    panes.forEach ((pane, i) => {
       if (pane.key == targetKey) {
         lastIndex = i ? i - 1 : i + 1;
       }
     });
-    const panes = this.state.panes.filter (pane => pane.key !== targetKey);
+    const panesFiltered = panes.filter (pane => pane.key !== targetKey);
     if (activeKey == targetKey && panes[lastIndex]) {
       const {key, content} = panes[lastIndex];
       activeKey = key;
       currentCodeContent = content;
     }
-    this.setState ({panes, activeKey, currentCodeContent});
+    this.setState ({panes: panesFiltered, activeKey, currentCodeContent});
   };
 
   saveCode = isSubmit => {

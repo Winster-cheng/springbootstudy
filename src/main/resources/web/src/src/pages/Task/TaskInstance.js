@@ -38,10 +38,6 @@ class TaskInstance extends PureComponent {
     formValues: {},
     pagination: {
       pageNo: 1,
-      date: '',
-      bussinessTime: '',
-      startTime: '',
-      executeTime: '',
     },
     showGraphContainer: 'hide',
     taskId: 0,
@@ -262,6 +258,7 @@ class TaskInstance extends PureComponent {
       sortType: 0,
       ...filters,
     };
+    console.log(filters)
     if (sorter.columnKey) {
       param.sortName = sorter.columnKey;
       if (sorter.order === 'descend') {
