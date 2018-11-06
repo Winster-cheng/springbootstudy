@@ -236,7 +236,7 @@ class TaskSubmit extends Component {
       <PageHeaderWrapper>
         <Row className="task-submit-container" style={{background: '#FFF'}}>
           <Col
-            span={4}
+            span={6}
             style={{
               height: '100%',
               background: '#fff',
@@ -255,7 +255,7 @@ class TaskSubmit extends Component {
                 </Tree>}
           </Col>
           <Col
-            span={20}
+            span={18}
             style={{
               height: '100%',
               background: '#FAFAFA',
