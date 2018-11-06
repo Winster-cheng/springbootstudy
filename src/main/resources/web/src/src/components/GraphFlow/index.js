@@ -142,6 +142,7 @@ class GraphFlow extends Component {
     });
     graph.on ('node:click', ev => {
       const {item, domEvent} = ev;
+      domEvent.stopPropagation();
       const {id, output, input, hasChildren, hasParent} = item.getModel ();
       let {target} = domEvent;
       let {className = ""} = target;
@@ -257,7 +258,7 @@ class GraphFlow extends Component {
           titleDetail: ""
         })
       }
-    })
+    });
     that.setState ({
       graph,
     });

@@ -2217,6 +2217,7 @@ i.trigger:hover {
   border-bottom-right-radius: 5px;
 }
 :global #mountNode .card-container {
+  border: 2px solid transparent;
   border-radius: 12px;
   background: #E5F4F7;
 }
@@ -2224,11 +2225,14 @@ i.trigger:hover {
   box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.1);
 }
 :global #mountNode .card-container.selected {
-  border: 1px solid #00BBDB;
+  border: 2px solid #00BBDB;
 }
 :global #mountNode .card-container.stop,
 :global #mountNode .card-container.waitting {
   background: #E7E7E7;
+}
+:global #mountNode .card-container.stop.selected,
+:global #mountNode .card-container.waitting.selected {
   border-color: #B2B2B2;
 }
 :global #mountNode .card-container.stop .status-icon {
@@ -2239,6 +2243,8 @@ i.trigger:hover {
 }
 :global #mountNode .card-container.running {
   background: #E5F0FF;
+}
+:global #mountNode .card-container.running.selected {
   border-color: #73AFFF;
 }
 :global #mountNode .card-container.running .status-icon {
@@ -2246,6 +2252,8 @@ i.trigger:hover {
 }
 :global #mountNode .card-container.success {
   background: #ECFFE3;
+}
+:global #mountNode .card-container.success.selected {
   border-color: #A0E281;
 }
 :global #mountNode .card-container.success .status-icon {
@@ -2253,6 +2261,8 @@ i.trigger:hover {
 }
 :global #mountNode .card-container.fail {
   background: #FFE8EA;
+}
+:global #mountNode .card-container.fail.selected {
   border-color: #FA848B;
 }
 :global #mountNode .card-container.fail .status-icon {
@@ -7949,6 +7959,7 @@ i.antd-pro-main-resources-web-src-src-components-global-header-index-trigger:hov
   border-bottom-right-radius: 5px;
 }
 #mountNode .card-container {
+  border: 2px solid transparent;
   border-radius: 12px;
   background: #E5F4F7;
 }
@@ -7956,11 +7967,14 @@ i.antd-pro-main-resources-web-src-src-components-global-header-index-trigger:hov
   box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.1);
 }
 #mountNode .card-container.selected {
-  border: 1px solid #00BBDB;
+  border: 2px solid #00BBDB;
 }
 #mountNode .card-container.stop,
 #mountNode .card-container.waitting {
   background: #E7E7E7;
+}
+#mountNode .card-container.stop.selected,
+#mountNode .card-container.waitting.selected {
   border-color: #B2B2B2;
 }
 #mountNode .card-container.stop .status-icon {
@@ -7971,6 +7985,8 @@ i.antd-pro-main-resources-web-src-src-components-global-header-index-trigger:hov
 }
 #mountNode .card-container.running {
   background: #E5F0FF;
+}
+#mountNode .card-container.running.selected {
   border-color: #73AFFF;
 }
 #mountNode .card-container.running .status-icon {
@@ -7978,6 +7994,8 @@ i.antd-pro-main-resources-web-src-src-components-global-header-index-trigger:hov
 }
 #mountNode .card-container.success {
   background: #ECFFE3;
+}
+#mountNode .card-container.success.selected {
   border-color: #A0E281;
 }
 #mountNode .card-container.success .status-icon {
@@ -7985,6 +8003,8 @@ i.antd-pro-main-resources-web-src-src-components-global-header-index-trigger:hov
 }
 #mountNode .card-container.fail {
   background: #FFE8EA;
+}
+#mountNode .card-container.fail.selected {
   border-color: #FA848B;
 }
 #mountNode .card-container.fail .status-icon {
