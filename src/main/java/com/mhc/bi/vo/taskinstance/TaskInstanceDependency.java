@@ -117,7 +117,7 @@ public class TaskInstanceDependency {
 
 
     //如果这个节点是父节点，那么我们就把他的父节点列表设置为空，子节点列表写死
-    public void initAsChildNode(TaskInstance taskInstance, boolean hasChildren, boolean hasParent, int centerId) {
+    public void initAsChildNode(TaskInstance taskInstance, boolean hasParent, boolean hasChildren, int centerId) {
         this.hasParent = hasParent;
         this.hasChildren = hasChildren;
         this.output = new ArrayList();

@@ -2,6 +2,9 @@ package com.mhc.bi.controller.JobPlan;
 
 import com.mhc.bi.common.ActionResult;
 import com.mhc.bi.common.ActionResult2;
+import com.mhc.bi.controller.JobPlan.FormBean.TaskPlanGetDependencies;
+import com.mhc.bi.controller.JobPlan.FormBean.TaskPlanGetMoreDependencies;
+import com.mhc.bi.controller.JobPlan.FormBean.TaskPlanSelect;
 import com.mhc.bi.domain.theadvisor.JobPlan;
 import com.mhc.bi.service.JobPlanService;
 import com.mhc.bi.vo.PageMessage;
@@ -95,10 +98,10 @@ public class JobPlanController {
 
             //给中心节点生产VO类
             jobPlanDependency = new JobPlanDependency();
-            JobPlan centerJobPlan=jobPlanService.getJobPlanById(centerId);
-            List<Integer> parentList=jobPlanService.getParentIdById(centerId);
-            List<Integer> childrenList=jobPlanService.getChildrenIdById(centerId);
-            jobPlanDependency.init(centerJobPlan,parentList ,childrenList );
+            JobPlan centerJobPlan = jobPlanService.getJobPlanById(centerId);
+            List<Integer> parentList = jobPlanService.getParentIdById(centerId);
+            List<Integer> childrenList = jobPlanService.getChildrenIdById(centerId);
+            jobPlanDependency.init(centerJobPlan, parentList, childrenList);
             jobPlanDependencyList.add(jobPlanDependency);
 
             actionResult.success();
@@ -111,24 +114,37 @@ public class JobPlanController {
     }
 
     @PostMapping("/getMoreDependencies")
-    public ActionResult2 getMoreDependencies(@RequestBody  TaskPlanGetMoreDependencies taskPlanGetMoreDependencies) {
-
+    public ActionResult2 getMoreDependencies(@RequestBody TaskPlanGetMoreDependencies taskPlanGetMoreDependencies) {
+        JobPlanExtend jobPlanExtend;
+        List<JobPlan> jobPlanParentsList;
+        List<JobPlan> jobPlanChildrenList;
         ActionResult2 actionResult = new ActionResult2();
         try {
+            jobPlanExtend = new JobPlanExtend();
             int jobPlanId = taskPlanGetMoreDependencies.getJobPlanId();
-            boolean isTop = taskPlanGetMoreDependencies.getIsTop();
             List<JobPlan> jobPlanList;
+            boolean isTop = taskPlanGetMoreDependencies.getIsTop();
+            JobPlan jobPlan = jobPlanService.getJobPlanById(jobPlanId);
+
             List<JobPlanExtend> jobPlanExtendList = new ArrayList<>();
-            JobPlanExtend jobPlanExtend;
             if (isTop) {
                 jobPlanList = jobPlanService.getParentList(jobPlanId);
-            } else
-                jobPlanList = jobPlanService.getChildrenList(jobPlanId);
-            for (JobPlan jobPlan : jobPlanList) {
-                jobPlanExtend = new JobPlanExtend();
-                jobPlanExtend.init(jobPlan, jobPlanService.getParentIdByJobPlan(jobPlan), jobPlanService.getChildrenIdByJobPlan(jobPlan));
-                jobPlanExtendList.add(jobPlanExtend);
+                for (JobPlan jobPlan1 : jobPlanList) { //对被点击节点
+                    jobPlanParentsList = jobPlanService.getParentList(jobPlanId);
+                    jobPlanChildrenList = jobPlanService.getChildrenList(jobPlanId);
+//                    if (jobPlanParentsList.size() != 0) hasParent = true;
+//                    if (jobPlanChildrenList.size() != 0) hasParent = true;
+//                    jobPlanExtend.initAsParent(jobPlan, jobPlanParentsList, jobPlanChildrenList);
+                }
+            } else {
+                jobPlanParentsList = jobPlanService.getParentList(jobPlanId);
+                jobPlanChildrenList = jobPlanService.getChildrenList(jobPlanId);
+//                if (jobPlanParentsList.size() != 0) hasParent = true;
+//                if (jobPlanChildrenList.size() != 0) hasParent = true;
+//                jobPlanExtend.initAsChildren(jobPlan, jobPlanParentsList, jobPlanChildrenList);
             }
+            jobPlanExtendList.add(jobPlanExtend);
+
             actionResult.setList(jobPlanExtendList);
             actionResult.setIsTop(isTop);
             actionResult.setDataValue(jobPlanId);

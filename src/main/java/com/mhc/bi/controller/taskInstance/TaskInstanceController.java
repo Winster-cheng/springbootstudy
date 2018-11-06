@@ -3,24 +3,20 @@ package com.mhc.bi.controller.taskInstance;
 import com.mhc.bi.common.ActionResult;
 import com.mhc.bi.common.ActionResult2;
 import com.mhc.bi.common.JDBC;
-import com.mhc.bi.controller.JobPlan.TaskPlanGetDependencies;
 import com.mhc.bi.controller.taskInstance.FormBean.TaskInstanceGetDependency;
 import com.mhc.bi.controller.taskInstance.FormBean.TaskInstanceGetLog;
 import com.mhc.bi.controller.taskInstance.FormBean.TaskInstanceGetMoreDependencies;
 import com.mhc.bi.controller.taskInstance.FormBean.TaskInstanceSelect;
-import com.mhc.bi.domain.theadvisor.JobPlan;
 import com.mhc.bi.domain.theadvisor.TaskInstance;
 import com.mhc.bi.service.TaskInstanceService;
 import com.mhc.bi.vo.PageMessage;
 import com.mhc.bi.vo.taskinstance.*;
-import com.mhc.bi.vo.taskplan.JobPlanExtend;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 

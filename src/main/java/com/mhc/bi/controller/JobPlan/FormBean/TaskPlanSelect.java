@@ -1,4 +1,4 @@
-package com.mhc.bi.controller.JobPlan;
+package com.mhc.bi.controller.JobPlan.FormBean;
 
 import lombok.Data;
 
