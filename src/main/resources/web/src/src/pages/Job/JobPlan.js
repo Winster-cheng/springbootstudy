@@ -22,7 +22,7 @@ class JobPlan extends PureComponent {
     formValues: {},
     pagination: {
       pageNo: 1,
-      timeSortType: '',
+      timeSortType: 0,
     },
     showGraphContainer: 'hide',
     jobId: 0,

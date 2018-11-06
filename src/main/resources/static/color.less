@@ -2211,9 +2211,20 @@ i.trigger:hover {
 .dark .action :global(.ant-badge) {
   color: rgba(255, 255, 255, 0.85);
 }
+:global .titleDetail {
+  background: #000;
+  color: #f2f2f2;
+  border-bottom-right-radius: 5px;
+}
 :global #mountNode .card-container {
-  border: 1px solid #AFE3EF;
   border-radius: 12px;
+  background: #E5F4F7;
+}
+:global #mountNode .card-container:hover {
+  box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.1);
+}
+:global #mountNode .card-container.selected {
+  border: 1px solid #00BBDB;
 }
 :global #mountNode .card-container.stop,
 :global #mountNode .card-container.waitting {
@@ -7932,9 +7943,20 @@ i.antd-pro-main-resources-web-src-src-components-global-header-index-trigger:hov
 .antd-pro-main-resources-web-src-src-components-global-header-index-dark .antd-pro-main-resources-web-src-src-components-global-header-index-action .ant-badge {
   color: rgba(255, 255, 255, 0.85);
 }
+.titleDetail {
+  background: #000;
+  color: #f2f2f2;
+  border-bottom-right-radius: 5px;
+}
 #mountNode .card-container {
-  border: 1px solid #AFE3EF;
   border-radius: 12px;
+  background: #E5F4F7;
+}
+#mountNode .card-container:hover {
+  box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.1);
+}
+#mountNode .card-container.selected {
+  border: 1px solid #00BBDB;
 }
 #mountNode .card-container.stop,
 #mountNode .card-container.waitting {

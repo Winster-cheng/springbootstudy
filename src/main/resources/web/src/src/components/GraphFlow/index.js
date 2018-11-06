@@ -12,21 +12,24 @@ import expandButton from '../../assets/expand_btn.svg';
 
 const MIN_ARROW_SIZE = 3;
 
+// 作业计划页面 isTaskInstance false/undefined 的情况使用一下props
+// 任务实例页面 isTaskInstance 为true 的情况使用一下props
 @connect (({task, loading}) => ({
-  // 作业计划页面 isTaskInstance false/undefined 的情况使用一下props
   newNodes: task.newNodes,
   graphNodeExpandLoading: loading.effects['task/fetchGraphNode'],
-  // 任务实例页面 isTaskInstance 为true 的情况使用一下props
   newInstanceNodes: task.newInstanceNodes,
   graphInstanceNodeExpandLoading: loading.effects['task/fetchInstanceNode'],
 }))
 class GraphFlow extends Component {
+  lastPoint = null;
+
   constructor (props) {
     super (props);
     this.state = {
       graph: null,
       graphDependencies: {},
       nodeId: 0,
+      titleDetail: ""
     };
   }
 
@@ -45,6 +48,7 @@ class GraphFlow extends Component {
         ...prevState,
         graphDependencies: nextProps.graphDependencies,
         nodeId: nextProps.nodeId,
+        titleDetail: ""
       };
     }
     if (prevState.graph && nextProps[newNodesKey].result) {
@@ -103,6 +107,14 @@ class GraphFlow extends Component {
         }
       );
     };
+    const hideDetail = () => {
+      Array.prototype.forEach.call (
+        document.getElementsByClassName("card-container"),
+        dom => {
+          dom.className = dom.className.split ('selected').join ('');
+        }
+      );
+    }
     that.g6RegisterInit ();
     const graph = new G6.Graph ({
       container: 'mountNode',
@@ -131,8 +143,9 @@ class GraphFlow extends Component {
     graph.on ('node:click', ev => {
       const {item, domEvent} = ev;
       const {id, output, input, hasChildren, hasParent} = item.getModel ();
-      const {target} = domEvent;
-      const {className} = target;
+      let {target} = domEvent;
+      let {className = ""} = target;
+      if(!className.indexOf) return false;
       if (
         className.indexOf ('ce-button') > -1 &&
         className.indexOf ('bottom') > -1
@@ -197,9 +210,54 @@ class GraphFlow extends Component {
             },
           });
         }
+      } else {
+        hideDetail();
+        if(className.indexOf ('card-container') === -1){
+          target = target.parentElement;
+          className = target.className || "";
+        }
+        if (className.indexOf ('selected') > -1) {
+          target.className = className.split ('selected').join ('');
+          that.setState({
+            titleDetail: ""
+          })
+        } else {
+          target.className = `${className} selected`;
+          that.setState({
+            titleDetail: target.firstElementChild.getAttribute("titledetail") || ""
+          })
+        }
       }
+
+      graph.on ('drag', ev => {
+        if (that.lastPoint) {
+          graph.translate (
+            ev.domX - that.lastPoint.x,
+            ev.domY - that.lastPoint.y
+          );
+        }
+        that.lastPoint = {
+          x: ev.domX,
+          y: ev.domY,
+        };
+      });
+
+      graph.on ('dragend', ev => {
+        that.lastPoint = null;
+      });
+
       graph.setFitView ('cc');
     });
+    graph.on('click', ev => {
+      const {domEvent} = ev;
+      const {target} = domEvent;
+      if(target.id.startsWith("canvas")){
+        hideDetail();
+        that.setState({
+          titleDetail: ""
+        })
+      }
+    })
     that.setState ({
       graph,
     });
@@ -293,7 +351,7 @@ class GraphFlow extends Component {
         }
         const html = G6.Util.createDOM (`
           <div class="card-container ${isTaskInstance ? statusClassName[statusId] : ''}">
-            <h1 class="main-text ellipsis">
+            <h1 class="main-text ellipsis" titledetail="${name}">
             ${isTaskInstance ? '<span class="status-icon"></span>' : ''}
             ${name}
             </h1>
@@ -371,6 +429,7 @@ class GraphFlow extends Component {
         <Spin style={spinStyle} />
         <Spin style={expandSpinStyle} />
         <div style={chartStyle} id="mountNode" />
+        <h1 className="titleDetail" style={{display: this.state.titleDetail ? "inline-block" : "none"}}>节点名称：{this.state.titleDetail}</h1>
       </React.Fragment>
     );
   }

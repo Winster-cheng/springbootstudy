@@ -179,7 +179,7 @@ class TaskInstance extends PureComponent {
       if (err) return;
       fieldsValue = {
         ...fieldsValue,
-        date: fieldsValue.date ? fieldsValue.date.format ('YYYY-MM-DD') : '',
+        date: fieldsValue.date ? fieldsValue.date.format ('YYYYMMDD') : '',
       };
       this.setState ({
         formValues: fieldsValue,
@@ -379,6 +379,7 @@ class TaskInstance extends PureComponent {
                 style={{
                   height: this.height4Expand[this.state.expandLevel][0],
                   width: '100%',
+                  position: "relative"
                 }}
               >
                 <GraphFlowCustomed
@@ -392,6 +393,9 @@ class TaskInstance extends PureComponent {
                 style={{
                   height: this.height4Expand[this.state.expandLevel][1],
                   width: '100%',
+                  position: "relative",
+                  zIndex: 1,
+                  background: "#fff"
                 }}
               >
                 <TaskLog
