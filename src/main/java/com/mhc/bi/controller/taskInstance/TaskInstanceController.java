@@ -37,7 +37,7 @@ public class TaskInstanceController {
 
     ActionResult actionResult;
 
-    //TODO 这个接口手动连接的JDBC，改回来以后
+    //TODO 这个接口手动连接的JDBC，以后改回来
     @PostMapping("/select")
     public ActionResult select(@RequestBody TaskInstanceSelect taskInstanceSelect) {
         ActionResult actionResult = new ActionResult();
@@ -59,14 +59,14 @@ public class TaskInstanceController {
             List<TaskInstanceView> taskInstanceViewList = new ArrayList<>();
             List<TaskInstance> taskInstanceList;
 
-            if (!date.equals("")) { //三套条件组合 筛选条件（date/fileName/status）+排序关键字（executeTime/bussinessTime/startTime），其中bussinessTime先默认executeTime-1 +排序顺序（0/1/2）
+            if (date.length() != 0) { //三套条件组合 筛选条件（date/fileName/status）+排序关键字（executeTime/bussinessTime/startTime），其中bussinessTime先默认executeTime-1 +排序顺序（0/1/2）
                 totalCount = taskInstanceService.getTotalCountByDate(date);
                 sql = "select * from taskinstance where execute_day=\"" + date + "\"" + getSortNameAndLimitSQL(sortName, sortType, pageSize, pageNo);
-            } else if (!fileName.equals("")) {
+            } else if (fileName.length() != 0) {
                 totalCount = taskInstanceService.getTotalCountByFileName(fileName);
                 sql = "select * from taskinstance where name like  \"%" + fileName + "%\"" + getSortNameAndLimitSQL(sortName, sortType, pageSize, pageNo);
             } else if (status.length != 0) {
-                //TODO 这里的getTotalCountByStatus是直接调用JDBC的，修改成xml配置
+                //TODO 这里的getTotalCountByStat[]us是直接调用JDBC的，修改成xml配置
                 totalCount = taskInstanceService.getTotalCountByStatus(status);
                 StringBuffer sb = new StringBuffer();
                 sb.append("(");
@@ -267,7 +267,7 @@ public class TaskInstanceController {
             logVoList.add(logVO5);
             actionResult.setList(logVoList);
             actionResult.success();
-        }catch (Exception e){
+        } catch (Exception e) {
             actionResult.fail();
             e.printStackTrace();
         }
