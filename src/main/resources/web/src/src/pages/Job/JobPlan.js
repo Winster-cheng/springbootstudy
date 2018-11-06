@@ -40,7 +40,7 @@ class JobPlan extends PureComponent {
     gmtModify: '',
     executeRate: '',
     owner: '',
-    planType: '',
+    type: '',
   };
 
   columns = [
@@ -59,9 +59,9 @@ class JobPlan extends PureComponent {
     },
     {
       title: '任务类型',
-      dataIndex: 'planType',
+      dataIndex: 'type',
       percent: 16,
-      render: text => this.renderTooltip (text, 'planType'),
+      render: text => this.renderTooltip (text, 'type'),
     },
     {
       title: '责任人',

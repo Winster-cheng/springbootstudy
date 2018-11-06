@@ -31,8 +31,8 @@ class GraphFlow extends Component {
   }
 
   static getDerivedStateFromProps (nextProps, prevState) {
-    const { isTaskInstance } = nextProps;
-    const newNodesKey = isTaskInstance ? "newInstanceNodes" : "newNodes"
+    const {isTaskInstance} = nextProps;
+    const newNodesKey = isTaskInstance ? 'newInstanceNodes' : 'newNodes';
     if (
       !nextProps.loading &&
       prevState.graph &&
@@ -53,42 +53,48 @@ class GraphFlow extends Component {
       list.forEach (node => {
         if (graph.find (node.id)) return false;
         graph.add ('node', node);
+        const {input = [], output = []} = node;
         if (isTop) {
-          node.output.forEach (target => {
-            graph.add ('edge', {
-              source: node.id,
-              target,
-            });
-            graph.update (target, {
-              input: uniq (graph.find (target).model.input.concat (node.id)),
-            });
+          output.forEach (target => {
+            if (graph.find (target)) {
+              graph.add ('edge', {
+                source: node.id,
+                target,
+              });
+              graph.update (target, {
+                input: uniq (graph.find (target).model.input.concat (node.id)),
+              });
+            }
           });
         } else {
-          node.input.forEach (source => {
-            graph.add ('edge', {
-              source,
-              target: node.id,
-            });
-            graph.update (source, {
-              output: uniq (graph.find (source).model.output.concat (node.id)),
-            });
+          input.forEach (source => {
+            if (graph.find (source)) {
+              graph.add ('edge', {
+                source,
+                target: node.id,
+              });
+              graph.update (source, {
+                output: uniq (
+                  graph.find (source).model.output.concat (node.id)
+                ),
+              });
+            }
           });
         }
       });
     }
     return null;
   }
-  
 
   componentDidMount () {
-    const { isTaskInstance } = this.props;
-    const fetchMoreEffectName = `task/${isTaskInstance ? "fetchInstanceNode" : "fetchGraphNode"}`
-    this.graphInit(fetchMoreEffectName)
+    const {isTaskInstance} = this.props;
+    const fetchMoreEffectName = `task/${isTaskInstance ? 'fetchInstanceNode' : 'fetchGraphNode'}`;
+    this.graphInit (fetchMoreEffectName);
   }
 
-  graphInit = (fetchMoreEffectName) => {
+  graphInit = fetchMoreEffectName => {
     const that = this;
-    const { payloadKey } = this.props;
+    const {payloadKey} = this.props;
     const toggleDomVisible = (id, isShow) => {
       Array.prototype.forEach.call (
         document.getElementsByClassName (`ce-button-${id}`),
@@ -97,7 +103,7 @@ class GraphFlow extends Component {
         }
       );
     };
-    that.g6RegisterInit();
+    that.g6RegisterInit ();
     const graph = new G6.Graph ({
       container: 'mountNode',
       fitView: 'cc',
@@ -197,11 +203,10 @@ class GraphFlow extends Component {
     that.setState ({
       graph,
     });
-  }
-  
+  };
 
   g6RegisterInit = () => {
-    const { isTaskInstance } = this.props;
+    const {isTaskInstance} = this.props;
     G6.registerEdge ('VHV', {
       draw (item) {
         const group = item.getGraphicGroup ();
@@ -274,7 +279,6 @@ class GraphFlow extends Component {
           status = {},
         } = item.getModel ();
         const {id: statusId, chineseName} = status;
-        console.log(isTaskInstance,status)
         const width = 188;
         const height = 46;
         const buttonWidth = 14;
@@ -290,11 +294,11 @@ class GraphFlow extends Component {
         const html = G6.Util.createDOM (`
           <div class="card-container ${isTaskInstance ? statusClassName[statusId] : ''}">
             <h1 class="main-text ellipsis">
-            ${isTaskInstance ? '<span class="status-icon"></span>' : ""}
+            ${isTaskInstance ? '<span class="status-icon"></span>' : ''}
             ${name}
             </h1>
             <p class="value-text ellipsis">
-            ${chineseName}
+            ${isTaskInstance ? chineseName : name}
             </p>
           </div>
         `);
@@ -332,8 +336,15 @@ class GraphFlow extends Component {
   };
 
   render () {
-    const {loading, graphNodeExpandLoading, graphInstanceNodeExpandLoading, isTaskInstance} = this.props;
-    const expandLoading = isTaskInstance ? graphInstanceNodeExpandLoading : graphNodeExpandLoading
+    const {
+      loading,
+      graphNodeExpandLoading,
+      graphInstanceNodeExpandLoading,
+      isTaskInstance,
+    } = this.props;
+    const expandLoading = isTaskInstance
+      ? graphInstanceNodeExpandLoading
+      : graphNodeExpandLoading;
     const commonStyle = {
       width: '100%',
       height: '100%',

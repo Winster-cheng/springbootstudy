@@ -1,4 +1,4 @@
-import { 
+import {
   queryTaskTreeData,
   queryGraphNode,
   queryAllGraphNodes,
@@ -11,20 +11,21 @@ import {
   queryLogs,
   queryAllStatuss,
 } from '@/services/task';
+import {message} from 'antd';
 
 const getEdges = list => {
   const edges = [];
-  list.forEach( item => {
-    const { id, output = [] } = item;
-    output.forEach(target => {
-      edges.push({
+  list.forEach (item => {
+    const {id, output = []} = item;
+    output.forEach (target => {
+      edges.push ({
         source: id,
-        target
-      })
-    })
-  })
+        target,
+      });
+    });
+  });
   return edges;
-}
+};
 
 export default {
   namespace: 'task',
@@ -37,170 +38,175 @@ export default {
     newInstanceNodes: [],
     data: [],
     allStatus: [],
-    logs: []
+    logs: [],
   },
 
   effects: {
-    *fetchTaskTreeData(_, { call, put }) {
-      const response = yield call(queryTaskTreeData);
-      yield put({
+    *fetchTaskTreeData (_, {call, put}) {
+      const response = yield call (queryTaskTreeData);
+      yield put ({
         type: 'saveTreeData',
         payload: response,
       });
     },
-    *fetchGraphNode(_, { call, put }) {
-      const payload = yield call(queryGraphNode, _.payload);
-      yield put({
+    *fetchGraphNode (_, {call, put}) {
+      const payload = yield call (queryGraphNode, _.payload);
+      yield put ({
         type: 'saveGraphNode',
         payload,
       });
     },
-    *fetchAllGraphNodes(_, { call, put }){
-      const payload = yield call(queryAllGraphNodes, _.payload);
-      yield put({
+    *fetchAllGraphNodes (_, {call, put}) {
+      const payload = yield call (queryAllGraphNodes, _.payload);
+      yield put ({
         type: 'saveGraphNodes',
         payload,
-      })
+      });
     },
-    *fetchCodeContent({ payload }, { call }){
-      const { result, dataValue } = yield call(queryContent, payload);
-      if(result){
-        const { fileContent } = dataValue;
+    *fetchCodeContent ({payload}, {call}) {
+      const {result, dataValue} = yield call (queryContent, payload);
+      if (result) {
+        const {fileContent} = dataValue;
         return fileContent;
       }
       return null;
     },
-    *submitTaskContent({ payload }, { call }){
-      return yield call(submitContent, payload);
+    *submitTaskContent ({payload}, {call}) {
+      return yield call (submitContent, payload);
     },
-    *saveTaskContent({ payload }, { call }){
-      return yield call(saveContent, payload);
+    *saveTaskContent ({payload}, {call}) {
+      return yield call (saveContent, payload);
     },
-    *fetchInstances({ payload }, { call, put }) {
-        const params = { 
-          pageNo: 1,
-          pageSize: 10,
-          date: "",
-          filename: "",
-          status: "",
-          sortName: "",
-          sortType: 0,
-          ...payload
-        };
-        const response = yield call(queryTaskInstance, params);
-        yield put({
-          type: 'saveInstances',
-          payload: response,
-        });
-      },
-      *fetchInstanceNode(_, { call, put }) {
-        const payload = yield call(queryInstanceNode, _.payload);
-        yield put({
-          type: 'saveInstanceNode',
-          payload,
-        });
-      },
-      *fetchAllInstanceNodes(_, { call, put }){
-        const payload = yield call(queryAllInstanceNodes, _.payload);
-        yield put({
-          type: 'saveInstanceNodes',
-          payload,
-        })
-      },
-      *fetchLogs(_, { call, put }){
-        const payload = yield call(queryLogs, _.payload);
-        yield put({
-          type: 'saveLogs',
-          payload
-        })
-      },
-      *fetchAllStatus(_, { call, put }){
-        const payload = yield call(queryAllStatuss, _.payload);
-        yield put({
-          type: 'saveStatus',
-          payload,
-        })
-      }
+    *fetchInstances ({payload}, {call, put}) {
+      const params = {
+        pageNo: 1,
+        pageSize: 10,
+        date: '',
+        filename: '',
+        status: [],
+        sortName: '',
+        sortType: 0,
+        ...payload,
+      };
+      const response = yield call (queryTaskInstance, params);
+      yield put ({
+        type: 'saveInstances',
+        payload: response,
+      });
+    },
+    *fetchInstanceNode (_, {call, put}) {
+      const payload = yield call (queryInstanceNode, _.payload);
+      yield put ({
+        type: 'saveInstanceNode',
+        payload,
+      });
+    },
+    *fetchAllInstanceNodes (_, {call, put}) {
+      const payload = yield call (queryAllInstanceNodes, _.payload);
+      yield put ({
+        type: 'saveInstanceNodes',
+        payload,
+      });
+    },
+    *fetchLogs (_, {call, put}) {
+      const payload = yield call (queryLogs, _.payload);
+      yield put ({
+        type: 'saveLogs',
+        payload,
+      });
+    },
+    *fetchAllStatus (_, {call, put}) {
+      const payload = yield call (queryAllStatuss, _.payload);
+      yield put ({
+        type: 'saveStatus',
+        payload,
+      });
+    },
   },
 
   reducers: {
-    saveLogs(state, { payload }){
-      const { result, list: logs } = payload
-      if(result){
+    saveLogs (state, {payload}) {
+      const {result, list: logs} = payload;
+      if (result) {
         return {
           ...state,
-          logs
-        }
+          logs,
+        };
       }
-      return state
+      return state;
     },
-    saveInstances(state, action) {
-      return {
-        ...state,
-        data: {
-          ...state.data,
-          list: action.payload.dataValue.list,
-          pagination: {
-            current: action.payload.dataValue.pageNo,
-            pageSize: action.payload.dataValue.pageSize,
-            total: action.payload.dataValue.totalCount
-          }
-        }
-      };
-    },
-    saveStatus(state, { payload }){
-      const { result, list: allStatus } = payload
-      if(result){
+    saveInstances (state, {payload}) {
+      const {result, dataValue, message: msg} = payload;
+      if (result) {
         return {
           ...state,
-          allStatus
-        }
-      }
-      return state
+          data: {
+            ...state.data,
+            list: dataValue.list,
+            pagination: {
+              current: dataValue.pageNo,
+              pageSize: dataValue.pageSize,
+              total: dataValue.totalCount,
+            },
+          },
+        };
+      } 
+      message.error (msg || '请求失败');
+      return state;
     },
-    saveTreeData(state, { payload }) {
-      const { result, list } = payload;
-      if(result){
+    saveStatus (state, {payload}) {
+      const {result, list: allStatus} = payload;
+      if (result) {
+        return {
+          ...state,
+          allStatus,
+        };
+      }
+      return state;
+    },
+    saveTreeData (state, {payload}) {
+      const {result, list} = payload;
+      if (result) {
         return {
           ...state,
           treeData: list,
         };
       }
-        return state
+      return state;
     },
-    saveGraphNodes(state, { payload }){
-      const { list } = payload;
+    saveGraphNodes (state, {payload}) {
+      const {list} = payload;
       return {
         ...state,
         graphNodes: {
           nodes: list,
-          edges: getEdges(list)
-        }
-      }
+          edges: getEdges (list),
+        },
+      };
     },
-    saveGraphNode(state, action) {
-      const { payload } = action;
+    saveGraphNode (state, action) {
+      const {payload} = action;
       return {
         ...state,
-        newNodes: payload
-      }
+        newNodes: payload,
+      };
     },
-    saveInstanceNodes(state, { payload }){
-      const { list } = payload;
+    saveInstanceNodes (state, {payload}) {
+      const {list} = payload;
       return {
         ...state,
         instanceNodes: {
           nodes: list,
-          edges: getEdges(list)
-        }
-      }
+          edges: getEdges (list),
+        },
+      };
     },
-    saveInstanceNode(state, action) {
-      const { payload } = action;
+    saveInstanceNode (state, action) {
+      const {payload} = action;
       return {
         ...state,
-        newInstanceNodes: payload
-      }
-    }
+        newInstanceNodes: payload,
+      };
+    },
   },
 };

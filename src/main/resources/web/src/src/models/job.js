@@ -1,4 +1,5 @@
-import {queryJobs} from '@/services/job';
+import { queryJobs } from '@/services/job';
+import { message } from "antd";
 
 export default {
   namespace: 'job',
@@ -16,13 +17,14 @@ export default {
         fileName: '',
         ...payload,
       };
-      const {result, dataValue = {}, message} = yield call (queryJobs, params);
+      const {result, dataValue = {}, message: msg} = yield call (queryJobs, params);
       if (result) {
         yield put ({
           type: 'queryJobs',
           payload: dataValue,
         });
       } else {
+        message.error(msg || "请求失败")
         return null;
       }
     },
