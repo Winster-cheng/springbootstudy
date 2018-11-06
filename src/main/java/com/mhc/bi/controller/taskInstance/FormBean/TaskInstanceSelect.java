@@ -16,5 +16,4 @@ public class TaskInstanceSelect {
     private int[] status;
     private String sortName;
     private int sortType;
-
 }

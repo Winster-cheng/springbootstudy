@@ -147,8 +147,8 @@ public class TaskInstanceController {
                 boolean hasChildren = false;
                 boolean hasParent = false;
                 taskInstanceDependency = new TaskInstanceDependency();
-                if (taskInstanceService.getChildrenListById(taskInstance.getId()).size() != 0) hasParent = true;
-                if (taskInstanceService.getParentListById(taskInstance.getId()).size() != 0) hasChildren = true;
+                if (taskInstanceService.getChildrenListById(taskInstance.getId()).size() != 0) hasChildren = true;
+                if (taskInstanceService.getParentListById(taskInstance.getId()).size() != 0) hasParent = true;
                 taskInstanceDependency.initAsParentNode(taskInstance, hasParent, hasChildren, centerId);
                 taskInstanceDependencies.add(taskInstanceDependency);
             }
