@@ -259,7 +259,7 @@ class JobPlan extends PureComponent {
     });
     const {name = 0} = this.fixedWidth;
     const maskWidthNumber = tableFullWidth - name - 36;
-    const maskWidth = `${maskWidthNumber}px`;
+    const maskWidth = `${maskWidthNumber + 1}px`;
     this.graphContainerRight.hide = `-${maskWidthNumber + 33}px`;
     return (
       <PageHeaderWrapper>

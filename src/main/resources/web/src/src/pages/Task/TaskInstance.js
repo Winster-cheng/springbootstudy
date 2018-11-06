@@ -90,7 +90,7 @@ class TaskInstance extends PureComponent {
       ),
     },
     {
-      title: '数据类型',
+      title: '任务类型',
       dataIndex: 'type',
       percent: 13,
       render: text => this.renderTooltip (text, 'type'),
@@ -215,7 +215,7 @@ class TaskInstance extends PureComponent {
         >
           <Col md={6} sm={24}>
             <Item label="脚本名称">
-              {getFieldDecorator ('filename') (<Input placeholder="请输入" />)}
+              {getFieldDecorator ('fileName') (<Input placeholder="请输入" />)}
             </Item>
           </Col>
           {/* <Col md={6} sm={24}>
@@ -258,7 +258,6 @@ class TaskInstance extends PureComponent {
       sortType: 0,
       ...filters,
     };
-    console.log(filters)
     if (sorter.columnKey) {
       param.sortName = sorter.columnKey;
       if (sorter.order === 'descend') {
@@ -362,7 +361,7 @@ class TaskInstance extends PureComponent {
     });
     const {name = 0, status = 0} = this.fixedWidth;
     const maskWidthNumber = tableFullWidth - name - status - 36 - 32;
-    const maskWidth = `${maskWidthNumber}px`;
+    const maskWidth = `${maskWidthNumber + 1}px`;
     this.graphContainerRight.hide = `-${maskWidthNumber + 33}px`;
     return (
       <PageHeaderWrapper>

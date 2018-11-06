@@ -82,7 +82,7 @@ export default {
         pageNo: 1,
         pageSize: 10,
         date: '',
-        filename: '',
+        fileName: '',
         status: [],
         sortName: '',
         sortType: 0,
