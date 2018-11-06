@@ -123,7 +123,7 @@ public class TaskInstanceController {
     public ActionResult getStatus() {
         try {
             List<Status> list = new ArrayList<Status>();
-            for (int i = 0; i < 6; i++) {
+            for (int i = 1; i < 6; i++) {
                 list.add(Status.getStatus(i));
             }
             actionResult = new ActionResult();
