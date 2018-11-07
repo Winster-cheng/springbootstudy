@@ -29,7 +29,8 @@ class GraphFlow extends Component {
       graph: null,
       graphDependencies: {},
       nodeId: 0,
-      titleDetail: ""
+      titleDetail: "",
+      nodes4Compare: {}
     };
   }
 
@@ -51,7 +52,7 @@ class GraphFlow extends Component {
         titleDetail: ""
       };
     }
-    if (prevState.graph && nextProps[newNodesKey].result) {
+    if (prevState.graph && !isEqual(nextProps[newNodesKey],prevState.nodes4Compare) && nextProps[newNodesKey].result) {
       const {graph} = prevState;
       const {isTop, list} = nextProps[newNodesKey];
       list.forEach (node => {
@@ -86,6 +87,10 @@ class GraphFlow extends Component {
           });
         }
       });
+      return {
+        ...prevState,
+        nodes4Compare: nextProps[newNodesKey]
+      }
     }
     return null;
   }
@@ -212,7 +217,6 @@ class GraphFlow extends Component {
           });
         }
       } else {
-        hideDetail();
         if(className.indexOf ('card-container') === -1){
           target = target.parentElement;
           className = target.className || "";
@@ -223,6 +227,7 @@ class GraphFlow extends Component {
             titleDetail: ""
           })
         } else {
+          hideDetail();
           target.className = `${className} selected`;
           that.setState({
             titleDetail: target.firstElementChild.getAttribute("titledetail") || ""
@@ -253,6 +258,7 @@ class GraphFlow extends Component {
       const {domEvent} = ev;
       const {target} = domEvent;
       if(target.id.startsWith("canvas")){
+        domEvent.stopPropagation()
         hideDetail();
         that.setState({
           titleDetail: ""
