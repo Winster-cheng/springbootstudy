@@ -19,11 +19,19 @@ const statuslogo = {
   5: fail,
 };
 
-const statusColor = {
+const statusBgColor = {
   1: '#8E8E8E',
-  2: '#8E8E8E',
-  3: '#016FFF',
-  4: '#56C61F',
-  5: '#E81B26',
+  2: '#FFF6E5',
+  3: '#E5F0FF',
+  4: '#ECFFE3',
+  5: '#FFE8EA',
 };
-export {statusClassName, statuslogo, statusColor};
+
+const statusBorderColor = {
+  1: "#7E7E7E",
+  2: "#FAAD14",
+  3: "#016FFF",
+  4: "#56C61F",
+  5: "#F5222D"
+}
+export {statusClassName, statuslogo, statusBgColor, statusBorderColor};

@@ -5,26 +5,13 @@ import {Controlled as CodeMirror} from 'react-codemirror2';
 // import { isEqual } from "lodash";
 import logdown from '../../assets/icon_log_down.svg';
 import logup from '../../assets/icon_log_top.svg';
-import success from '../../assets/icon_status_success.svg';
-import fail from '../../assets/icon_status_fail.svg';
-// import freeze from "../../assets/icon_status_freeze.svg";
-import running from '../../assets/icon_status_running.svg';
-import stop from '../../assets/icon_status_stop.svg';
-import waitting from '../../assets/icon_status_waitting.svg';
+import { statuslogo } from '@/utils/constant';
 
 require ('codemirror/mode/javascript/javascript');
 require ('codemirror/lib/codemirror.css');
 require ('codemirror/theme/neo.css');
 
 class TaskLog extends Component {
-  statuslogo = {
-    1: stop,
-    2: waitting,
-    3: running,
-    4: success,
-    5: fail,
-  };
-
   editor = null;
 
   constructor (props) {
@@ -77,7 +64,7 @@ class TaskLog extends Component {
                     })}
                 >
                   <Icon
-                    component={this.statuslogo[log.status.id]}
+                    component={statuslogo[log.status.id]}
                     className="log-status"
                   />
                   {log.time}

@@ -5,7 +5,7 @@ import {uniq, isEqual} from 'lodash';
 import './g6';
 import G6 from '@antv/g6';
 import G6Plugins from '@antv/g6/build/plugins';
-import {statusClassName} from '@/utils/constant';
+import {statusClassName, statusBorderColor} from '@/utils/constant';
 import './index.less';
 import collapseButton from '../../assets/collapse_btn.svg';
 import expandButton from '../../assets/expand_btn.svg';
@@ -29,8 +29,8 @@ class GraphFlow extends Component {
       graph: null,
       graphDependencies: {},
       nodeId: 0,
-      titleDetail: "",
-      nodes4Compare: {}
+      titleDetail: '',
+      nodes4Compare: {},
     };
   }
 
@@ -49,10 +49,14 @@ class GraphFlow extends Component {
         ...prevState,
         graphDependencies: nextProps.graphDependencies,
         nodeId: nextProps.nodeId,
-        titleDetail: ""
+        titleDetail: '',
       };
     }
-    if (prevState.graph && !isEqual(nextProps[newNodesKey],prevState.nodes4Compare) && nextProps[newNodesKey].result) {
+    if (
+      prevState.graph &&
+      !isEqual (nextProps[newNodesKey], prevState.nodes4Compare) &&
+      nextProps[newNodesKey].result
+    ) {
       const {graph} = prevState;
       const {isTop, list} = nextProps[newNodesKey];
       list.forEach (node => {
@@ -89,8 +93,8 @@ class GraphFlow extends Component {
       });
       return {
         ...prevState,
-        nodes4Compare: nextProps[newNodesKey]
-      }
+        nodes4Compare: nextProps[newNodesKey],
+      };
     }
     return null;
   }
@@ -100,6 +104,40 @@ class GraphFlow extends Component {
     const fetchMoreEffectName = `task/${isTaskInstance ? 'fetchInstanceNode' : 'fetchGraphNode'}`;
     this.graphInit (fetchMoreEffectName);
   }
+
+  paintRelatedEdges = nodeId => {
+    const {state} = this;
+    const {graph} = state;
+    const {model} = graph.find (nodeId);
+    const {status = {}} = model;
+    const {id: statusId} = status;
+    const edges = graph.getEdges ();
+    edges.forEach (edge => {
+      const {id, source, target} = edge;
+      const isRelated = source.id == nodeId || target.id == nodeId;
+      if (isRelated) {
+        graph.update (id, {
+          color: statusBorderColor[statusId] || '#016FFF',
+        });
+      } else {
+        graph.update (id, {
+          color: 'rgba(0,0,0,.45)',
+        });
+      }
+    });
+  };
+
+  rePaintAllEdges = () => {
+    const {state} = this;
+    const {graph} = state;
+    const edges = graph.getEdges ();
+    edges.forEach (edge => {
+      const {id} = edge;
+      graph.update (id, {
+        color: 'rgba(0,0,0,.45)',
+      });
+    });
+  };
 
   graphInit = fetchMoreEffectName => {
     const that = this;
@@ -114,12 +152,12 @@ class GraphFlow extends Component {
     };
     const hideDetail = () => {
       Array.prototype.forEach.call (
-        document.getElementsByClassName("card-container"),
+        document.getElementsByClassName ('card-container'),
         dom => {
           dom.className = dom.className.split ('selected').join ('');
         }
       );
-    }
+    };
     that.g6RegisterInit ();
     const graph = new G6.Graph ({
       container: 'mountNode',
@@ -134,6 +172,9 @@ class GraphFlow extends Component {
     graph.edge ({
       shape: 'VHV',
       endArrow: true,
+      color({color}) {
+        return color;
+      },
     });
     graph.on ('node:mouseenter', ev => {
       const {item} = ev;
@@ -147,11 +188,11 @@ class GraphFlow extends Component {
     });
     graph.on ('node:click', ev => {
       const {item, domEvent} = ev;
-      domEvent.stopPropagation();
+      domEvent.stopPropagation ();
       const {id, output, input, hasChildren, hasParent} = item.getModel ();
       let {target} = domEvent;
-      let {className = ""} = target;
-      if(!className.indexOf) return false;
+      let {className = ''} = target;
+      if (!className.indexOf) return false;
       if (
         className.indexOf ('ce-button') > -1 &&
         className.indexOf ('bottom') > -1
@@ -217,21 +258,25 @@ class GraphFlow extends Component {
           });
         }
       } else {
-        if(className.indexOf ('card-container') === -1){
+        if (className.indexOf ('card-container') === -1) {
           target = target.parentElement;
-          className = target.className || "";
+          className = target.className || '';
         }
         if (className.indexOf ('selected') > -1) {
           target.className = className.split ('selected').join ('');
-          that.setState({
-            titleDetail: ""
-          })
+          that.setState ({
+            titleDetail: '',
+          });
+          that.rePaintAllEdges ();
         } else {
-          hideDetail();
+          hideDetail ();
+          that.paintRelatedEdges (id);
           target.className = `${className} selected`;
-          that.setState({
-            titleDetail: target.firstElementChild.getAttribute("titledetail") || ""
-          })
+          that.setState ({
+            titleDetail: target.firstElementChild.getAttribute (
+              'titledetail'
+            ) || '',
+          });
         }
       }
 
@@ -254,15 +299,16 @@ class GraphFlow extends Component {
 
       graph.setFitView ('cc');
     });
-    graph.on('click', ev => {
+    graph.on ('click', ev => {
       const {domEvent} = ev;
       const {target} = domEvent;
-      if(target.id.startsWith("canvas")){
-        domEvent.stopPropagation()
-        hideDetail();
-        that.setState({
-          titleDetail: ""
-        })
+      if (target.id.startsWith ('canvas')) {
+        domEvent.stopPropagation ();
+        that.rePaintAllEdges ();
+        hideDetail ();
+        that.setState ({
+          titleDetail: '',
+        });
       }
     });
     that.setState ({
@@ -274,12 +320,14 @@ class GraphFlow extends Component {
     const {isTaskInstance} = this.props;
     G6.registerEdge ('VHV', {
       draw (item) {
+        const {model} = item;
+        const {color = 'rgba(0,0,0,.45)'} = model;
         const group = item.getGraphicGroup ();
         const path = this.getPath (item);
         return group.addShape ('path', {
           attrs: {
             path,
-            stroke: '#00BBDB',
+            stroke: color,
             lineWidth: 2,
           },
         });
@@ -436,7 +484,12 @@ class GraphFlow extends Component {
         <Spin style={spinStyle} />
         <Spin style={expandSpinStyle} />
         <div style={chartStyle} id="mountNode" />
-        <h1 className="titleDetail" style={{display: this.state.titleDetail ? "inline-block" : "none"}}>节点名称：{this.state.titleDetail}</h1>
+        <h1
+          className="titleDetail"
+          style={{display: this.state.titleDetail ? 'inline-block' : 'none'}}
+        >
+          节点名称：{this.state.titleDetail}
+        </h1>
       </React.Fragment>
     );
   }

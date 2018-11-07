@@ -18,7 +18,7 @@ import GraphFlow from '@/components/GraphFlow';
 import GraphCustomTool from '@/components/GraphFlow/GraphCustomTool';
 import TaskLog from './TaskLog';
 import styles from './TaskInstance.less';
-import {statusColor, statuslogo} from '@/utils/constant';
+import {statusBorderColor, statuslogo} from '@/utils/constant';
 
 const {Item} = Form;
 const {Option} = Select;
@@ -80,7 +80,7 @@ class TaskInstance extends PureComponent {
       filters: [],
       percent: 13,
       render: status => (
-        <span style={{color: statusColor[status.id]}}>
+        <span style={{color: statusBorderColor[status.id]}}>
           <Icon
             component={statuslogo[status.id]}
             style={{marginRight: '8px'}}
@@ -144,14 +144,14 @@ class TaskInstance extends PureComponent {
           className={styles.tdEllisps}
         >
           {text}
-          </a>
+        </a>
         : <span
           href="javascript:;"
           style={{maxWidth: `${this.fixedWidth[dataIndex]}px`}}
           className={styles.tdEllisps}
         >
           {text}
-          </span>}
+        </span>}
     </Tooltip>
   );
 
