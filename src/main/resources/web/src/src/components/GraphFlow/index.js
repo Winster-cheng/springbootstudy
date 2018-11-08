@@ -5,7 +5,7 @@ import {uniq, isEqual} from 'lodash';
 import './g6';
 import G6 from '@antv/g6';
 import G6Plugins from '@antv/g6/build/plugins';
-import {statusClassName, statusBorderColor} from '@/utils/constant';
+import { statusClassName } from '@/utils/constant';
 import './index.less';
 import collapseButton from '../../assets/collapse_btn.svg';
 import expandButton from '../../assets/expand_btn.svg';
@@ -52,18 +52,17 @@ class GraphFlow extends Component {
         isSelected: true
       })
       const {status = {}, name = ''} = model;
-      const {id: statusId} = status;
       const edges = graph.getEdges ();
       edges.forEach (edge => {
         const {id, source, target} = edge;
         const isRelated = source.id == nodeId || target.id == nodeId;
         if (isRelated) {
           graph.update (id, {
-            color: statusBorderColor[statusId] || '#016FFF',
+            color: '#80B7FF',
           });
         } else {
           graph.update (id, {
-            color: 'rgba(0,0,0,.45)',
+            color: "#8C8C8C",
           });
         }
       });
@@ -133,18 +132,17 @@ class GraphFlow extends Component {
     const {graph} = state;
     const {model} = graph.find (nodeId);
     const {status = {}} = model;
-    const {id: statusId} = status;
     const edges = graph.getEdges ();
     edges.forEach (edge => {
       const {id, source, target} = edge;
       const isRelated = source.id == nodeId || target.id == nodeId;
       if (isRelated) {
         graph.update (id, {
-          color: statusBorderColor[statusId] || '#016FFF',
+          color: '#80B7FF',
         });
       } else {
         graph.update (id, {
-          color: 'rgba(0,0,0,.45)',
+          color: '#8C8C8C',
         });
       }
     });
@@ -157,7 +155,7 @@ class GraphFlow extends Component {
     edges.forEach (edge => {
       const {id} = edge;
       graph.update (id, {
-        color: 'rgba(0,0,0,.45)',
+        color: '#8C8C8C',
       });
     });
   };
@@ -354,7 +352,7 @@ class GraphFlow extends Component {
     G6.registerEdge ('VHV', {
       draw (item) {
         const {model} = item;
-        const {color = 'rgba(0,0,0,.45)'} = model;
+        const {color = '#8C8C8C'} = model;
         const group = item.getGraphicGroup ();
         const path = this.getPath (item);
         return group.addShape ('path', {
@@ -427,7 +425,7 @@ class GraphFlow extends Component {
         } = item.getModel ();
         const {id: statusId, chineseName} = status;
         const width = 188;
-        const height = 46;
+        const height = 50;
         const buttonWidth = 14;
         const buttonHeight = 14;
         let topButton = '';

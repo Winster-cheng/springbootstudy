@@ -252,7 +252,7 @@ class TaskSubmit extends Component {
                 selectedKeys={[this.state.activeKey.toString ()]}
               >
                 {this.TreeNodeList (taskTreeData)}
-                </Tree>}
+              </Tree>}
           </Col>
           <Col
             span={18}
@@ -323,7 +323,7 @@ class TaskSubmit extends Component {
             </Button>
             <Button onClick={this.submitCode} className={styles.btn}>提交</Button>
             <Button
-              onClick={() => router.push ('/jobPlan?jobId=1')}
+              onClick={() => router.push ('/jobPlan')}
               className={styles.btn2}
             >
               查看依赖

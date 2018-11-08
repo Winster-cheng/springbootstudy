@@ -28,10 +28,10 @@ const statusBgColor = {
 };
 
 const statusBorderColor = {
-  1: "#7E7E7E",
-  2: "#FAAD14",
-  3: "#016FFF",
-  4: "#56C61F",
-  5: "#F5222D"
+  1: "rgba(126,126,126,.5)",
+  2: "rgba(250,173,20,.5)",
+  3: "rgba(1,111,255,.5)",
+  4: "rgba(86,198,31,.5)",
+  5: "rgba(245,34,45,.5)"
 }
 export {statusClassName, statuslogo, statusBgColor, statusBorderColor};
