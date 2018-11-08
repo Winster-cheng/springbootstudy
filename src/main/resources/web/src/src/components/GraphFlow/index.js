@@ -44,12 +44,35 @@ class GraphFlow extends Component {
       (!isEqual (prevState.nodeId, nextProps.nodeId) ||
         !isEqual (prevState.graphDependencies, nextProps.graphDependencies))
     ) {
+      const { graph } = prevState;
+      const { nodeId } = nextProps;
       prevState.graph.read (nextProps.graphDependencies);
+      const { model } = graph.find(nodeId);
+      graph.update(nodeId,{
+        isSelected: true
+      })
+      const {status = {}, name = ''} = model;
+      const {id: statusId} = status;
+      const edges = graph.getEdges ();
+      edges.forEach (edge => {
+        const {id, source, target} = edge;
+        const isRelated = source.id == nodeId || target.id == nodeId;
+        if (isRelated) {
+          graph.update (id, {
+            color: statusBorderColor[statusId] || '#016FFF',
+          });
+        } else {
+          graph.update (id, {
+            color: 'rgba(0,0,0,.45)',
+          });
+        }
+      });
+
       return {
         ...prevState,
         graphDependencies: nextProps.graphDependencies,
         nodeId: nextProps.nodeId,
-        titleDetail: '',
+        titleDetail: name,
       };
     }
     if (
@@ -222,6 +245,11 @@ class GraphFlow extends Component {
             },
           });
         }
+        that.rePaintAllEdges ();
+        hideDetail ();
+        that.setState ({
+          titleDetail: '',
+        });
       } else if (
         className.indexOf ('ce-button') > -1 &&
         className.indexOf ('top') > -1
@@ -257,6 +285,11 @@ class GraphFlow extends Component {
             },
           });
         }
+        that.rePaintAllEdges ();
+        hideDetail ();
+        that.setState ({
+          titleDetail: '',
+        });
       } else {
         if (className.indexOf ('card-container') === -1) {
           target = target.parentElement;
@@ -279,26 +312,26 @@ class GraphFlow extends Component {
           });
         }
       }
-
-      graph.on ('drag', ev => {
-        if (that.lastPoint) {
-          graph.translate (
-            ev.domX - that.lastPoint.x,
-            ev.domY - that.lastPoint.y
-          );
-        }
-        that.lastPoint = {
-          x: ev.domX,
-          y: ev.domY,
-        };
-      });
-
-      graph.on ('dragend', ev => {
-        that.lastPoint = null;
-      });
-
       graph.setFitView ('cc');
     });
+    
+    graph.on ('drag', ev => {
+      if (that.lastPoint) {
+        graph.translate (
+          ev.domX - that.lastPoint.x,
+          ev.domY - that.lastPoint.y
+        );
+      }
+      that.lastPoint = {
+        x: ev.domX,
+        y: ev.domY,
+      };
+    });
+
+    graph.on ('dragend', ev => {
+      that.lastPoint = null;
+    });
+
     graph.on ('click', ev => {
       const {domEvent} = ev;
       const {target} = domEvent;
@@ -387,6 +420,7 @@ class GraphFlow extends Component {
           id,
           hasChildren,
           hasParent,
+          isSelected,
           input = [],
           output = [],
           status = {},
@@ -405,7 +439,7 @@ class GraphFlow extends Component {
           topButton = `<img class="ce-button ce-button-${id} top" src=${input.length > 0 ? collapseButton : expandButton}>`;
         }
         const html = G6.Util.createDOM (`
-          <div class="card-container ${isTaskInstance ? statusClassName[statusId] : ''}">
+          <div class="card-container ${isSelected ? 'selected' : ''} ${isTaskInstance ? statusClassName[statusId] : ''}">
             <h1 class="main-text ellipsis" titledetail="${name}">
             ${isTaskInstance ? '<span class="status-icon"></span>' : ''}
             ${name}
