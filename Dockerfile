@@ -1,4 +1,4 @@
-FROM reg.maihaoche.com/library/mhc_jdk8_pp-agent:1.0.0
+FROM reg.haimaiche.net/library/mhc_jdk8_pp-agent:1.0.0
 USER root
 ADD . /root/build
 RUN cd /root/build/ && mvn -q -X -DskipTests=true compile && mvn package -DskipTests=true \
