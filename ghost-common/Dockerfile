@@ -6,7 +6,7 @@ ENV REFRESHED_AT 2018-06-25
     
 ARG JAR_FILE
 ADD target/${JAR_FILE}  /home/admin/app/mhcapp.jar
-RUN echo "java \$JAVA_OPTIONS -jar /home/admin/app/mhcapp.jar --spring.profiles.active=\$SPRING_PROFILES_ACTIVE --spring.dubbo.protocol.port=\$SPRING_DUBBO_PROTOCOL_PORT --server.port=\$JETTY_PORT" >> /home/admin/app/hosts.sh &&\
+RUN echo "java \$JAVA_OPTIONS -jar /home/admin/app/mhcapp.jar --spring.profiles.active=\$SPRING_PROFILES_ACTIVE --server.port=\$JETTY_PORT" >> /home/admin/app/hosts.sh &&\
     cat /home/admin/app/hosts.sh &&\
     chown -R admin:admin /home/admin &&\
     chmod u+x /home/admin/app/hosts.sh
