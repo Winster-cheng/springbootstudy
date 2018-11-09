@@ -6,7 +6,10 @@
     <groupId>com.mhc</groupId>
     <artifactId>theadvisor</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <modules>
+        <module>ghost-common</module>
+    </modules>
+    <packaging>pom</packaging>
 
     <name>theadvisor</name>
     <description>Demo project for Spring Boot</description>
