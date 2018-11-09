@@ -19,7 +19,7 @@ private String gmtModify;
  */
 public interface ShellContentMapper {
 
-    @Insert("insert into shellcontent(shellname,shelltype,shellcontent,gmt_create) values(#{shellContent.shellName},#{shellContent.shellType},#{shellContent.shellContent},#{createTime})")
+    @Insert("insert into shellcontent(shellname,shelltype,shellcontent,gmt_create,gmt_modify) values(#{shellContent.shellName},#{shellContent.shellType},#{shellContent.shellContent},#{createTime},#{createTime})")
     @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
     int insertIntoShellContent(@Param("shellContent") ShellContent shellContent, @Param("createTime") String createTime);
 

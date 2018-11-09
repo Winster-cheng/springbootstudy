@@ -2,19 +2,20 @@ package com.mhc.bi.service.Impl;
 
 import com.mhc.bi.Utils.Algorithm;
 import com.mhc.bi.Utils.GetTime;
+import com.mhc.bi.common.ActionResult;
+import com.mhc.bi.common.JDBC;
 import com.mhc.bi.domain.theadvisor.JobPlan;
 import com.mhc.bi.domain.theadvisor.TaskInstance;
 import com.mhc.bi.mapper.theadvisor.TaskInstanceMapper;
 import com.mhc.bi.service.JobPlanService;
 import com.mhc.bi.service.TaskInstanceService;
+import com.mhc.bi.vo.PageMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author baiyan
@@ -67,7 +68,6 @@ public class TaskInstanceServiceImpl implements TaskInstanceService {
     @Override
     public void createTaskInstance() {
         TaskInstance taskInstance;
-        System.out.println("Strating create TaskInstance！！！");
         List<JobPlan> list = jobPlanService.selectAll();
         String day = GetTime.getTimeStamp("yyyyMMdd", +1); //每天我们生成的是第二天的任务
         for (JobPlan jobPlan : list) {
@@ -88,6 +88,8 @@ public class TaskInstanceServiceImpl implements TaskInstanceService {
                 taskInstance.setExecuteTime(time);
                 taskInstance.setExecuteDay(day);
                 taskInstance.setParaments(jobPlan.getParaments());
+                taskInstance.setOwner(jobPlan.getOwner());
+                taskInstance.setType(jobPlan.getType());
                 taskInstanceService.insertTaskInstance(taskInstance); //注入到数据库中
             }
         }
@@ -112,6 +114,17 @@ public class TaskInstanceServiceImpl implements TaskInstanceService {
     @Override
     public int updateStatus(TaskInstance taskInstance) {
         return taskInstanceMapper.updateStatus(taskInstance, GetTime.getTimeStamp("yyyyMMddHHmmss"));
+    }
+
+    @Override
+    public PageMessage select(int pageSize, int pageNo, String date, String fileName, int status, int timingSortType, int bussinessDateSortType, int startTimeSortType) {
+        int totalCount = taskInstanceMapper.getTotalCount();
+        PageMessage pageMessage = new PageMessage();
+        pageMessage.setTotalPage(totalCount % pageSize == 0 ? totalCount / pageSize : totalCount / pageSize + 1);
+        pageMessage.setPageNo(pageNo);
+        pageMessage.setPageSize(pageSize);
+        pageMessage.setTotalCount(totalCount);
+        return null;
     }
 
     /**
@@ -184,4 +197,121 @@ public class TaskInstanceServiceImpl implements TaskInstanceService {
         }
         return map;
     }
+
+
+    //给接口3.2返回的List<TaskInstance>
+    public List<TaskInstance> selectByPage(int pageSize, int pageNo, String date, String fileName, int[] status, String sortName, String sortType) {
+        int start = (pageNo - 1) * pageSize;
+//        taskInstanceService
+        return null;
+    }
+
+    //输入id,返回父节点List
+    public List<TaskInstance> getParentListById(int id) {
+        List<TaskInstance> taskInstanceList = new ArrayList<>();
+        String input = taskInstanceMapper.selectInputById(id);
+        if (input == null) { //意味着这个节点是最高的，没有父节点
+            return taskInstanceList;
+        }
+        String[] in = input.split(",");
+        for (String i : in) {
+            taskInstanceList.add(this.getTaskInstanceByInput(i));
+        }
+        return taskInstanceList;
+    }
+
+
+    //输入output,获取output=该值的对象
+    public TaskInstance getTaskInstanceByInput(String output) {
+        return taskInstanceMapper.getTaskInstanceByOutput(output);
+    }
+
+
+    //输入id,返回子节点List
+    public List<TaskInstance> getChildrenListById(int id) {
+        List<TaskInstance> taskInstanceList = new ArrayList<>();
+        String output = taskInstanceMapper.selectOutputById(id);
+        return getTaskInstanceByOutput(output);
+    }
+
+
+    //输入key,获取数据库中字段input=该值/包含该值的对象
+    public List<TaskInstance> getTaskInstanceByOutput(String key) {
+        List<TaskInstance> taskInstanceList = new ArrayList<>();
+        List<TaskInstance> taskInstanceList2 = taskInstanceMapper.getTaskInstanceByInput(key);
+        for (TaskInstance taskInstance : taskInstanceList2) { //对每个都进行筛选
+            String in[] = taskInstance.getInput().split(",");
+            for (String i : in) {
+                if (i.equals(key)) {
+                    taskInstanceList.add(taskInstance);
+                    continue;
+                }
+            }
+        }
+        return taskInstanceList;
+    }
+
+    @Override
+    public TaskInstance selectTaskInstanceById(int id) {
+        return taskInstanceMapper.getTaskInstanceById(id);
+    }
+
+    @Override
+    public int getTotalCountByDate(String date) {
+        return taskInstanceMapper.getTotalCountByDate(date);
+    }
+
+    @Override
+    public int getTotalCountByFileName(String name) {
+        return taskInstanceMapper.getTotalCountByFileName(name);
+    }
+
+    @Override
+    public int getTotalCountByStatus(int[] status) {
+        StringBuffer sb = new StringBuffer();//拼接数组
+        sb.append("(");
+        int count = 0;
+        for (int i : status) {
+            if (count == 0) sb.append(" " + i);
+            else sb.append("," + i);
+            count++;
+        }
+        sb.append(")");
+
+        JDBC jdbc = new JDBC();
+        ActionResult actionResult = new ActionResult();
+        try {
+            count = jdbc.getTotalCountByStatus("select count(*) from taskinstance where status in " + sb.toString() + ";");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return count;
+    }
+
+    @Override
+    public int getTotalCount() {
+        return taskInstanceMapper.getTotalCount();
+    }
+
+    @Override
+    public List<Integer> getParentIdByTaskInstance(int id) {
+        List<Integer> idList = new ArrayList<>();
+        List<TaskInstance> l = this.getParentListById(id);
+        for (TaskInstance taskInstance : l) {
+            idList.add(taskInstance.getId());
+        }
+        return idList;
+    }
+
+    @Override
+    public List<Integer> getChildrenIdByTaskInstance(int id) {
+        List<Integer> idList = new ArrayList<>();
+        List<TaskInstance> l = this.getChildrenListById(id);
+        for (TaskInstance taskInstance : l) {
+            idList.add(taskInstance.getId());
+        }
+        return idList;
+    }
+
+
 }

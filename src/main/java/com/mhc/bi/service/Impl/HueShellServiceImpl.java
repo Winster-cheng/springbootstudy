@@ -38,23 +38,24 @@ public class HueShellServiceImpl implements HueShellService {
     @Autowired
     private ShellContentService shellContentService;
 
-    @Autowired
-    HueShell hueShell;
 
     JobPlan jobPlan;
     ShellContent shellContent;
 
     @Override
-    public String submit(String name) {
-        hueShell = hueShellService.selectByName(name);
+    public boolean submit(String name) {
+        HueShell hueShell;
+        hueShell = hueShellService.selectByName(StringHandle.checkEnding(name,"bi"));
         insertOrAddNewVersion(hueShell);//做一个备份到hueshell表
         String msg = check(hueShell);
         if (msg != "OK") {
-            return "提交" + name + "失败！！" + msg;
+            return false;
         } else {
-            jobPlan = new JobPlan(hueShell.getName(), hueShell.getInput(), hueShell.getShellName().replaceAll(".bi", ""), hueShell.getOutput(), hueShell.getExecuteRate(), hueShell.getExecuteTime(), hueShell.getParaments(), GetTime.getTimeStamp("yyyyMMdd"));
+            jobPlan = new JobPlan(hueShell.getName(), hueShell.getInput(), hueShell.getShellName().replaceAll(".bi", ""), hueShell.getOutput(), hueShell.getExecuteRate(), hueShell.getExecuteTime(), hueShell.getParaments(), GetTime.getTimeStamp("yyyyMMdd"),hueShell.getOwner(),hueShell.getType());
+            jobPlanService.insert(jobPlan);
             shellContent = new ShellContent(hueShell.getShellName(), hueShell.getShellContent(), hueShell.getType(), GetTime.getTimeStamp("yyyyMMdd"));
-            return name+" 插入jobPlan结果" + jobPlanService.insert(jobPlan) + "\n插入shellContent结果:" + shellContentService.insertShellContent(shellContent);
+            shellContentService.insertShellContent(shellContent);
+            return true;
         }
     }
 
@@ -89,6 +90,11 @@ public class HueShellServiceImpl implements HueShellService {
     }
 
     @Override
+    public List<String> getDirectory() {
+        return null;
+    }
+
+    @Override
     public List<HueShell> selectAll() {
         return hueShellMapper.getAll();
     }
@@ -108,11 +114,15 @@ public class HueShellServiceImpl implements HueShellService {
      */
     @Override
     public HueShell selectByName(String name) {
-        String executorContent = desktopDocument2Mapper.selectByName(StringHandle.checkEnding(name, ".bi")).getSearch();
-
-        System.out.println("从hue2中取出的" + StringHandle.checkEnding(name, ".bi") + "内容是:\n" + executorContent);
+      HueShell  hueShell=new HueShell();
+      String realName=StringHandle.checkEnding(name, ".bi");
+        String executorContent = desktopDocument2Mapper.selectByName(realName).getSearch();
+        //TODO owner接入实际用户
+        String owner="测试用户";
+        String type="hiveshell";
         //name type executetime shellname shellcontent input output execute_rate paraments
-        hueShell.setName(name.replace(".bi", ""));
+        hueShell.setName(realName);
+        hueShell.setType(type);
         Map<String, String> fileMap = new HashMap<String, String>(); //负责存储从数据库中查询出来的键值对
         String[] ec = executorContent.split("\\n");
         for (String x : ec) {
@@ -150,6 +160,7 @@ public class HueShellServiceImpl implements HueShellService {
         if (fileMap.keySet().contains("executerate"))
             hueShell.setExecuteRate(fileMap.get("executerate"));
         hueShell.setIsHistory(1);
+        hueShell.setOwner(owner);
         return hueShell;
     }
 
@@ -165,13 +176,15 @@ public class HueShellServiceImpl implements HueShellService {
     public String check(HueShell hueShell) {
         if (hueShell.getInput() == null) return "OK";//这个节点没有父依赖
         int startHour = getEarliesTime(hueShell);
-        HueShell parentHueShell;
         for (String x : hueShell.getInput().split(",")) {//检查每天父节点的最早执行时间
+            HueShell parentHueShell;
             parentHueShell = hueShellService.selectByOutput(x);
             if (startHour < getEarliesTime(parentHueShell)) {
                 return hueShell.getName() + "的执行时间早于" + parentHueShell.getName();
             }
         }
+        hueShell.getName();
+
         return "OK";
     }
 
@@ -185,7 +198,10 @@ public class HueShellServiceImpl implements HueShellService {
      */
 
     public int getEarliesTime(HueShell hueShell) {
+        System.out.println("hueShell.getExecuteTime():"+hueShell.getExecuteTime());
         List<String> timeList = Arrays.asList(hueShell.getExecuteTime().split(","));
         return Integer.parseInt(Collections.min(timeList));
     }
+
+
 }

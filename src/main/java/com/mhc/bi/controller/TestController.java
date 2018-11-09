@@ -5,15 +5,17 @@ import com.mhc.bi.domain.hue.DesktopDocument2;
 import com.mhc.bi.exec.FlowControl;
 import com.mhc.bi.service.DesktopDocument2Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * @author baiyan
  * @date 2018/09/23
  * @description
  */
-@RestController
+@Controller
 public class TestController {
     @Autowired
     FlowControl flowControl;
@@ -24,9 +26,9 @@ public class TestController {
     @Autowired
     DingDingAlert dingDingAlert;
 
-    @GetMapping(value = "/hello")
-    public int hello() {
-        return 1;
+    @RequestMapping("/hello")
+    public String  hello() {
+        return "index2";
     }
 
     @GetMapping("desktopdocument2")
@@ -34,20 +36,12 @@ public class TestController {
         return desktopDocument2Service.getDesktopDocument2(name);
     }
 
-    @GetMapping("loginValidate")
-    public Object loginOut(){
-        return "我是跳转界面";
-    }
-
-    @GetMapping("test1")
-    public Object tset1(){
-        return "我是首页地址";
-    }
-
-
     //钉钉手动接入
+    @ResponseBody
     @GetMapping("dingding")
     public void sendDingDingMsg(String msg){
         dingDingAlert.sendMsg(msg);
     }
+
+
 }

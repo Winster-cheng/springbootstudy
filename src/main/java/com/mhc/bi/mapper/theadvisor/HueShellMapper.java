@@ -94,7 +94,7 @@ public interface HueShellMapper {
     })
     HueShell selectAliveByName(String name);
 
-    @Insert("insert into hueshell(name,input,output,execute_time,execute_rate,shellcontent,shellname,type,gmt_create,paraments,is_history) values(#{hueShell.name},#{hueShell.input},#{hueShell.output},#{hueShell.executeTime},#{hueShell.executeRate},#{hueShell.shellContent},#{hueShell.shellName},#{hueShell.type},#{createTime},#{hueShell.paraments},#{hueShell.isHistory})")
+    @Insert("insert into hueshell(name,input,output,execute_time,execute_rate,shellcontent,shellname,type,gmt_create,gmt_modify,paraments,is_history) values(#{hueShell.name},#{hueShell.input},#{hueShell.output},#{hueShell.executeTime},#{hueShell.executeRate},#{hueShell.shellContent},#{hueShell.shellName},#{hueShell.type},#{createTime},#{createTime},#{hueShell.paraments},#{hueShell.isHistory})")
     @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
     int insert(@Param("hueShell") HueShell hueShell, @Param("createTime") String createTime);
 
@@ -118,6 +118,6 @@ public interface HueShellMapper {
             @Result(column = "paraments", property = "paraments"),
             @Result(column = "is_history", property = "isHistory")
     })
-    HueShell selectByOutput(String name);
+    HueShell selectByOutput(String output);
 
 }
