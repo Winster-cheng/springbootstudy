@@ -35,6 +35,7 @@ public class JobPlanController {
     public ActionResult select(@RequestBody TaskPlanSelect taskPlanSelect) {
         actionResult = new ActionResult();
         try {
+            System.out.println(taskPlanSelect.getTimeSortType());
             int totalCount;
             if (taskPlanSelect.getFileName() == "") {
                 totalCount = jobPlanService.getNumbers();

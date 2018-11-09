@@ -11,7 +11,8 @@ import lombok.Data;
 public class TaskPlanSelect {
     private Integer pageSize;
     private Integer pageNo;
-    private  String fileName;
+    private String fileName;
     private Integer timeSortType;
+
 
 }
