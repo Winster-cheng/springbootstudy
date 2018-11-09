@@ -32,7 +32,7 @@
                 <configuration>  
                     <!--日期格式;默认值:dd.MM.yyyy '@' HH:mm:ss z;-->  
                     <dateFormat>yyyyMMdd</dateFormat>  
-                    <useNativeGit>true</useNativeGit>
+                    <useNativeGit>false</useNativeGit>
                     <!--,构建过程中,是否打印详细信息;默认值:false;-->  
                     <verbose>false</verbose>  
                     <!-- ".git"文件路径;默认值:${project.basedir}/.git; -->  
