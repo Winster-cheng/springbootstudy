@@ -2,6 +2,7 @@ package com.mhc.bi.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * @author baiyan
@@ -11,14 +12,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class LoginController {
 
-    @GetMapping("/center/**")
+    @GetMapping("/center")
     public String center() {
-        return "/center/index";
+
+
+        return "index";
     }
 
+    @ResponseBody
     @GetMapping("/loginValidate")
     public String loginValidate() {
-        return "/center/index";
+        return "hello";
     }
 
 }
