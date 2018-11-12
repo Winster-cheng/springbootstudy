@@ -25,4 +25,14 @@ public class LoginController {
         return "hello";
     }
 
+    @ResponseBody
+    @GetMapping("/loginValidate")
+    public String loginValidate() {
+        User user = currentUserHolder.get(User.class);
+        if ( null == user){
+            return "登陆失败！";
+        }
+        return user.getName();
+    }
+
 }
