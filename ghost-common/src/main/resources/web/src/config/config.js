@@ -63,7 +63,7 @@ export default {
   },
   proxy: {
     '/api': {
-      target: 'http://127.0.0.1:8088/',
+      target: 'http://127.0.0.1:8089/',
       changeOrigin: true,
       // bypass: (req, res, proxyOptions) => {
       //   if(req.url.indexOf("/user/getUser") > -1){
