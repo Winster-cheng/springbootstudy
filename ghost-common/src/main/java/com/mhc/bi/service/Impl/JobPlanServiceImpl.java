@@ -1,6 +1,7 @@
 package com.mhc.bi.service.Impl;
 
 import com.mhc.bi.Utils.GetTime;
+import com.mhc.bi.domain.theadvisor.HueShell;
 import com.mhc.bi.domain.theadvisor.JobPlan;
 import com.mhc.bi.mapper.theadvisor.JobPlanMapper;
 import com.mhc.bi.service.JobPlanService;
@@ -28,6 +29,7 @@ public class JobPlanServiceImpl implements JobPlanService {
 
     @Override
     public int update(JobPlan jobPlan) {
+        jobPlan.setGmtModify(GetTime.getTimeWithMysqlFormat());
         return jobPlanMapper.update(jobPlan);
     }
 
@@ -40,6 +42,7 @@ public class JobPlanServiceImpl implements JobPlanService {
     public int insert(JobPlan jobPlan) {
         return jobPlanMapper.insertIntoJobPlan(jobPlan, GetTime.getTimeWithMysqlFormat());
     }
+
 
     @Override
     public JobPlan selectJobPlanByOutput(String output) {
@@ -106,12 +109,24 @@ public class JobPlanServiceImpl implements JobPlanService {
         return jobPlanMapper.getJobPlanById(id);
     }
 
+    @Override
+    public boolean isExit(String name) {
+        if (this.selectJobPlan(name) != null) return true;
+        return false;
+    }
+
+    @Override
+    public JobPlan getJobPlanFromHueShell(HueShell hueShell) {
+        return new JobPlan(hueShell.getName(), hueShell.getInput(), hueShell.getShellName().replaceAll(".bi", ""), hueShell.getOutput(), hueShell.getExecuteRate(), hueShell.getExecuteTime(), hueShell.getParaments(), GetTime.getTimeStamp("yyyyMMdd"), hueShell.getOwner(), hueShell.getType());
+
+    }
+
     //输入id,返回父节点列表
     @Override
     public List<JobPlan> getParentList(int id) {
         List<JobPlan> jobPlanList = new ArrayList<>();
         String input = this.getInputById(id);
-        if (!(input==null)) { //考虑到最顶上到节点
+        if (!(input == null)) { //考虑到最顶上到节点
             String[] in = input.split(",");
             JobPlan jobPlan;
             for (String o : in) {

@@ -32,16 +32,16 @@ public class HueShellController {
         return hueShellService.selectAll();
     }
 
-    //将HueShell的内容导入到JobPlan和ShellContent,模拟提交操作 http://localhost:8080/hueshell/export?name=task1
-    @GetMapping("submitById")
-    public boolean submitById(int id) {
-        String name =desktopDocument2Service.selectNameById(id);
-        return hueShellService.submit(name);
-    }
-    @GetMapping("submitByName")
-    public boolean submitByName(String name) {
-        return hueShellService.submit(name);
-    }
+//    //将HueShell的内容导入到JobPlan和ShellContent,模拟提交操作 http://localhost:8080/hueshell/export?name=task1
+//    @GetMapping("submitById")
+//    public boolean submitById(int id) {
+//        String name =desktopDocument2Service.selectNameById(id);
+//        return hueShellService.submit(name);
+//    }
+//    @GetMapping("submitByName")
+//    public boolean submitByName(String name) {
+//        return hueShellService.submit(name);
+//    }
 
     //将HueShell的内容导入到JobPlan和ShellContent,模拟提交操作 http://localhost:8080/hueshell/export?name=task1
     @GetMapping("selecttest")

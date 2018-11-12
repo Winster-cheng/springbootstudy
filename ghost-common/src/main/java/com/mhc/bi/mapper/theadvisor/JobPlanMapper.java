@@ -34,7 +34,7 @@ public interface JobPlanMapper {
     @Delete("delete from jobplan where name=#{name}")
     int delete(String name);
 
-    @Update("update jobplan set  input=#{input},execute_rate=#{executeRate},execute_time=#{executeTime},output=#{output},paraments=#{paraments},gmt_create=#{gmtCreate}, gmt_modify=#{gmtModify}where name=#{name}")
+    @Update("update jobplan set shellname=#{shellName},input=#{input},execute_rate=#{executeRate},execute_time=#{executeTime},output=#{output},paraments=#{paraments},gmt_create=#{gmtCreate}, gmt_modify=#{gmtModify},owner=#{owner},type=#{type} where name=#{name}")
     int update(JobPlan jobplan);
 
     @Select("select * from jobplan where name=#{name}")

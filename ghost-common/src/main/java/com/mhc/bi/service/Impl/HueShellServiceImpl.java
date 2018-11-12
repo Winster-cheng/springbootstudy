@@ -41,22 +41,7 @@ public class HueShellServiceImpl implements HueShellService {
     JobPlan jobPlan;
     ShellContent shellContent;
 
-    @Override
-    public boolean submit(String name) {
-        HueShell hueShell;
-        hueShell = hueShellService.selectByName(StringHandle.checkEnding(name,"bi"));
-        insertOrAddNewVersion(hueShell);//做一个备份到hueshell表
-        String msg = check(hueShell);
-        if (msg != "OK") {
-            return false;
-        } else {
-            jobPlan = new JobPlan(hueShell.getName(), hueShell.getInput(), hueShell.getShellName().replaceAll(".bi", ""), hueShell.getOutput(), hueShell.getExecuteRate(), hueShell.getExecuteTime(), hueShell.getParaments(), GetTime.getTimeStamp("yyyyMMdd"),hueShell.getOwner(),hueShell.getType());
-            jobPlanService.insert(jobPlan);
-            shellContent = new ShellContent(hueShell.getShellName(), hueShell.getShellContent(), hueShell.getType(), GetTime.getTimeStamp("yyyyMMdd"));
-            shellContentService.insertShellContent(shellContent);
-            return true;
-        }
-    }
+
 
     @Override
     public HueShell selectAliveByName(String name) {
@@ -172,6 +157,7 @@ public class HueShellServiceImpl implements HueShellService {
      * @创建时间 2018/9/23
      * @修改人和其它信息
      */
+    @Override
     public String check(HueShell hueShell) {
         if (hueShell.getInput() == null) return "OK";//这个节点没有父依赖
         int startHour = getEarliesTime(hueShell);

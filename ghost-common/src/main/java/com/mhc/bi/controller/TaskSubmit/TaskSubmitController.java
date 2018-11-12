@@ -1,12 +1,18 @@
 package com.mhc.bi.controller.TaskSubmit;
 
+import com.mhc.bi.Utils.StringHandle;
 import com.mhc.bi.common.ActionResult;
 import com.mhc.bi.controller.TaskSubmit.BeamForm.TaskSubmitGetContent;
 import com.mhc.bi.controller.TaskSubmit.BeamForm.TaskSubmitSave;
 import com.mhc.bi.controller.TaskSubmit.BeamForm.TaskSubmitSubmit;
 import com.mhc.bi.domain.hue.DesktopDocument2;
+import com.mhc.bi.domain.theadvisor.HueShell;
+import com.mhc.bi.domain.theadvisor.JobPlan;
+import com.mhc.bi.domain.theadvisor.ShellContent;
 import com.mhc.bi.service.DesktopDocument2Service;
 import com.mhc.bi.service.HueShellService;
+import com.mhc.bi.service.JobPlanService;
+import com.mhc.bi.service.ShellContentService;
 import com.mhc.bi.vo.tasksubmit.File;
 import com.mhc.bi.vo.tasksubmit.FileContent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +36,13 @@ public class TaskSubmitController {
     HueShellService hueShellService;
 
     @Autowired
+    ShellContentService shellContentService;
+
+    @Autowired
     DesktopDocument2Service desktopDocument2Service;
 
+    @Autowired
+    JobPlanService jobPlanService;
 
     ActionResult actionResult;
 
@@ -93,7 +104,7 @@ public class TaskSubmitController {
     public ActionResult getContent(@RequestBody TaskSubmitGetContent taskSubmitGetContent) {
         actionResult = new ActionResult();
         FileContent fileContent = new FileContent();
-        String content=desktopDocument2Service.getContent(taskSubmitGetContent.getFileId());
+        String content = desktopDocument2Service.getContent(taskSubmitGetContent.getFileId());
         fileContent.setFileContent(content);
         try {
             actionResult.success();
@@ -124,26 +135,37 @@ public class TaskSubmitController {
         actionResult = new ActionResult();
         try {
             String beforeMessage = desktopDocument2Service.getContent(taskSubmitSubmit.getFileId());
-            String content=taskSubmitSubmit.getContent();
+            String content = taskSubmitSubmit.getContent();
             if (!(content.equals(beforeMessage))) {
                 actionResult.fail("提交错误，请先保存");
                 return actionResult;
             }
-            String name=desktopDocument2Service.getNameById(taskSubmitSubmit.getFileId());
-            if(!name.endsWith(".bi")){
+            String name = desktopDocument2Service.getNameById(taskSubmitSubmit.getFileId());
+            if (!name.endsWith(".bi")) {
                 actionResult.fail("提交错误，只能提交.bi文件");
                 return actionResult;
             }
-            boolean flag = hueShellService.submit(name);
-            if (flag) actionResult.success();
-            else
-                actionResult.fail();
+            HueShell hueShell = hueShellService.selectByName(StringHandle.checkEnding(name, "bi"));
+            hueShellService.insertOrAddNewVersion(hueShell);//备份到hueshell表;
+            String msg = hueShellService.check(hueShell);
+            if (!msg.equals("OK")) { //检查子节点的时间有没有比父节点早
+                actionResult.fail(msg);
+            }
+            JobPlan jobPlan = jobPlanService.getJobPlanFromHueShell(hueShell);
+            ShellContent shellContent = shellContentService.getShellContentFromHueShell(hueShell);
+            //如果JobPlan已经存在，那么更新
+            if (jobPlanService.isExit(name)) {
+                jobPlanService.update(jobPlan);
+                shellContentService.updateShellContent(shellContent);
+            } else {
+                jobPlanService.insert(jobPlan);
+                shellContentService.insertShellContent(shellContent);
+            }
+            actionResult.success();
         } catch (Exception e) {
             e.printStackTrace();
             actionResult.fail("未知错误，请查看后台日志");
         }
         return actionResult;
     }
-
-
 }

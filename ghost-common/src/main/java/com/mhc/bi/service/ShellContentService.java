@@ -1,5 +1,7 @@
 package com.mhc.bi.service;
 
+import com.mhc.bi.domain.theadvisor.HueShell;
+import com.mhc.bi.domain.theadvisor.JobPlan;
 import com.mhc.bi.domain.theadvisor.ShellContent;
 
 import java.util.List;
@@ -11,10 +13,17 @@ import java.util.List;
  */
 public interface ShellContentService {
 
-        public int insertShellContent(ShellContent content);
-        public List<ShellContent> selectShellContent();
-        public int updateShellContent(ShellContent content);
-        public int deleteShellContent(ShellContent content);
-        public  ShellContent selectByName(String shellName);
+    public int insertShellContent(ShellContent content);
+
+    public List<ShellContent> selectShellContent();
+
+    public int updateShellContent(ShellContent content);
+
+    public int deleteShellContent(ShellContent content);
+
+    public ShellContent selectByName(String shellName);
+
+    public ShellContent getShellContentFromHueShell(HueShell hueShell);
+
 
 }

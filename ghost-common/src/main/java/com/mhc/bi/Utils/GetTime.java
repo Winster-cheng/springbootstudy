@@ -83,7 +83,7 @@ public class GetTime {
 
     /**
      * @描述 mysql的datetime格式的当前时间
-     * @参数
+     * @参数e
      * @返回值
      * @创建人 baiyan
      * @创建时间 2018/9/27

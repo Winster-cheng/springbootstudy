@@ -1,5 +1,6 @@
 package com.mhc.bi.service;
 
+import com.mhc.bi.domain.theadvisor.HueShell;
 import com.mhc.bi.domain.theadvisor.JobPlan;
 
 import java.util.List;
@@ -45,4 +46,8 @@ public interface JobPlanService {
     public List<Integer> getChildrenIdById(int id);
 
     public JobPlan getJobPlanById(int id);
+
+    public boolean isExit(String name);
+
+    public JobPlan getJobPlanFromHueShell(HueShell hueShell);
 }

@@ -1,6 +1,7 @@
 package com.mhc.bi.service.Impl;
 
 import com.mhc.bi.Utils.GetTime;
+import com.mhc.bi.domain.theadvisor.HueShell;
 import com.mhc.bi.domain.theadvisor.ShellContent;
 import com.mhc.bi.mapper.theadvisor.ShellContentMapper;
 import com.mhc.bi.service.ShellContentService;
@@ -26,7 +27,7 @@ public class ShellContentSerivceImpl implements ShellContentService {
 
     @Override
     public int insertShellContent(ShellContent content) {
-        return  shellContentMapper.insertIntoShellContent(content, GetTime.getTimeWithMysqlFormat());
+        return shellContentMapper.insertIntoShellContent(content, GetTime.getTimeWithMysqlFormat());
     }
 
     @Override
@@ -47,5 +48,10 @@ public class ShellContentSerivceImpl implements ShellContentService {
     @Override
     public ShellContent selectByName(String shellName) {
         return shellContentMapper.selectByName(shellName);
+    }
+
+    @Override
+    public ShellContent getShellContentFromHueShell(HueShell hueShell) {
+        return new ShellContent(hueShell.getShellName(), hueShell.getShellContent(), hueShell.getType(), GetTime.getTimeStamp("yyyyMMdd"));
     }
 }
