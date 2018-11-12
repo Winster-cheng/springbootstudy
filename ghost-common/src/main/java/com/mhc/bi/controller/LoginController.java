@@ -11,8 +11,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class LoginController {
 
-    @GetMapping("/**")
+    @GetMapping("/center/**")
     public String center() {
+        return "/center/index";
+    }
+
+    @GetMapping("/loginValidate")
+    public String loginValidate() {
         return "/center/index";
     }
 
