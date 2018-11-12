@@ -14,8 +14,6 @@ public class LoginController {
 
     @GetMapping("/center")
     public String center() {
-
-
         return "index";
     }
 
