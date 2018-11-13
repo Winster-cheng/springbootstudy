@@ -10,8 +10,6 @@ second.datasource.password=TaoBao-1234
 second.datasource.driver-class-name=com.mysql.jdbc.Driver
 second.datasource.type=com.alibaba.druid.pool.DruidDataSource
 
-
-
 #如果不使用默认的数据源 （com.zaxxer.hikari.HikariDataSource）
 #spring.datasource.type =com.alibaba.druid.pool.DruidDataSource
 mybatis.configuration.log-impl=org.apache.ibatis.logging.stdout.StdOutImpl
@@ -24,16 +22,8 @@ gw.app.id=255792592814370816
 gw.app.key=N5H4PYAFYMTjZtHy
 ## 对应环境的讴歌地址【必要】
 gw.app.authDomain=http://lg.haimaiche.com
-
-//正式环境讴歌
-#讴歌
 spring.application.name=ghost
 server.port=8089
-#gw.app.name=ghost
-#gw.app.id=267924097571573760
-#gw.app.key=1av6ubU6ZQs2Sygh
-# 对应环境的讴歌地址【必要】
-#gw.app.authDomain=http://login.haimaiche.com
 # 是否开启讴歌web应用权限验证，为true才会开启权限验证
 gw.app.acura.web=true
 # 权限验证需要拦截的请求路径，可模糊匹配，可不配置，默认拦截/** 所有请求
@@ -66,8 +56,8 @@ spring.redis.pool.min-idle=0
 # 连接超时时间（毫秒）
 spring.redis.timeout=5000
 
-#thymelea模板配置
-spring.thymeleaf.prefix=classpath:/template/
+#thymeleaf模板配置
+spring.thymeleaf.prefix=classpath:/templates/
 spring.thymeleaf.suffix=.html
 spring.thymeleaf.mode=LEGACYHTML5
 spring.thymeleaf.encoding=UTF-8
