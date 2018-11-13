@@ -27,7 +27,7 @@ public class TestController {
     DingDingAlert dingDingAlert;
 
     @RequestMapping("/hello")
-    public String  hello() {
+    public String hello() {
         return "index2";
     }
 
@@ -39,9 +39,8 @@ public class TestController {
     //钉钉手动接入
     @ResponseBody
     @GetMapping("dingding")
-    public void sendDingDingMsg(String msg){
+    public void sendDingDingMsg(String msg) {
         dingDingAlert.sendMsg(msg);
     }
-
 
 }
