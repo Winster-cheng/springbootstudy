@@ -13,7 +13,7 @@ import java.util.List;
  */
 @Service
 public interface DesktopDocument2Mapper {
-    @Select("select * from hue2.desktop_document2 where name=#{name} and is_trashed=0;")
+    @Select("select * from hue.desktop_document2 where name=#{name} and is_trashed=0;")
     @Results({
             @Result(column = "id", property = "id"),
             @Result(column = "owner_id", property = "ownerId"),
@@ -50,7 +50,7 @@ public interface DesktopDocument2Mapper {
     private int isManaged;
     private int isTrashed;
      */
-    @Select("select * from hue2.desktop_document2 where is_trashed=0 and id>3")
+    @Select("select * from hue.desktop_document2 where is_trashed=0 and id>3")
     @Results({
             @Result(column = "id", property = "id"),
             @Result(column = "owner_id", property = "ownerId"),
@@ -71,20 +71,20 @@ public interface DesktopDocument2Mapper {
     )
     List<DesktopDocument2> getAllAlive();
 
-    @Select("select id from hue2.desktop_document2 where parent_directory_id=#{parentId}")
+    @Select("select id from hue.desktop_document2 where parent_directory_id=#{parentId}")
     List<Integer> getChildrenList(int parentId);
 
 
-    @Select("select search from hue2.desktop_document2 where id=#{id}")
+    @Select("select search from hue.desktop_document2 where id=#{id}")
     String getContent(int id);
 
-    @Update("update hue2.desktop_document2 set search=#{content} where id=#{id}")
+    @Update("update hue.desktop_document2 set search=#{content} where id=#{id}")
     Boolean updateContentById(@Param("id") int id, @Param("content") String content);
 
     @Select("select name from desktop_document2 where id=#{fileId}")
     String selectNameById(int fileId);
 
-    @Select("select * from hue2.desktop_document2 where is_trashed=0 and id>3 and id=#{id}")
+    @Select("select * from desktop_document2 where is_trashed=0 and id>3 and id=#{id}")
     @Results({
             @Result(column = "id", property = "id"),
             @Result(column = "owner_id", property = "ownerId"),
@@ -105,7 +105,7 @@ public interface DesktopDocument2Mapper {
     )
     DesktopDocument2 getById(int id);
 
-    @Select("select * from hue2.desktop_document2 where is_trashed=0 and id>3 and parent_directory_id=#{id}")
+    @Select("select * from desktop_document2 where is_trashed=0 and id>3 and parent_directory_id=#{id}")
     @Results({
             @Result(column = "id", property = "id"),
             @Result(column = "owner_id", property = "ownerId"),
@@ -126,7 +126,7 @@ public interface DesktopDocument2Mapper {
     )
     List<DesktopDocument2> getChildrenListById(int id);
 
-    @Select("select name from hue2.desktop_document2 where is_trashed=0 and id=#{id}")
+    @Select("select name from desktop_document2 where is_trashed=0 and id=#{id}")
     String getNameById(int id);
 
 }
