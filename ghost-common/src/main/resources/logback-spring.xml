@@ -1,59 +1,39 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <configuration>
+    <springProperty scope="context" name="appName" source="logging.appname"/>
+    <springProperty scope="context" name="appPath" source="logging.apppath"/>
+    <springProperty scope="context" name="springLevel" source="logging.level.spring"/>
+    <springProperty scope="context" name="dubboLevel" source="logging.level.dubbo"/>
+    <springProperty scope="context" name="mhcLevel" source="logging.level.mhcframework"/>
+    <springProperty scope="context" name="mhcFrameworkLevel" source="logging.level.mhc"/>
+    <springProperty scope="context" name="rootLevel" source="logging.level.root"/>
+    <jmxConfigurator/>
+    <!-- 引入mhc生产、测试环境配置 -->
+    <include  resource="mhc_default.xml"/>
+    <!--本地环境日志输出-->
+    <springProfile name="local">
+        <!-- 根目录日志 -->
+        <root level="info">
+            <appender-ref ref="STDOUT"/>
+            <appender-ref ref="FILE"/>
+            <appender-ref ref="FILE-ERROR"/>
+        </root>
+        <!--springframework log-->
+        <logger name="org.springframework" additivity="true" level="info">
+            <appender-ref ref="SPRING_INFO"/>
+        </logger>
+        <!--卖好车框架日志-->
+        <logger name="com.mhc.framework" additivity="true" level="info">
+            <appender-ref ref="MHCFRAMEWORK_INFO"/>
+        </logger>
+        <!--dubbo log-->
+        <logger name="dubbo.accesslog.com" additivity="true" level="info">
+            <appender-ref ref="DUBBO_INFO"/>
+        </logger>
+        <!--卖好车业务日志-->
+        <logger name="com.mhc" additivity="true" level="info">
+            <appender-ref ref="MHC_INFO"/>
+        </logger>
 
-    <appender name="consoleApp" class="ch.qos.logback.core.ConsoleAppender">
-        <layout class="ch.qos.logback.classic.PatternLayout">
-            <pattern>
-                %date{yyyy-MM-dd HH:mm:ss.SSS} %-5level[%thread]%logger{56}.%method:%L -%msg%n
-            </pattern>
-        </layout>
-    </appender>
-
-    <appender name="fileInfoApp" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <filter class="ch.qos.logback.classic.filter.LevelFilter"> //过滤器，这里过滤了error级别的内容
-            <level>ERROR</level>
-            <onMatch>DENY</onMatch>
-            <onMismatch>ACCEPT</onMismatch>
-        </filter>
-        <encoder>
-            <pattern>
-                %date{yyyy-MM-dd HH:mm:ss.SSS} %-5level[%thread]%logger{56}.%method:%L -%msg%n
-            </pattern>
-        </encoder>
-        <!-- 滚动策略 -->
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <!-- 路径 -->
-            <!--<fileNamePattern>/usr/local/forwind/logs/app.info.%d.log</fileNamePattern>-->
-            <fileNamePattern>logs/app.info.%d.log</fileNamePattern>
-
-        </rollingPolicy>
-    </appender>
-
-    <appender name="fileErrorApp" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-            <level>ERROR</level>
-        </filter>
-        <encoder>
-            <pattern>
-                %date{yyyy-MM-dd HH:mm:ss.SSS} %-5level[%thread]%logger{56}.%method:%L -%msg%n
-            </pattern>
-        </encoder>
-
-        <!-- 设置滚动策略 -->
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <!-- 路径 -->
-            <!--<fileNamePattern>/usr/local/forwind/logs/app.err.%d.log</fileNamePattern>-->
-            <fileNamePattern>logs/app.err.%d.log</fileNamePattern>
-
-            <!-- 控制保留的归档文件的最大数量，超出数量就删除旧文件，假设设置每个月滚动，
-            且<maxHistory> 是1，则只保存最近1个月的文件，删除之前的旧文件 -->
-            <MaxHistory>1</MaxHistory>
-
-        </rollingPolicy>
-    </appender>
-    <root level="INFO">
-        <appender-ref ref="consoleApp"/>
-        <appender-ref ref="fileInfoApp"/>
-        <appender-ref ref="fileErrorApp"/>
-    </root>
+    </springProfile>
 </configuration>

@@ -101,6 +101,10 @@
             <artifactId>validation-api</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.mhc.framework</groupId>
+            <artifactId>framework-support-log</artifactId>
+        </dependency>
     </dependencies>
 
     <artifactId>ghost-common</artifactId>
