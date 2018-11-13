@@ -1,29 +1,32 @@
-first.datasource.url=jdbc:mysql://172.21.10.53/forwind?useSSL=false
+//正式环境配置信息
+first.datasource.url=jdbc:mysql://10.0.1.121/forwind?useSSL=false
 first.datasource.username=root
-first.datasource.password=TaoBao-1234
+first.datasource.password=Y1vzOeNJWEbUuY6r
 first.datasource.driver-class-name=com.mysql.jdbc.Driver
 first.datasource.type=com.alibaba.druid.pool.DruidDataSource
 
-second.datasource.url=jdbc:mysql://172.21.10.53/hue2?useSSL=false
+second.datasource.url=jdbc:mysql://10.0.1.121/ghost?useSSL=false
 second.datasource.username=root
-second.datasource.password=TaoBao-1234
+second.datasource.password=Y1vzOeNJWEbUuY6r
 second.datasource.driver-class-name=com.mysql.jdbc.Driver
 second.datasource.type=com.alibaba.druid.pool.DruidDataSource
+#
+
 
 #如果不使用默认的数据源 （com.zaxxer.hikari.HikariDataSource）
 #spring.datasource.type =com.alibaba.druid.pool.DruidDataSource
 mybatis.configuration.log-impl=org.apache.ibatis.logging.stdout.StdOutImpl
 logging.level.com.mhc.bi.mapper=debug
 
-//测试环境讴歌
-## 应用的appId【必要】
-gw.app.id=255792592814370816
-## 应用的appKey【必要】
-gw.app.key=N5H4PYAFYMTjZtHy
-## 对应环境的讴歌地址【必要】
-gw.app.authDomain=http://lg.haimaiche.com
+
+#讴歌
 spring.application.name=ghost
 server.port=8089
+gw.app.name=ghost
+gw.app.id=267924097571573760
+gw.app.key=1av6ubU6ZQs2Sygh
+# 对应环境的讴歌地址【必要】
+gw.app.authDomain=https://login.maihaoche.com
 # 是否开启讴歌web应用权限验证，为true才会开启权限验证
 gw.app.acura.web=true
 # 权限验证需要拦截的请求路径，可模糊匹配，可不配置，默认拦截/** 所有请求
@@ -35,29 +38,19 @@ gw.app.expire=3600
 #如果是非前后端分离项目添加此配置设为false
 gw.app.onlyService=false
 
-//测试用Redis
-# REDIS (RedisProperties)
-# Redis数据库索引（默认为0）
-spring.redis.database=0
-# Redis服务器地址
-spring.redis.host=yijiqingchen.com
-# Redis服务器连接端口
-spring.redis.port=6399
-# Redis服务器连接密码（默认为空）
-spring.redis.password=zhimaguanmen
-# 连接池最大连接数（使用负值表示没有限制）
-spring.redis.pool.max-active=8
-# 连接池最大阻塞等待时间（使用负值表示没有限制）
-spring.redis.pool.max-wait=-1
-# 连接池中的最大空闲连接
-spring.redis.pool.max-idle=8
-# 连接池中的最小空闲连接
-spring.redis.pool.min-idle=0
-# 连接超时时间（毫秒）
-spring.redis.timeout=5000
-
-#thymeleaf模板配置
+spring.redis.host = 63a6b336b10143e8.m.cnhza.kvstore.aliyuncs.com
+spring.redis.port = 6379
+spring.redis.password = 63a6b336b10143e8:nVUV92uM
+spring.redis.timeout = 2000
+spring.redis.default.expire-seconds = 3600
+spring.redis.pool.max-idle = 8
+spring.redis.pool.min-idle = 2
+spring.redis.pool.max-active = 32
+spring.redis.pool.max-wait = 1000
+spring.redis.pool.testOnBorrow = true
+#thymelea模板配置
 spring.thymeleaf.prefix=classpath:/templates/
+spring.resources.static-locations=classpath:/static/
 spring.thymeleaf.suffix=.html
 spring.thymeleaf.mode=LEGACYHTML5
 spring.thymeleaf.encoding=UTF-8

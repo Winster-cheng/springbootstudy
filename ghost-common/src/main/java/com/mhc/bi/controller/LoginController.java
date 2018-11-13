@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class LoginController {
 
-    @GetMapping("/center/**")
+    @GetMapping(path={"/", "/center/**"})
     public String center() {
         return "index";
     }
