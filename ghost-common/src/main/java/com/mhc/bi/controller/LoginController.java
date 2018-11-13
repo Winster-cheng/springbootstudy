@@ -17,10 +17,10 @@ public class LoginController {
         return "index";
     }
 
-    @ResponseBody
-    @GetMapping("/loginValidate")
-    public String loginValidate(String ct) {
-        
-        return "hello";
-    }
+//    @ResponseBody
+//    @GetMapping("/loginValidate")
+//    public String loginValidate(String ct) {
+//
+//        return "hello";
+//    }
 }
