@@ -17,11 +17,9 @@ public class LoginController {
         return "index";
     }
 
-//    @ResponseBody
-//    @GetMapping("/loginValidate")
-//    public String loginValidate() {
-//        return "hello";
-//    }
-
-
+    @ResponseBody
+    @GetMapping("/loginValidate")
+    public String loginValidate() {
+        return "hello";
+    }
 }
