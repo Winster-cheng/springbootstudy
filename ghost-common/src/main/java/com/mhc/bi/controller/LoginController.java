@@ -19,7 +19,8 @@ public class LoginController {
 
     @ResponseBody
     @GetMapping("/loginValidate")
-    public String loginValidate() {
+    public String loginValidate(String ct) {
+        
         return "hello";
     }
 }
