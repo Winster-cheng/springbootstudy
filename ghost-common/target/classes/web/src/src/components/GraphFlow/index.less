@@ -1,0 +1,108 @@
+@import '~antd/lib/style/themes/default.less';
+
+:global{
+  .titleDetail{
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    font-size: 14px;
+    background: #000;
+    color: #f2f2f2;
+    padding: 20px 30px;
+    border-bottom-right-radius: 5px;
+  }
+  #mountNode{
+      .card-container {
+          width: 188px;
+          height: 50px;
+          border: 1px solid transparent;
+          border-radius: 4px;
+          position: relative;
+          background: #E5F0FF;
+          &:hover{
+            box-shadow: 0px 2px 6px 0px rgba(0,0,0,0.1);
+          }
+          &.selected{
+            border: 1px solid rgba(1,111,255,.5);
+          }
+          &.stop{
+            background: #E7E7E7;
+            &.selected{
+              border-color: rgba(126,126,126,.5);
+            }
+          }
+          &.waitting{
+            background: #FFF6E5;
+            &.selected{
+              border-color: rgba(250,173,20,.5);
+            }
+          }
+          &.stop .status-icon{
+            background-image: url(../../assets/icon_no.png);
+          }
+          &.waitting .status-icon{
+            background-image: url(../../assets/icon_wait.png);
+          }
+          &.running{
+            background: #E5F0FF;
+            &.selected{
+              border-color: rgba(1,111,255,.5);
+            }
+          }
+          &.running .status-icon{
+            background-image: url(../../assets/icon_run.png);
+          }
+          &.success{
+            background: #ECFFE3;
+            &.selected{
+              border-color: rgba(86,198,31,.5);
+            }
+          }
+          &.success .status-icon{
+            background-image: url(../../assets/icon_success.png);
+          }
+          &.fail{
+            background: #FFE8EA;
+            &.selected{
+              border-color: rgba(245,34,45,.5);
+            }
+          }
+          &.fail .status-icon{
+            background-image: url(../../assets/icon_fail.png);
+          }
+          .ellipsis{
+            width: 100%;
+            overflow: hidden;
+            display: inline-block;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            text-align: center;
+          }
+          .main-text{
+            margin: 0;
+            font-size: 14px;
+            color: rgba(0, 0, 0, 0.85);
+            margin-top: 3px;
+            .status-icon{
+              width: 14px;
+              height: 14px;
+              display: inline-block;
+              background-size: contain;
+              vertical-align: middle;
+            }
+          }
+          .value-text{
+            font-size: 12px;
+            color: rgba(0,0,0,.45);
+            line-height: 12px;
+          }
+        }
+        .ce-button{
+          display: none;
+          &:hover{
+            cursor: pointer;
+          }
+        }
+  }
+}

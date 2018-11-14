@@ -1,0 +1,19 @@
+Hue存储内容表(desktop_document2)：
++---------------------+--------------+------+-----+---------+----------------+
+| id                  | int(11)      | NO   | PRI | NULL    | auto_increment |
+| owner_id            | int(11)      | NO   | MUL | NULL    |                |
+| name                | varchar(255) | NO   |     | NULL    |                |
+| description         | longtext     | NO   |     | NULL    |                |
+| uuid                | varchar(36)  | NO   | MUL | NULL    |                |
+| type                | varchar(32)  | NO   | MUL | NULL    |                |
+| data                | longtext     | NO   |     | NULL    |                |
+| extra               | longtext     | NO   |     | NULL    |                |
+| last_modified       | datetime     | NO   | MUL | NULL    |                |
+| version             | smallint(6)  | NO   | MUL | NULL    |                |
+| is_history          | tinyint(1)   | NO   | MUL | NULL    |                |
+| parent_directory_id | int(11)      | YES  | MUL | NULL    |                |
+| search              | longtext     | YES  |     | NULL    |                |
+| is_managed          | tinyint(1)   | NO   | MUL | NULL    |                |
+| is_trashed          | tinyint(1)   | YES  | MUL | NULL    |                |
++---------------------+--------------+------+-----+---------+----------------+
+这个表是hue自带的

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <springProperty scope="context" name="appName" source="logging.appname"/>
+    <springProperty scope="context" name="appPath" source="logging.apppath"/>
+    <springProperty scope="context" name="springLevel" source="logging.level.spring"/>
+    <springProperty scope="context" name="dubboLevel" source="logging.level.dubbo"/>
+    <springProperty scope="context" name="mhcLevel" source="logging.level.mhcframework"/>
+    <springProperty scope="context" name="mhcFrameworkLevel" source="logging.level.mhc"/>
+    <springProperty scope="context" name="rootLevel" source="logging.level.root"/>
+    <jmxConfigurator/>
+    <!-- 引入mhc生产、测试环境配置 -->
+    <include  resource="mhc_default.xml"/>
+    <!--本地环境日志输出-->
+    <springProfile name="local">
+        <!-- 根目录日志 -->
+        <root level="info">
+            <appender-ref ref="STDOUT"/>
+            <appender-ref ref="FILE"/>
+            <appender-ref ref="FILE-ERROR"/>
+        </root>
+        <!--springframework log-->
+        <logger name="org.springframework" additivity="true" level="info">
+            <appender-ref ref="SPRING_INFO"/>
+        </logger>
+        <!--卖好车框架日志-->
+        <logger name="com.mhc.framework" additivity="true" level="info">
+            <appender-ref ref="MHCFRAMEWORK_INFO"/>
+        </logger>
+        <!--dubbo log-->
+        <logger name="dubbo.accesslog.com" additivity="true" level="info">
+            <appender-ref ref="DUBBO_INFO"/>
+        </logger>
+        <!--卖好车业务日志-->
+        <logger name="com.mhc" additivity="true" level="info">
+            <appender-ref ref="MHC_INFO"/>
+        </logger>
+
+    </springProfile>
+</configuration>
