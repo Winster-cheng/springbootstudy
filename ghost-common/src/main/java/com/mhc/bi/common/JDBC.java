@@ -76,8 +76,7 @@ public class JDBC {
         TaskInstance taskInstance;
         this.init();
         try {
-            stmt = conn.createStatement();
-            rs = stmt.executeQuery(sql);
+            rs = this.stmt.executeQuery(sql);
             while (rs.next()) {
                 taskInstance = new TaskInstance();
                 taskInstance.setId(rs.getInt("id"));
@@ -90,7 +89,6 @@ public class JDBC {
                 taskInstance.setStatus(rs.getInt("status"));
                 taskInstance.setExecuteTime(rs.getString("execute_time"));
                 taskInstance.setExecuteDay(rs.getString("execute_day"));
-                taskInstance.setParaments(rs.getString("paraments"));
                 taskInstance.setParaments(rs.getString("paraments"));
                 taskInstanceList.add(taskInstance);
             }
