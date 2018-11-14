@@ -1,6 +1,7 @@
 package com.mhc.bi.common;
 
 import com.mhc.bi.domain.theadvisor.TaskInstance;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -17,12 +18,25 @@ public class JDBC {
     Statement stmt = null;
     ResultSet rs;
 
+    @Value("${first.datasource.driver-class-name}")
+    private String driverName1;
+
+    @Value("${first.datasource.url}")
+    private String url1;
+
+    @Value("${first.datasource.username}")
+    private String user1;
+
+    @Value("${first.datasource.password}")
+    private String password1;
+
+
     public void init() {
         // 不同的数据库有不同的驱动
-        String driverName = "com.mysql.jdbc.Driver";
-        String url = "jdbc:mysql://172.21.10.53/forwind?useSSL=false";
-        String user = "root";
-        String password = "TaoBao-1234";
+        String driverName =driverName1;
+        String url = url1;
+        String user =user1;
+        String password = password1;
         try {
             // 加载驱动
             Class.forName("com.mysql.jdbc.Driver");
