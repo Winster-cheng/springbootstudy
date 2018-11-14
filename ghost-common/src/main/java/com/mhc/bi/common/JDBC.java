@@ -1,5 +1,6 @@
 package com.mhc.bi.common;
 
+import com.mhc.bi.Utils.PropertyUtil;
 import com.mhc.bi.domain.theadvisor.TaskInstance;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -18,24 +19,20 @@ public class JDBC {
     Statement stmt = null;
     ResultSet rs;
 
-    @Value("${first.datasource.driver-class-name}")
-    private String driverName1;
 
-    @Value("${first.datasource.url}")
-    private String url1;
+    private String url1=PropertyUtil.getProperty("first.datasource.url");
 
-    @Value("${first.datasource.username}")
-    private String user1;
+    @Value("${taskinstance.user}")
+    private String driverName1=PropertyUtil.getProperty("unsubscribeUrl");;
 
-    @Value("${first.datasource.password}")
-    private String password1;
+    private String password1=PropertyUtil.getProperty("first.datasource.password");
 
 
     public void init() {
         // 不同的数据库有不同的驱动
         String driverName =driverName1;
         String url = url1;
-        String user =user1;
+        String user ="root";
         String password = password1;
         try {
             // 加载驱动
