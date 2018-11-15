@@ -68,7 +68,8 @@ public class JDBC {
         this.init();
         System.out.println("execute sql :" + sql);
         try {
-            this.rs = this.stmt.executeQuery(sql);
+            this.stmt.executeQuery(sql);
+            this.rs =this.stmt.executeQuery(sql);
             while (rs.next()) {
                 taskInstance = new TaskInstance();
                 taskInstance.setId(rs.getInt("id"));
