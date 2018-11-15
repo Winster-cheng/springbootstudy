@@ -71,6 +71,7 @@ public class JDBC {
         List<TaskInstance> taskInstanceList = new ArrayList<>();
         TaskInstance taskInstance;
         this.init();
+        System.out.println("execute sql :"+sql);
         try {
             rs = this.stmt.executeQuery(sql);
             while (rs.next()) {

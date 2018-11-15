@@ -78,7 +78,6 @@ public class TaskInstanceController {
                 totalCount = taskInstanceService.getTotalCount();
                 sql = "select * from taskinstance " + getSortNameAndLimitSQL(sortName, sortType, pageSize, pageNo);
             }
-            System.out.println("execute sql :"+sql);
             taskInstanceList = jdbc.selectTaskInstanceList(sql);
             totalPage = totalCount % pageSize == 0 ? totalCount / pageSize : totalCount / pageSize + 1;
             for (TaskInstance taskInstance : taskInstanceList) {
