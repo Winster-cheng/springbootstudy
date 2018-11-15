@@ -29,7 +29,7 @@ public class PropertyUtil {
         try {
 
             in = PropertyUtil.class.getClassLoader().
-                    getResourceAsStream("application.properties");
+                    getResourceAsStream("application-local.properties");
             props.load(in);
             logger.info("properites analyse success");
         } catch (FileNotFoundException e) {

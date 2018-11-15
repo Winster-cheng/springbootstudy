@@ -10,7 +10,7 @@ import java.util.List;
 
 /**
  * @author baiyan
- * @date 2018/11/05
+ * @date 2018/11/05w
  * @description
  */
 //TODO 这个类是因为用Mapper不知道怎么生成 where in (1,2,3)临时做的
@@ -89,9 +89,9 @@ public class JDBC {
                 taskInstance.setParaments(rs.getString("paraments"));
                 taskInstanceList.add(taskInstance);
             }
-            rs.close();
-            stmt.close();
-            conn.close();
+//            rs.close();
+//            stmt.close();
+//            conn.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
