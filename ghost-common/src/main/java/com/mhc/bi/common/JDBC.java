@@ -65,7 +65,20 @@ public class JDBC {
     public List<TaskInstance> selectTaskInstanceList(String sql) {
         List<TaskInstance> taskInstanceList = new ArrayList<>();
         TaskInstance taskInstance;
-        this.init();
+        // 不同的数据库有不同的驱动
+        String url = url1;
+        String user = "root";
+        String password = password1;
+        try {
+            // 加载驱动
+            System.out.println("开始连接数据库");
+            Class.forName("com.mysql.jdbc.Driver");
+            this.conn = DriverManager.getConnection(url, user, password);
+            this.stmt = conn.createStatement();
+            System.out.println("数据库连接成功..");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         System.out.println("execute sql :" + sql);
         try {
             this.stmt.executeQuery(sql);
