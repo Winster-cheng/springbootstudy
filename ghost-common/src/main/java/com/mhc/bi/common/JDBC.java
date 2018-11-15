@@ -49,7 +49,6 @@ public class JDBC {
         this.init();
         int count = 0;
         try {
-            this.stmt = conn.createStatement();
             this.rs = stmt.executeQuery(sql);
             while (rs.next()) {
                 count = rs.getInt(1);
@@ -89,8 +88,8 @@ public class JDBC {
                 taskInstance.setParaments(rs.getString("paraments"));
                 taskInstanceList.add(taskInstance);
             }
-//            rs.close();
-//            stmt.close();
+            rs.close();
+            stmt.close();
 //            conn.close();
         } catch (SQLException e) {
             e.printStackTrace();
