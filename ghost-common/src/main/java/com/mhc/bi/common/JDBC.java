@@ -21,16 +21,11 @@ public class JDBC {
 
     private String url1 = PropertyUtil.getProperty("first.datasource.url");
 
-    @Value("${taskinstance.user}")
-    private String driverName1 = PropertyUtil.getProperty("unsubscribeUrl");
-    ;
-
     private String password1 = PropertyUtil.getProperty("first.datasource.password");
 
 
     public void init() {
         // 不同的数据库有不同的驱动
-        String driverName = driverName1;
         String url = url1;
         String user = "root";
         String password = password1;
@@ -73,7 +68,7 @@ public class JDBC {
         this.init();
         System.out.println("execute sql :" + sql);
         try {
-            rs = this.stmt.executeQuery(sql);
+            this.rs = this.stmt.executeQuery(sql);
             while (rs.next()) {
                 taskInstance = new TaskInstance();
                 taskInstance.setId(rs.getInt("id"));
@@ -89,9 +84,9 @@ public class JDBC {
                 taskInstance.setParaments(rs.getString("paraments"));
                 taskInstanceList.add(taskInstance);
             }
-            rs.close();
-            stmt.close();
-//            conn.close();
+            this.rs.close();
+            this.stmt.close();
+            this.conn.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
