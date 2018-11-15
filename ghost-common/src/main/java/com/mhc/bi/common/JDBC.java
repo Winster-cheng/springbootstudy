@@ -19,26 +19,26 @@ public class JDBC {
     Statement stmt = null;
     ResultSet rs;
 
-
-    private String url1=PropertyUtil.getProperty("first.datasource.url");
+    private String url1 = PropertyUtil.getProperty("first.datasource.url");
 
     @Value("${taskinstance.user}")
-    private String driverName1=PropertyUtil.getProperty("unsubscribeUrl");;
+    private String driverName1 = PropertyUtil.getProperty("unsubscribeUrl");
+    ;
 
-    private String password1=PropertyUtil.getProperty("first.datasource.password");
+    private String password1 = PropertyUtil.getProperty("first.datasource.password");
 
 
     public void init() {
         // 不同的数据库有不同的驱动
-        String driverName =driverName1;
+        String driverName = driverName1;
         String url = url1;
-        String user ="root";
+        String user = "root";
         String password = password1;
         try {
             // 加载驱动
             Class.forName("com.mysql.jdbc.Driver");
-            conn = DriverManager.getConnection(url, user, password);
-            stmt = conn.createStatement();
+            this.conn = DriverManager.getConnection(url, user, password);
+            this.stmt = conn.createStatement();
             System.out.println("数据库连接成功..");
         } catch (Exception e) {
             e.printStackTrace();
@@ -71,7 +71,7 @@ public class JDBC {
         List<TaskInstance> taskInstanceList = new ArrayList<>();
         TaskInstance taskInstance;
         this.init();
-        System.out.println("execute sql :"+sql);
+        System.out.println("execute sql :" + sql);
         try {
             rs = this.stmt.executeQuery(sql);
             while (rs.next()) {
@@ -96,5 +96,5 @@ public class JDBC {
             e.printStackTrace();
         }
         return taskInstanceList;
-}
+    }
 }
