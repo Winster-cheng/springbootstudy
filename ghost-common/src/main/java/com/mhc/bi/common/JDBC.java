@@ -15,8 +15,8 @@ import java.util.List;
  */
 //TODO 这个类是因为用Mapper不知道怎么生成 where in (1,2,3)临时做的
 public class JDBC {
-    Connection conn = null;
-    Statement stmt = null;
+    Connection conn;
+    Statement stmt ;
     ResultSet rs;
 
     private String url1 = PropertyUtil.getProperty("first.datasource.url");
