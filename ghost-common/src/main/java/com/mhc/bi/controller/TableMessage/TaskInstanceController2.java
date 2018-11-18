@@ -64,8 +64,13 @@ public class TaskInstanceController2 {
     }
 
     @GetMapping("/start1")
-    public Object start() {
-        return flowControl.start();
+    public String start() {
+        try {
+            return flowControl.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "任务失败";
     }
 
     @GetMapping("/updatestatus")

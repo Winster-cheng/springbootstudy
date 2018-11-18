@@ -37,6 +37,7 @@ public class ShellContentSerivceImpl implements ShellContentService {
 
     @Override
     public int updateShellContent(ShellContent content) {
+        content.setGmtModify(GetTime.getTimeWithMysqlFormat());
         return shellContentMapper.update(content);
     }
 

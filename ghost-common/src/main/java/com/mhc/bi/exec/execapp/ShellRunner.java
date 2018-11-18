@@ -88,8 +88,8 @@ public class ShellRunner extends Runner implements Runnable {
             return;
         }
         this.taskInstance.setStatus(4);
-        taskInstanceService.updateStatus(this.taskInstance);
         dingDingAlert.sendMsg(this.realName + "在" + this.executeTime + "点的任务执行成功");
+        taskInstanceService.updateStatus(this.taskInstance);
         this.initExecuteInstance(taskInstance);
         if (this.outputNodeList != null) {
             for (TaskInstance taskInstance : outputNodeList) {

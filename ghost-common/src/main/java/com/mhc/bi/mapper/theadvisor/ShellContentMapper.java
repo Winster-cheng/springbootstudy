@@ -36,8 +36,8 @@ public interface ShellContentMapper {
     @Delete("delete from shellcontent where shellname=#{shellnName}")
     int delete(String shellName);
 
-    @Update("update shellcontent set  shellcontent=#{shellContent},shelltype=#{shellType},gmt_modify=#{gmtModify},gmt_create=#{gmtCreate} where shellname=#{shellName}")
-    int update(ShellContent shellcontent);
+    @Update("update shellcontent set  shellcontent=#{shellContent.shellContent},shelltype=#{shellContent.shellType},gmt_modify=#{shellContent.gmtModify} where shellname=#{shellContent.shellName}")
+    int update(@Param("shellContent")ShellContent shellcontent);
 
     @Select("select * from shellcontent where shellname=#{shellname}")
     @Results({

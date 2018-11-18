@@ -48,16 +48,10 @@ public class FlowControl {
      * @创建时间 2018/9/23
      * @修改人和其它信息
      */
-    public Object start() {
-//        startNode = taskInstanceService.selectStartNode(GetTime.getTimeStamp("yyyyMMdd"));
-//        //从头节点开始启动
-//        for (TaskInstance taskInstance : startNode) {
-//            shellRunner=new ShellRunner(taskInstance, taskInstanceService, shellContentService,executeInstanceService,dingDingAlert);//这里请解决构造方法中无法引用注解的问题，目前先把注解对象传入
-//            threadPoolExecutor.submit(shellRunner);
-//        }
-        //从固定头节点 sync_all 开始启动
+    public String start() {
         TaskInstance taskInstance=taskInstanceService.selectStartNode(GetTime.getTimeStamp("yyyyMMdd"));
         shellRunner=new ShellRunner(taskInstance,taskInstanceService,shellContentService,executeInstanceService,dingDingAlert);
+        threadPoolExecutor.submit(shellRunner);
         return "所有任务都已经启动";
     }
 }

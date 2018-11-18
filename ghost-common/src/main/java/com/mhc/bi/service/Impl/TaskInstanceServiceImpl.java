@@ -72,9 +72,9 @@ public class TaskInstanceServiceImpl implements TaskInstanceService {
             //每个时间点都生成一个执行实例
             for (String time : jobPlan.getExecuteTime().split(",")) {
                 taskInstance = new TaskInstance();
-                taskInstance.setName(jobPlan.getName() + "_" + time);
+                taskInstance.setName(jobPlan.getName().replaceAll(".bi","") + "_" + time);
                 try {
-                    //如果不存在父节点就不设置
+                    //如果不存在父节点就不设置父节点
                     if (jobPlan.getInput() != null)
                         taskInstance.setInput(getTaskInstanceInput(jobPlan, time));
                 } catch (Exception e) {
