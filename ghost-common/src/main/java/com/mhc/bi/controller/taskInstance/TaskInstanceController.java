@@ -32,7 +32,6 @@ public class TaskInstanceController {
 
     ActionResult actionResult;
 
-    //TODO 这个接口手动连接的JDBC，以后改回来
     @PostMapping("/select")
     public ActionResult select(@RequestBody TaskInstanceSelect taskInstanceSelect) {
         ActionResult actionResult = new ActionResult();

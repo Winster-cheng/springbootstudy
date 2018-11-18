@@ -82,7 +82,7 @@ public interface TaskInstanceMapper {
     })
     TaskInstance selectByTimeAndOutputName(@Param("day") String day, @Param("name") String name);
 
-    @Select("select * from taskinstance where name=\"project_etl_start\" and execute_day=#{execute_day} ")
+    @Select("select * from taskinstance where name=\"sync_all\" and execute_day=#{execute_day} ")
     @Results({
             @Result(column = "id", property = "id"),
             @Result(column = "name", property = "name"),

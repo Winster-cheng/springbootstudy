@@ -130,6 +130,7 @@ public class TaskSubmitController {
         return actionResult;
     }
 
+    //提交的条件 1.父节点的最早执行时间不比子节点的最早执行时间晚 2.只能提交.bi文件 3.
     @PostMapping("/submit")
     public ActionResult submit(@RequestBody TaskSubmitSubmit taskSubmitSubmit) {
         actionResult = new ActionResult();
@@ -145,6 +146,7 @@ public class TaskSubmitController {
                 actionResult.fail("提交错误，只能提交.bi文件");
                 return actionResult;
             }
+            //TODO 不应该在selectByName里面进行筛选
             HueShell hueShell = hueShellService.selectByName(StringHandle.checkEnding(name, "bi"));
             hueShellService.insertOrAddNewVersion(hueShell);//备份到hueshell表;
             String msg = hueShellService.check(hueShell);

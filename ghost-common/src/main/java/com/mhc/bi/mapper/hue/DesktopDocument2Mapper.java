@@ -13,7 +13,7 @@ import java.util.List;
  */
 @Service
 public interface DesktopDocument2Mapper {
-    @Select("select * from hue.desktop_document2 where name=#{name} and is_trashed=0;")
+    @Select("select * from desktop_document2 where name=#{name} and is_trashed=0;")
     @Results({
             @Result(column = "id", property = "id"),
             @Result(column = "owner_id", property = "ownerId"),

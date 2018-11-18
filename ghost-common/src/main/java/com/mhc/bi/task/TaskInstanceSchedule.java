@@ -6,6 +6,7 @@ import com.mhc.bi.service.JobPlanService;
 import com.mhc.bi.service.TaskInstanceService;
 import com.mhc.bi.service.alert.DingDingAlert;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 /**
@@ -28,13 +29,13 @@ public class TaskInstanceSchedule {
     DingDingAlert dingDingAlert;
     TaskInstance taskInstance;
 
-    //    @Scheduled(cron = "0 30 23 ? * *")
+        @Scheduled(cron = "0 30 23 ? * *")
     public void createTaskInstance() {
         dingDingAlert.sendMsg("开始生成任务实例");
         taskInstanceService.createTaskInstance();
     }
 
-    //    @Scheduled(cron = "0 01 00 ? * *")
+        @Scheduled(cron = "0 01 00 ? * *")
     public void start() {
         dingDingAlert.sendMsg("开始执行任务");
         flowControl.start();

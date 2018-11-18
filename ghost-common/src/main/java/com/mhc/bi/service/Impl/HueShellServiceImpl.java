@@ -102,7 +102,7 @@ public class HueShellServiceImpl implements HueShellService {
       String realName=StringHandle.checkEnding(name, ".bi");
         String executorContent = desktopDocument2Mapper.selectByName(realName).getSearch();
         //TODO owner接入实际用户
-        String owner="测试用户";
+        String owner="test_user";
         String type="hiveshell";
         //name type executetime shellname shellcontent input output execute_rate paraments
         hueShell.setName(realName);
