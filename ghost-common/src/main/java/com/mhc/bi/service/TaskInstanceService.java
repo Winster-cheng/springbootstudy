@@ -63,4 +63,6 @@ public interface TaskInstanceService {
 
     //输入ID，返回子节点列表，注意这里要加一个execute_day判断
     public List<Integer> getChildrenIdByTaskInstance(int id);
+
+    public List<TaskInstance> executeDefineSql(String sql);
 }

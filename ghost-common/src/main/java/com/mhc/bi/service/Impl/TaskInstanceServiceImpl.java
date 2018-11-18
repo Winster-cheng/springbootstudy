@@ -3,7 +3,6 @@ package com.mhc.bi.service.Impl;
 import com.mhc.bi.Utils.Algorithm;
 import com.mhc.bi.Utils.GetTime;
 import com.mhc.bi.common.ActionResult;
-import com.mhc.bi.common.JDBC;
 import com.mhc.bi.domain.theadvisor.JobPlan;
 import com.mhc.bi.domain.theadvisor.TaskInstance;
 import com.mhc.bi.mapper.theadvisor.TaskInstanceMapper;
@@ -268,19 +267,15 @@ public class TaskInstanceServiceImpl implements TaskInstanceService {
     @Override
     public int getTotalCountByStatus(int[] status) {
         StringBuffer sb = new StringBuffer();//拼接数组
-        sb.append("(");
         int count = 0;
         for (int i : status) {
             if (count == 0) sb.append(" " + i);
             else sb.append("," + i);
             count++;
         }
-        sb.append(")");
-
-        JDBC jdbc = new JDBC();
         ActionResult actionResult = new ActionResult();
         try {
-            count = jdbc.getTotalCountByStatus("select count(*) from taskinstance where status in " + sb.toString() + ";");
+            count = taskInstanceMapper.getTotalCountByStatus("select count(*) from taskinstance where status in " + sb.toString() + ";");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -310,6 +305,11 @@ public class TaskInstanceServiceImpl implements TaskInstanceService {
             idList.add(taskInstance.getId());
         }
         return idList;
+    }
+
+    @Override
+    public List<TaskInstance> executeDefineSql(String sql) {
+        return taskInstanceMapper.executeDefineSql(sql);
     }
 
 

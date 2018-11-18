@@ -2,7 +2,6 @@ package com.mhc.bi.controller.taskInstance;
 
 import com.mhc.bi.common.ActionResult;
 import com.mhc.bi.common.ActionResult2;
-import com.mhc.bi.common.JDBC;
 import com.mhc.bi.controller.taskInstance.FormBean.TaskInstanceGetDependency;
 import com.mhc.bi.controller.taskInstance.FormBean.TaskInstanceGetLog;
 import com.mhc.bi.controller.taskInstance.FormBean.TaskInstanceGetMoreDependencies;
@@ -38,7 +37,6 @@ public class TaskInstanceController {
     public ActionResult select(@RequestBody TaskInstanceSelect taskInstanceSelect) {
         ActionResult actionResult = new ActionResult();
         try {
-            JDBC jdbc = new JDBC();
             int pageSize = taskInstanceSelect.getPageSize();
             int pageNo = taskInstanceSelect.getPageNo();
             String date = taskInstanceSelect.getDate();
@@ -78,7 +76,7 @@ public class TaskInstanceController {
                 totalCount = taskInstanceService.getTotalCount();
                 sql = "select * from taskinstance " + getSortNameAndLimitSQL(sortName, sortType, pageSize, pageNo);
             }
-            taskInstanceList = jdbc.selectTaskInstanceList(sql);
+            taskInstanceList = taskInstanceService.executeDefineSql(sql);
             totalPage = totalCount % pageSize == 0 ? totalCount / pageSize : totalCount / pageSize + 1;
             for (TaskInstance taskInstance : taskInstanceList) {
                 taskInstanceView = new TaskInstanceView();

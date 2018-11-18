@@ -39,7 +39,10 @@ public interface TaskInstanceMapper {
             @Result(column = "execute_time", property = "executeTime"),
             @Result(column = "execute_day", property = "executeDay"),
             @Result(column = "paraments", property = "paraments"),
-            @Result(column = "type", property = "type")
+            @Result(column = "type", property = "type"),
+            @Result(column = "owner",property = "owner"),
+            @Result(column = "startTime",property = "start_time"),
+            @Result(column = "endTime",property = "end_time")
     })
     List<TaskInstance> selectByExecuteTime(String time);
 
@@ -57,8 +60,8 @@ public interface TaskInstanceMapper {
             @Result(column = "execute_time", property = "executeTime"),
             @Result(column = "execute_day", property = "executeDay"),
             @Result(column = "paraments", property = "paraments"),
-            @Result(column = "type", property = "type")
-    })
+            @Result(column = "type", property = "type"),
+            @Result(column = "owner", property = "owner")})
     TaskInstance selectByTimeAndOutput(@Param("day") String day, @Param("output") String name);
 
     @Select("select * from taskinstance where execute_day=#{day} and output=#{name}")
@@ -74,7 +77,8 @@ public interface TaskInstanceMapper {
             @Result(column = "execute_time", property = "executeTime"),
             @Result(column = "execute_day", property = "executeDay"),
             @Result(column = "paraments", property = "paraments"),
-            @Result(column = "type", property = "type")
+            @Result(column = "type", property = "type"),
+            @Result(column = "owner",property = "owner")
     })
     TaskInstance selectByTimeAndOutputName(@Param("day") String day, @Param("name") String name);
 
@@ -91,7 +95,10 @@ public interface TaskInstanceMapper {
             @Result(column = "execute_time", property = "executeTime"),
             @Result(column = "execute_day", property = "executeDay"),
             @Result(column = "paraments", property = "paraments"),
-            @Result(column = "type", property = "type")
+            @Result(column = "type", property = "type"),
+            @Result(column = "owner",property = "owner"),
+            @Result(column = "startTime",property = "start_time"),
+            @Result(column = "endTime",property = "end_time")
     })
     TaskInstance selectStartNode(String day);
 
@@ -109,7 +116,10 @@ public interface TaskInstanceMapper {
             @Result(column = "execute_time", property = "executeTime"),
             @Result(column = "execute_day", property = "executeDay"),
             @Result(column = "paraments", property = "paraments"),
-            @Result(column = "type", property = "type")
+            @Result(column = "type", property = "type"),
+            @Result(column = "owner",property = "owner"),
+            @Result(column = "startTime",property = "start_time"),
+            @Result(column = "endTime",property = "end_time")
     })
     List<TaskInstance> selectOutNode(@Param("input") String input, @Param("day") String day);
 
@@ -141,7 +151,10 @@ public interface TaskInstanceMapper {
             @Result(column = "execute_time", property = "executeTime"),
             @Result(column = "execute_day", property = "executeDay"),
             @Result(column = "paraments", property = "paraments"),
-            @Result(column = "type", property = "type")
+            @Result(column = "type", property = "type"),
+            @Result(column = "owner",property = "owner"),
+            @Result(column = "startTime",property = "start_time"),
+            @Result(column = "endTime",property = "end_time")
     })
     TaskInstance getTaskInstanceByOutput(String output);
 
@@ -164,7 +177,10 @@ public interface TaskInstanceMapper {
             @Result(column = "execute_time", property = "executeTime"),
             @Result(column = "execute_day", property = "executeDay"),
             @Result(column = "paraments", property = "paraments"),
-            @Result(column = "type", property = "type")
+            @Result(column = "type", property = "type"),
+            @Result(column = "owner",property = "owner"),
+            @Result(column = "startTime",property = "start_time"),
+            @Result(column = "endTime",property = "end_time")
     })
     List<TaskInstance> getTaskInstanceByInput(String key);
 
@@ -181,7 +197,10 @@ public interface TaskInstanceMapper {
             @Result(column = "execute_time", property = "executeTime"),
             @Result(column = "execute_day", property = "executeDay"),
             @Result(column = "paraments", property = "paraments"),
-            @Result(column = "type", property = "type")
+            @Result(column = "type", property = "type"),
+            @Result(column = "owner",property = "owner"),
+            @Result(column = "startTime",property = "start_time"),
+            @Result(column = "endTime",property = "end_time")
     })
     TaskInstance getTaskInstanceById(int id);
 
@@ -191,7 +210,28 @@ public interface TaskInstanceMapper {
     @Select("select count(*) from taskinstance where name like  concat('%', #{name}, '%')")
     public int getTotalCountByFileName(String name);
 
-    @Select("select count(*) from taskinstance where status in #{status}")
-    public int getTotalCountByStatus(String status);
 
+    @Select("${_parameter}")
+    @Results({
+            @Result(column = "id", property = "id"),
+            @Result(column = "name", property = "name"),
+            @Result(column = "shellname", property = "shellName"),
+            @Result(column = "input", property = "input"),
+            @Result(column = "output", property = "output"),
+            @Result(column = "gmt_create", property = "gmtCreate"),
+            @Result(column = "gmt_modify", property = "gmtModify"),
+            @Result(column = "status", property = "status"),
+            @Result(column = "execute_time", property = "executeTime"),
+            @Result(column = "execute_day", property = "executeDay"),
+            @Result(column = "paraments", property = "paraments"),
+            @Result(column = "type", property = "type"),
+            @Result(column = "owner",property = "owner"),
+            @Result(column = "startTime",property = "start_time"),
+            @Result(column = "endTime",property = "end_time")
+    })
+    public List<TaskInstance> executeDefineSql(String sql);
+
+
+    @Select("${_parameter}")
+    public int getTotalCountByStatus(String sql);
 }
