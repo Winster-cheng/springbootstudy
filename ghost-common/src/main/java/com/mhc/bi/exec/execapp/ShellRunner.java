@@ -65,6 +65,7 @@ public class ShellRunner extends Runner implements Runnable {
 
     @Override
     public void run() {
+        dingDingAlert.sendMsg("开始执行" + name);
         taskInstance.setStatus(3);
         this.taskInstance.setStartTime(GetTime.getTimeWithMysqlFormat());
         taskInstanceService.updateStatus(this.taskInstance);
@@ -78,20 +79,24 @@ public class ShellRunner extends Runner implements Runnable {
                 e.printStackTrace();
             }
         }
-        System.out.println("开始执行" + name);
-        int execStatus = this.execute(this.command);
-        this.taskInstance.setEndTme(GetTime.getTimeWithMysqlFormat());
-        if (execStatus != 0) {
-            this.taskInstance.setStatus(5);
-            dingDingAlert.sendMsg(this.realName + "在" + this.executeTime + "点的任务执行失败");
+
+        try {
+            int execStatus = this.execute(this.command);
+            this.taskInstance.setEndTme(GetTime.getTimeWithMysqlFormat());
+            if (execStatus != 0) {
+                this.taskInstance.setStatus(5);
+                dingDingAlert.sendMsg(this.realName + "在" + this.executeTime + "点的任务执行失败");
+                taskInstanceService.updateStatus(this.taskInstance);
+                return;
+            }
+            this.taskInstance.setStatus(4);
+            dingDingAlert.sendMsg(this.realName + "在" + this.executeTime + "点的任务执行成功");
             taskInstanceService.updateStatus(this.taskInstance);
-            return;
+            this.initExecuteInstance(taskInstance);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        this.taskInstance.setStatus(4);
-        dingDingAlert.sendMsg(this.realName + "在" + this.executeTime + "点的任务执行成功");
-        taskInstanceService.updateStatus(this.taskInstance);
-        this.initExecuteInstance(taskInstance);
-        if (this.outputNodeList != null) {
+        if (this.outputNodeList.size() != 0) {
             for (TaskInstance taskInstance : outputNodeList) {
                 FlowControl.threadPoolExecutor.submit(new ShellRunner(taskInstance, taskInstanceService, shellContentService, executeInstanceService, dingDingAlert));
             }
@@ -107,7 +112,8 @@ public class ShellRunner extends Runner implements Runnable {
      * @创建时间 2018/9/27
      * @修改人和其它信息
      */
-    public String getCommand(ShellContentService shellContentService, TaskInstanceService taskInstanceService, TaskInstance taskInstance) {
+    public String getCommand(ShellContentService shellContentService, TaskInstanceService
+            taskInstanceService, TaskInstance taskInstance) {
         ShellContent shellContent;
         //获取去除了时间后缀的task任务名
         shellContent = shellContentService.selectByName(readShellName);
@@ -172,7 +178,7 @@ public class ShellRunner extends Runner implements Runnable {
                 result = result + new String(msg);
             }
             exitValue = process.waitFor();
-
+            dingDingAlert.sendMsg(result);
             in.close();
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -216,12 +222,16 @@ public class ShellRunner extends Runner implements Runnable {
      * @修改人和其它信息
      */
     public void initExecuteInstance(TaskInstance taskInstance) {
-        this.executeInstance.setParentId(taskInstance.getId());
-        this.executeInstance.setEndTime(taskInstance.getEndTime());
-        this.executeInstance.setStartTime(taskInstance.getStartTime());
-        this.executeInstance.setStatus(taskInstance.getStatus());
-        this.executeInstance.setLogLink("No LOG");
-        this.executeInstanceService.insert(this.executeInstance);
+        try {
+            this.executeInstance.setParentId(taskInstance.getId());
+            this.executeInstance.setEndTime(taskInstance.getEndTime());
+            this.executeInstance.setStartTime(taskInstance.getStartTime());
+            this.executeInstance.setStatus(taskInstance.getStatus());
+            this.executeInstance.setLogLink("No LOG");
+            this.executeInstanceService.insert(this.executeInstance);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

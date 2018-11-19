@@ -37,8 +37,9 @@ public class FlowControl {
     private List<Runner> shellRunnerList;
     private List<TaskInstance> taskInstancesList;
     private List<TaskInstance> startNode;
+
     public static ThreadPoolExecutor threadPoolExecutor = (ThreadPoolExecutor) Executors.newFixedThreadPool(100);//创建一个缓冲池，缓冲池容量大小为Integer.MAX_VALUE
-    ShellRunner shellRunner ;
+    ShellRunner shellRunner;
 
     /**
      * @描述 每天0点开始，运行任务
@@ -49,9 +50,10 @@ public class FlowControl {
      * @修改人和其它信息
      */
     public String start() {
-        TaskInstance taskInstance=taskInstanceService.selectStartNode(GetTime.getTimeStamp("yyyyMMdd"));
-        shellRunner=new ShellRunner(taskInstance,taskInstanceService,shellContentService,executeInstanceService,dingDingAlert);
-        threadPoolExecutor.submit(shellRunner);
+//        TaskInstance taskInstance=taskInstanceService.selectStartNode(GetTime.getTimeStamp("yyyyMMdd"));
+        TaskInstance taskInstance = taskInstanceService.selectStartNode(GetTime.getTimeStamp("20181120"));
+        shellRunner = new ShellRunner(taskInstance, taskInstanceService, shellContentService, executeInstanceService, dingDingAlert);
+        FlowControl.threadPoolExecutor.submit(shellRunner);
         return "所有任务都已经启动";
     }
 }

@@ -18,7 +18,7 @@ import org.apache.ibatis.annotations.Param;
  * private String longLink;
  */
 public interface ExecuteInstanceMapper {
-    @Insert("insert into executeinstance (parent_id,start_time,end_time,gmt_create,,gmt_modify,status,log_link) values(#{executeInstance.parentId},#{executeInstance.startTime},#{executeInstance.endTime},#{createTime},#{createTime},#{executeInstance.status},#{executeInstance.logLink})")
+    @Insert("insert into executeinstance (parent_id,start_time,end_time,gmt_create,gmt_modify,status,log_link) values(#{executeInstance.parentId},#{executeInstance.startTime},#{executeInstance.endTime},#{createTime},#{createTime},#{executeInstance.status},#{executeInstance.logLink})")
     @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
     int insert(@Param("executeInstance") ExecuteInstance executeInstance, @Param("createTime") String createTime);
 }
