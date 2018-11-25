@@ -53,7 +53,7 @@ public class HiveTableClient {
         String realHiveTableName = biDBName + "." + tableName;
         //TODO 通过配置文件来读取wareHouseLocation
  //       String warehouseLocation = "hdfs://spark-test1:8020/apps/hive/warehouse"; //hdfs://spark-test1:8020/apps/hive/warehouse
-        String warehouseLocation = " hdfs://mycluster/apps/hive/warehouse"; //hdfs://spark-test1:8020/apps/hive/warehouse
+        String warehouseLocation = "hdfs://mycluster/apps/hive/warehouse"; //hdfs://spark-test1:8020/apps/hive/warehouse
         String dbPath = warehouseLocation + "/" + biDBName + ".db";//
         String timestamp = GetTime.getTimeStamp("yyyyMMdd");
         String taskAppName = "hive_table_data_sync_" + tableName + "_" + ds + "_" + timestamp;
@@ -196,7 +196,7 @@ public class HiveTableClient {
             logger.info("HIVE导数完成");
             jdbcUtil.close();
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
+            logger.error(e.getMessage());
             dingDingAlert.sendMsg(e.getMessage());
             return RollsroyceClientConstant.FAIL_CODE;
         } finally {
