@@ -17,10 +17,9 @@ public class RollsroyceClientUtil {
      */
     public static Properties buildBIDBProperties() {
         Properties properties = new Properties();
-        properties.put("user", "bi");
-        properties.put("password", "aRwr84pKtqXAZm");
+        properties.put("user", "dtdba_backup57");
+        properties.put("password", "r8G8EMqNC8p");
         properties.put("driver", "com.mysql.jdbc.Driver");
         return properties;
     }
-
 }

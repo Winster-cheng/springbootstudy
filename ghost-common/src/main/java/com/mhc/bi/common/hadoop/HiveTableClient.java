@@ -37,7 +37,7 @@ public class HiveTableClient {
 //    }
 
     public int moveDataFromMysqlToHive(String tableName, String ds) {
-        dingDingAlert=new DingDingAlert();
+        dingDingAlert = new DingDingAlert();
         logger.info("hive 表执行任务开始--------");
         if (StringUtil.isEmpty(tableName)) {
             logger.info("请输入tableName ----------");
@@ -52,7 +52,7 @@ public class HiveTableClient {
         String partitionColumn = "ds";
         String realHiveTableName = biDBName + "." + tableName;
         //TODO 通过配置文件来读取wareHouseLocation
- //       String warehouseLocation = "hdfs://spark-test1:8020/apps/hive/warehouse"; //hdfs://spark-test1:8020/apps/hive/warehouse
+        //       String warehouseLocation = "hdfs://spark-test1:8020/apps/hive/warehouse"; //hdfs://spark-test1:8020/apps/hive/warehouse
         String warehouseLocation = "hdfs://mycluster/apps/hive/warehouse"; //hdfs://spark-test1:8020/apps/hive/warehouse
         String dbPath = warehouseLocation + "/" + biDBName + ".db";//
         String timestamp = GetTime.getTimeStamp("yyyyMMdd");
@@ -70,10 +70,15 @@ public class HiveTableClient {
         try {
             String dbTableName = "hive_" + tableName;
             //从mysql中生成DataFram
+//            Dataset<Row> bizdateDS = sparkSession.read().jdbc(
+//                    "jdbc:mysql://rds7fzjym7fzjymo.mysql.rds.aliyuncs.com:3306/db_bi?useUnicode=true&characterEncoding=UTF-8&verifyServerCertificate=false&useSSL=false",
+//                    dbTableName,
+//                    RollsroyceClientUtil.buildBIDBProperties());
             Dataset<Row> bizdateDS = sparkSession.read().jdbc(
-                    "jdbc:mysql://rds7fzjym7fzjymo.mysql.rds.aliyuncs.com:3306/db_bi?useUnicode=true&characterEncoding=UTF-8&verifyServerCertificate=false&useSSL=false",
+                    "jdbc:mysql://back-risk.mysql.rds.aliyuncs.com:3306/db_bi?useUnicode=true&characterEncoding=UTF-8&verifyServerCertificate=false&useSSL=false",
                     dbTableName,
                     RollsroyceClientUtil.buildBIDBProperties());
+
             StructType structType = bizdateDS.schema();
             StructField[] structFields = structType.fields();
             /*
