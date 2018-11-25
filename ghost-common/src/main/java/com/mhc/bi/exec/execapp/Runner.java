@@ -108,7 +108,7 @@ public class Runner implements Runnable {
     }
 
     /**
-     * @描述 输入TaskInstance和ShellContentService, 获取替换过参数的命令
+     * @描述 输入TaskInstance获取替换过参数的命令
      * @参数
      * @返回值
      * @创建人 baiyan
@@ -122,29 +122,33 @@ public class Runner implements Runnable {
         if (taskInstance.getParaments() != null) {
             this.command = this.paramentsReplace(shellContent.getShellContent(), taskInstance.getParaments());
         } else this.command = shellContent.getShellContent();
-        return paramentsReplace(command, taskInstance.getParaments());
+        return this.command;
     }
 
     /**
      * @描述 将command需要替换的参数进行替换
      * @参数 比如command=sqoop_test.sql biz_date=${yyyyMMdd+1}，那么会把sqoop_test.sql中的${biz_date}替换成明天
-     * @返回值
+     * @返回值 可以直接用来运行的命令
      * @创建人 baiyan
      * @创建时间 2018/9/25
      * @修改人和其它信息
      */
     public String paramentsReplace(String command, String paraments) {
-        List<String> paramentsList;
-        String pattern = "(.*?)\\$\\{(.*?)\\}(.*?)";//x=${yyyymmdd}
-        if (paraments == null) return command;
-        paramentsList = Arrays.asList(paraments.split(","));
-        for (String parament : paramentsList) {
-            String key = parament.split("=")[0];
-            String value = parament.split("=")[1];
-            if (Pattern.matches(pattern, value)) { //如果参数是${}格式，那么把他替换成时间
-                value = GetTime.getTimeStamp(parament.split("=")[1], -1);
+        try {
+            List<String> paramentsList;
+            String pattern = "\\{(.*?)\\}";//${}
+            if (paraments == null) return command;
+            paramentsList = Arrays.asList(paraments.split(","));
+            for (String parament : paramentsList) {
+                String key = parament.split("=")[0];
+                String value = parament.split("=")[1];
+                if (Pattern.matches(pattern, value)) { //如果参数是{yyyyMMdd+1}格式，那么把他替换成时间
+                    value = GetTime.getTimeForCommand(value.replaceAll("\\{|\\}",""));
+                }
+                command = command.replaceAll("\\$\\{" + key + "\\}", value);
             }
-            command = command.replaceAll("\\$\\{" + key + "\\}", value);
+        }catch (Exception e){
+            e.printStackTrace();
         }
         return command;
     }

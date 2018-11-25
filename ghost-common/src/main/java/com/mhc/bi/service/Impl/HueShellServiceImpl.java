@@ -42,7 +42,6 @@ public class HueShellServiceImpl implements HueShellService {
     ShellContent shellContent;
 
 
-
     @Override
     public HueShell selectAliveByName(String name) {
         return hueShellMapper.selectAliveByName(name);
@@ -98,12 +97,12 @@ public class HueShellServiceImpl implements HueShellService {
      */
     @Override
     public HueShell selectByName(String name) {
-      HueShell  hueShell=new HueShell();
-      String realName=StringHandle.checkEnding(name, ".bi");
+        HueShell hueShell = new HueShell();
+        String realName = StringHandle.checkEnding(name, ".bi");
         String executorContent = desktopDocument2Mapper.selectByName(realName).getSearch();
         //TODO owner接入实际用户
-        String owner="test_user";
-        String type="hiveshell";
+        String owner = "test_user";
+        String type = "hiveshell";
         //name type executetime shellname shellcontent input output execute_rate paraments
         hueShell.setName(realName);
         hueShell.setType(type);
@@ -111,14 +110,17 @@ public class HueShellServiceImpl implements HueShellService {
         String[] ec = executorContent.split("\\n");
         for (String x : ec) {
             if (x.contains("command=")) {//处理hue界面的command=xxxx.sql x=20133113 y=${yyyyMMdd}
-                String[] g = x.replaceAll("command=", "").trim().split("//s+");
+                String[] g = x.replaceAll("command=", "").trim().split("\\s+");
                 hueShell.setShellName(g[0]);
                 String command = desktopDocument2Mapper.selectByName(g[0]).getSearch();
                 hueShell.setShellContent(command);
                 if (g.length > 1) {
                     StringBuffer p = new StringBuffer();
                     for (int j = 1; j < g.length; j++) {
-                        p.append(g[j] + ",");
+                        if (j == 1)
+                            p.append(g[j]);
+                        else
+                            p.append("," + g[j]);
                     }
                     hueShell.setParaments(p.toString());
                 }
@@ -183,7 +185,7 @@ public class HueShellServiceImpl implements HueShellService {
      */
 
     public int getEarliesTime(HueShell hueShell) {
-        System.out.println("hueShell.getExecuteTime():"+hueShell.getExecuteTime());
+        System.out.println("hueShell.getExecuteTime():" + hueShell.getExecuteTime());
         List<String> timeList = Arrays.asList(hueShell.getExecuteTime().split(","));
         return Integer.parseInt(Collections.min(timeList));
     }

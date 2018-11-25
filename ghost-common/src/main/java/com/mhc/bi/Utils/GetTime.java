@@ -117,4 +117,19 @@ public class GetTime {
         }
         return null;
     }
+
+    /**
+     *@描述 替换参数专用时间方法，输入前端command中的时间参数，返回具体的时间值，比如${yyyyMMdd}，返回的是今天的天数-1，比如${yyyyMMdd-1}，返回的是今天的天数-2
+     *@参数 时间格式参数
+     *@返回值 具体值
+     *@创建人  baiyan
+     *@创建时间  2018/11/25
+     *@修改人和其它信息
+     */
+    public static String getTimeForCommand(String format){
+        int time=Integer.parseInt(format.replaceAll("\\s+","").replaceAll("yyyyMMdd",""));
+        return  getTimeStamp("yyyyMMdd",time-1);
+
+    }
+
 }

@@ -50,7 +50,7 @@ public class FlowControl {
      * @修改人和其它信息
      */
     public String start() {
-//        TaskInstance taskInstance=taskInstanceService.selectStartNode(GetTime.getTimeStamp("yyyyMMdd"));//根据execute_day进行查询
+//        TaskInstance taskInstance=taskInstanceService.selectStartNode(GetTime.getTimeStamp("yyyyMMdd"));//根据execute_day执行，注意这是0点以后执行的
         TaskInstance taskInstance = taskInstanceService.selectStartNode(GetTime.getTimeStamp("20181126"));
         shellRunner = new ShellRunner(taskInstance, taskInstanceService, shellContentService, executeInstanceService, dingDingAlert);
         FlowControl.threadPoolExecutor.submit(shellRunner);

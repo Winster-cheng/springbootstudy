@@ -1,6 +1,0 @@
-2018-11-23 11:41:30 | INFO  | restartedMain | com.mhc.bi.TheAdvisorApplication | [StartupInfoLogger.java:48] | Starting TheAdvisorApplication on mac.local with PID 2221 (/Users/peilongcheng/gitcode/ghost/ghost-common/target/classes started by peilongcheng in /Users/peilongcheng/gitcode/ghost)
-2018-11-23 11:41:30 | INFO  | restartedMain | com.mhc.bi.TheAdvisorApplication | [SpringApplication.java:597] | The following profiles are active: local
-2018-11-23 11:54:05 | INFO  | restartedMain | com.mhc.bi.TheAdvisorApplication | [StartupInfoLogger.java:48] | Starting TheAdvisorApplication on mac.local with PID 2396 (/Users/peilongcheng/gitcode/ghost/ghost-common/target/classes started by peilongcheng in /Users/peilongcheng/gitcode/ghost)
-2018-11-23 11:54:05 | INFO  | restartedMain | com.mhc.bi.TheAdvisorApplication | [SpringApplication.java:597] | The following profiles are active: local
-2018-11-23 11:56:46 | INFO  | restartedMain | com.mhc.bi.TheAdvisorApplication | [StartupInfoLogger.java:48] | Starting TheAdvisorApplication on mac.local with PID 2422 (/Users/peilongcheng/gitcode/ghost/ghost-common/target/classes started by peilongcheng in /Users/peilongcheng/gitcode/ghost)
-2018-11-23 11:56:46 | INFO  | restartedMain | com.mhc.bi.TheAdvisorApplication | [SpringApplication.java:597] | The following profiles are active: local

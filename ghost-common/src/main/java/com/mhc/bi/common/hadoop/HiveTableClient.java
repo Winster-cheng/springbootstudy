@@ -49,9 +49,10 @@ public class HiveTableClient {
         String biDBName = "db_bi";
         String partitionColumn = "ds";
         String realHiveTableName = biDBName + "." + tableName;
-        String warehouseLocation = "hdfs://spark-test1:8020/apps/hive/warehouse"; //hdfs://spark-test1:8020/apps/hive/warehouse
+        //TODO 通过配置文件来读取wareHouseLocation
+ //       String warehouseLocation = "hdfs://spark-test1:8020/apps/hive/warehouse"; //hdfs://spark-test1:8020/apps/hive/warehouse
+        String warehouseLocation = "hdfs://hadoop-server1:8020/apps/hive/warehouse"; //hdfs://spark-test1:8020/apps/hive/warehouse
         String dbPath = warehouseLocation + "/" + biDBName + ".db";//
-        //String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern(RollsroyceConstant.DATE_TIME_FORMAT));
         String timestamp = GetTime.getTimeStamp("yyyyMMdd");
         String taskAppName = "hive_table_data_sync_" + tableName + "_" + ds + "_" + timestamp;
         int capacity = 1000;
@@ -122,9 +123,10 @@ public class HiveTableClient {
             //JdbcUtil只是一个记录属性的类，不是Spark的类
             JdbcUtil jdbcUtil = JdbcUtil.custom()
                     .driver("org.apache.hive.jdbc.HiveDriver")
-                    .url("jdbc:hive2://spark-test2:10000/db_bi")
-                    .username("baiyan")
-                    .password("baiyan@123")
+                    //.url("jdbc:hive2://spark-test2:10000/db_bi")
+                    .url("jdbc:hive2://hadoop-server2:10000/db_bi")
+                    .username("root")
+                    .password("Apyb290ICAg")
                     .build();
 
             //获取建表脚本的hive表中的字段
