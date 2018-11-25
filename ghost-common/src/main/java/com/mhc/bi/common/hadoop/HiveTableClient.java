@@ -6,6 +6,7 @@ import com.mhc.bi.Utils.GetTime;
 import com.mhc.bi.common.hadoop.config.HiveDataTypeEnum;
 import com.mhc.bi.common.hadoop.config.SparkDataTypeEnum;
 import com.mhc.bi.common.hadoop.util.JdbcUtil;
+import com.mhc.bi.service.alert.DingDingAlert;
 import jodd.util.StringUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.spark.sql.Dataset;
@@ -28,7 +29,7 @@ import java.util.Map;
  * @version 2.0.0
  */
 public class HiveTableClient {
-
+    DingDingAlert dingDingAlert;
     private static Logger logger = LoggerFactory.getLogger(HiveTableClient.class);
 
 //    public static void main(String[] args) {
@@ -134,6 +135,7 @@ public class HiveTableClient {
                     jdbcUtil.getTableColumns(tableName);
             if (null == hiveTableColumns) {
                 logger.error("表" + tableName + "不存在，程序关闭");
+                dingDingAlert.sendMsg("表" + tableName + "不存在，程序关闭");
                 return RollsroyceClientConstant.FAIL_CODE;
             }
             List<String> alterColumns = Lists.newArrayList();
@@ -194,6 +196,7 @@ public class HiveTableClient {
             jdbcUtil.close();
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
+            dingDingAlert.sendMsg(e.getMessage());
             return RollsroyceClientConstant.FAIL_CODE;
         } finally {
             sparkSession.close();
