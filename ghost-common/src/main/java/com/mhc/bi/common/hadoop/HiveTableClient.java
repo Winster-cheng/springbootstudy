@@ -51,7 +51,7 @@ public class HiveTableClient {
         String realHiveTableName = biDBName + "." + tableName;
         //TODO 通过配置文件来读取wareHouseLocation
  //       String warehouseLocation = "hdfs://spark-test1:8020/apps/hive/warehouse"; //hdfs://spark-test1:8020/apps/hive/warehouse
-        String warehouseLocation = "hdfs://hadoop-server1:8020/apps/hive/warehouse"; //hdfs://spark-test1:8020/apps/hive/warehouse
+        String warehouseLocation = " hdfs://mycluster/apps/hive/warehouse"; //hdfs://spark-test1:8020/apps/hive/warehouse
         String dbPath = warehouseLocation + "/" + biDBName + ".db";//
         String timestamp = GetTime.getTimeStamp("yyyyMMdd");
         String taskAppName = "hive_table_data_sync_" + tableName + "_" + ds + "_" + timestamp;
