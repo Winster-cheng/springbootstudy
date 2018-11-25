@@ -72,7 +72,8 @@ public class Runner implements Runnable {
         if (!checkParentsStatus()) return;
         int time = timeCheck();
         if (time != 0) {
-            System.out.println("时间未到，等待" + time + "小时");
+            logger.info("时间未到，等待" + time + "小时");
+            dingDingAlert.sendMsg(taskInstance.getName()+"时间未到，等待" + time + "小时");
             try {
                 Thread.sleep(time * 3600000);
             } catch (InterruptedException e) {
