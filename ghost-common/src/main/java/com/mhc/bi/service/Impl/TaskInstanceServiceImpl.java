@@ -206,6 +206,8 @@ public class TaskInstanceServiceImpl implements TaskInstanceService {
 
     //输入id,返回父节点List
     public List<TaskInstance> getParentListById(int id) {
+        TaskInstance taskInstance=getTaskInstanceById(id);
+        String execute_day=taskInstance.getExecuteDay();
         List<TaskInstance> taskInstanceList = new ArrayList<>();
         String input = taskInstanceMapper.selectInputById(id);
         if (input == null) { //意味着这个节点是最高的，没有父节点
@@ -213,15 +215,15 @@ public class TaskInstanceServiceImpl implements TaskInstanceService {
         }
         String[] in = input.split(",");
         for (String i : in) {
-            taskInstanceList.add(this.getTaskInstanceByInput(i));
+            taskInstanceList.add(this.getTaskInstanceByOutputAndExecuteDay(i,execute_day));
         }
         return taskInstanceList;
     }
 
 
-    //输入output,获取output=该值的对象
-    public TaskInstance getTaskInstanceByInput(String output) {
-        return taskInstanceMapper.getTaskInstanceByOutput(output);
+    //输入output,获取output=该值并且execute_day相同的taskinstance
+    public TaskInstance getTaskInstanceByOutputAndExecuteDay(String output,String executeDay) {
+        return taskInstanceMapper.getTaskInstanceByOutputAndExecuteDay(output,executeDay);
     }
 
 
@@ -250,7 +252,7 @@ public class TaskInstanceServiceImpl implements TaskInstanceService {
     }
 
     @Override
-    public TaskInstance selectTaskInstanceById(int id) {
+    public TaskInstance getTaskInstanceById(int id) {
         return taskInstanceMapper.getTaskInstanceById(id);
     }
 
@@ -311,6 +313,5 @@ public class TaskInstanceServiceImpl implements TaskInstanceService {
     public List<TaskInstance> executeDefineSql(String sql) {
         return taskInstanceMapper.executeDefineSql(sql);
     }
-
 
 }

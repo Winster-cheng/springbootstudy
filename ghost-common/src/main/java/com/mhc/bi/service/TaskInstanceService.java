@@ -38,13 +38,13 @@ public interface TaskInstanceService {
 
     public List<TaskInstance> getParentListById(int id);
 
-    public TaskInstance getTaskInstanceByInput(String output);
+    public TaskInstance getTaskInstanceByOutputAndExecuteDay(String output,String executeDay);
 
     public List<TaskInstance> getChildrenListById(int id);
 
     public List<TaskInstance> getTaskInstanceByOutput(String key);
 
-    public TaskInstance selectTaskInstanceById(int id);
+    public TaskInstance getTaskInstanceById(int id);
 
     //获得总条数-时间筛选
     public int getTotalCountByDate(String date);

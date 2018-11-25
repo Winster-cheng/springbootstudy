@@ -138,7 +138,7 @@ public interface TaskInstanceMapper {
     @Select("select count(id) from taskinstance")
     int getTotalCount();
 
-    @Select("select * from taskinstance where output=#{output}")
+    @Select("select * from taskinstance where output=#{output} and execute_day=#{executeDay}")
     @Results({
             @Result(column = "id", property = "id"),
             @Result(column = "name", property = "name"),
@@ -156,7 +156,7 @@ public interface TaskInstanceMapper {
             @Result(column = "startTime",property = "start_time"),
             @Result(column = "endTime",property = "end_time")
     })
-    TaskInstance getTaskInstanceByOutput(String output);
+    TaskInstance getTaskInstanceByOutputAndExecuteDay(@Param("output") String output,@Param("executeDay")String executeDay);
 
     @Select("select output from taskinstance where id=#{id}")
     String selectOutputById(int id);

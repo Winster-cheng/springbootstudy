@@ -3,7 +3,6 @@ package com.mhc.bi.controller.TableMessage;
 import com.mhc.bi.Utils.JsonData;
 import com.mhc.bi.common.ActionResult;
 import com.mhc.bi.domain.theadvisor.TaskInstance;
-import com.mhc.bi.exec.ExecServer;
 import com.mhc.bi.exec.FlowControl;
 import com.mhc.bi.service.TaskInstanceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +24,6 @@ public class TaskInstanceController2 {
     @Autowired
     private FlowControl flowControl;
 
-    @Autowired
-    private ExecServer execServer;
 
     @GetMapping("insert")
     public Object insertTaskInstance() {
@@ -71,15 +68,6 @@ public class TaskInstanceController2 {
             e.printStackTrace();
         }
         return "任务失败";
-    }
-
-    @GetMapping("/updatestatus")
-    public Object start2() {
-        TaskInstance t = new TaskInstance();
-        t.setStatus(2);
-        t.setExecuteDay("20180927");
-        t.setName("test_0");
-        return taskInstanceService.updateStatus(t);
     }
 
     @GetMapping("getTotalCountByDate")

@@ -4,14 +4,14 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.mhc</groupId>
-    <artifactId>theadvisor</artifactId>
+    <artifactId>ghost</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <modules>
         <module>ghost-common</module>
     </modules>
     <packaging>pom</packaging>
 
-    <name>theadvisor</name>
+    <name>ghost</name>
     <description>Demo project for Spring Boot</description>
 
     <parent>
@@ -25,10 +25,23 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
         <docker.skip>true</docker.skip>
+        <spark.version>2.1.0</spark.version>
+        <spark-project.version>2.11</spark-project.version>
+        <hadoop.version>2.7.3</hadoop.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>org.codehaus.janino</groupId>
+                <artifactId>commons-compiler</artifactId>
+                <version>3.0.8</version>
+            </dependency>
+            <dependency>
+                <groupId>org.codehaus.janino</groupId>
+                <artifactId>janino</artifactId>
+                <version>3.0.8</version>
+            </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-web</artifactId>

@@ -50,10 +50,11 @@ public class FlowControl {
      * @修改人和其它信息
      */
     public String start() {
-//        TaskInstance taskInstance=taskInstanceService.selectStartNode(GetTime.getTimeStamp("yyyyMMdd"));
-        TaskInstance taskInstance = taskInstanceService.selectStartNode(GetTime.getTimeStamp("20181120"));
+//        TaskInstance taskInstance=taskInstanceService.selectStartNode(GetTime.getTimeStamp("yyyyMMdd"));//根据execute_day进行查询
+        TaskInstance taskInstance = taskInstanceService.selectStartNode(GetTime.getTimeStamp("20181126"));
         shellRunner = new ShellRunner(taskInstance, taskInstanceService, shellContentService, executeInstanceService, dingDingAlert);
         FlowControl.threadPoolExecutor.submit(shellRunner);
-        return "所有任务都已经启动";
+        dingDingAlert.sendMsg("头节点已经启动");
+        return "头节点已经启动";
     }
 }

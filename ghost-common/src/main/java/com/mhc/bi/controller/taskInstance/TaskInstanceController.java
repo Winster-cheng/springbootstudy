@@ -162,7 +162,7 @@ public class TaskInstanceController {
 
             //给中心节点生产VO类
             taskInstanceDependency = new TaskInstanceDependency();
-            taskInstanceDependency.init(taskInstanceService.selectTaskInstanceById(centerId), taskInstanceService.getParentListById(centerId), taskInstanceService.getChildrenListById(centerId));
+            taskInstanceDependency.init(taskInstanceService.getTaskInstanceById(centerId), taskInstanceService.getParentListById(centerId), taskInstanceService.getChildrenListById(centerId));
             taskInstanceDependencies.add(taskInstanceDependency);
             actionResult.success();
             actionResult.setList(taskInstanceDependencies);

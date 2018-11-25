@@ -3,13 +3,22 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>theadvisor</artifactId>
+        <artifactId>ghost</artifactId>
         <groupId>com.mhc</groupId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
+
     <dependencies>
+        <dependency>
+            <groupId>org.codehaus.janino</groupId>
+            <artifactId>commons-compiler</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.janino</groupId>
+            <artifactId>janino</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -105,10 +114,187 @@
             <groupId>com.mhc.framework</groupId>
             <artifactId>framework-support-log</artifactId>
         </dependency>
-    </dependencies>
 
+        <!-- hadoop相关jar-->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.25</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.7.25</version>
+        </dependency>
+
+        <!-- Spark Core -->
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-core_${spark-project.version}</artifactId>
+            <version>${spark.version}</version>
+        </dependency>
+
+        <!-- Spark SQL -->
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-sql_${spark-project.version}</artifactId>
+            <version>${spark.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-hive_${spark-project.version}</artifactId>
+            <version>${spark.version}</version>
+        </dependency>
+
+        <!-- SparkStreaming -->
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-streaming_${spark-project.version}</artifactId>
+            <version>${spark.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-catalyst_${spark-project.version}</artifactId>
+            <version>${spark.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.5</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.hive</groupId>
+            <artifactId>hive</artifactId>
+            <version>1.1.0</version>
+            <type>pom</type>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.hive/hive-jdbc -->
+        <dependency>
+            <groupId>org.apache.hive</groupId>
+            <artifactId>hive-jdbc</artifactId>
+            <version>1.1.1</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.eclipse.jetty.aggregate</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+
+        <!-- Hadoop -->
+        <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-client</artifactId>
+            <version>${hadoop.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-yarn-server-common</artifactId>
+            <version>${hadoop.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-mapreduce-client-core</artifactId>
+            <version>${hadoop.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-yarn-common</artifactId>
+            <version>${hadoop.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-annotations</artifactId>
+            <version>${hadoop.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-yarn-api</artifactId>
+            <version>${hadoop.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-common</artifactId>
+            <version>${hadoop.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-hdfs</artifactId>
+            <version>${hadoop.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-auth</artifactId>
+            <version>${hadoop.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-yarn-server-resourcemanager</artifactId>
+            <version>${hadoop.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-yarn-server-applicationhistoryservice</artifactId>
+            <version>${hadoop.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.hive</groupId>
+            <artifactId>hive-exec</artifactId>
+            <version>2.3.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-core_${spark-project.version}</artifactId>
+            <version>${spark.version}</version>
+        </dependency>
+
+        <!-- Spark SQL -->
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-sql_${spark-project.version}</artifactId>
+            <version>${spark.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-hive_${spark-project.version}</artifactId>
+            <version>${spark.version}</version>
+        </dependency>
+
+        <!-- SparkStreaming -->
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-streaming_${spark-project.version}</artifactId>
+            <version>${spark.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-catalyst_${spark-project.version}</artifactId>
+            <version>${spark.version}</version>
+        </dependency>
+
+    </dependencies>
     <artifactId>ghost-common</artifactId>
-    
+
     <build>
         <finalName>ghost</finalName>
         <plugins>
@@ -116,89 +302,89 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
-            <plugin>  
-                <groupId>pl.project13.maven</groupId>  
-                <artifactId>git-commit-id-plugin</artifactId>  
-                <version>2.2.4</version>  
-                <executions>  
-                    <execution>  
-                        <goals>  
-                            <goal>revision</goal>  
-                        </goals>  
-                    </execution>  
-                </executions>  
-                <configuration>  
-                    <!--日期格式;默认值:dd.MM.yyyy '@' HH:mm:ss z;-->  
-                    <dateFormat>yyyyMMdd</dateFormat>  
+            <plugin>
+                <groupId>pl.project13.maven</groupId>
+                <artifactId>git-commit-id-plugin</artifactId>
+                <version>2.2.4</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>revision</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <!--日期格式;默认值:dd.MM.yyyy '@' HH:mm:ss z;-->
+                    <dateFormat>yyyyMMdd</dateFormat>
                     <useNativeGit>false</useNativeGit>
-                    <!--,构建过程中,是否打印详细信息;默认值:false;-->  
-                    <verbose>false</verbose>  
-                    <!-- ".git"文件路径;默认值:${project.basedir}/.git; -->  
-                    <dotGitDirectory>${project.basedir}/.git</dotGitDirectory>  
-                    <!--若项目打包类型为pom,是否取消构建;默认值:true;-->  
-                    <skipPoms>false</skipPoms>  
-                    <!--是否生成"git.properties"文件;默认值:false;-->  
-                    <generateGitPropertiesFile>true</generateGitPropertiesFile>  
-                    <!--指定"git.properties"文件的存放路径(相对于${project.basedir}的一个路径);-->  
-                    <generateGitPropertiesFilename>git.properties</generateGitPropertiesFilename>  
-                    <!--".git"文件夹未找到时,构建是否失败;若设置true,则构建失败;若设置false,则跳过执行该目标;默认值:true;-->  
-                    <failOnNoGitDirectory>false</failOnNoGitDirectory>  
+                    <!--,构建过程中,是否打印详细信息;默认值:false;-->
+                    <verbose>false</verbose>
+                    <!-- ".git"文件路径;默认值:${project.basedir}/.git; -->
+                    <dotGitDirectory>${project.basedir}/.git</dotGitDirectory>
+                    <!--若项目打包类型为pom,是否取消构建;默认值:true;-->
+                    <skipPoms>false</skipPoms>
+                    <!--是否生成"git.properties"文件;默认值:false;-->
+                    <generateGitPropertiesFile>true</generateGitPropertiesFile>
+                    <!--指定"git.properties"文件的存放路径(相对于${project.basedir}的一个路径);-->
+                    <generateGitPropertiesFilename>git.properties</generateGitPropertiesFilename>
+                    <!--".git"文件夹未找到时,构建是否失败;若设置true,则构建失败;若设置false,则跳过执行该目标;默认值:true;-->
+                    <failOnNoGitDirectory>false</failOnNoGitDirectory>
                     <replacementProperties>
-                                  <replacementProperty>
-                                    <property>git.branch</property>
-                                    <propertyOutputSuffix>newbranch</propertyOutputSuffix>
-                                    <token>^([^\/]*\/)*([^\/]*)$</token>
-                                    <value>$2</value>
-                                    <regex>true</regex>
-                                    <transformationRules>
-                                      <transformationRule>
-                                        <apply>BEFORE</apply>
-                                        <action>UPPER_CASE</action>
-                                      </transformationRule>
-                                      <transformationRule>
-                                        <apply>AFTER</apply>
-                                        <action>LOWER_CASE</action>
-                                      </transformationRule>
-                                    </transformationRules>
-                                  </replacementProperty>
-                                  <replacementProperty>
-                                    <property>git.build.time</property>
-                                    <propertyOutputSuffix>buildtime</propertyOutputSuffix>
-                                    <token>^(.*)$</token>
-                                    <value>$1</value>
-                                    <regex>true</regex>
-                                    <transformationRules>
-                                      <transformationRule>
-                                        <apply>BEFORE</apply>
-                                        <action>UPPER_CASE</action>
-                                      </transformationRule>
-                                      <transformationRule>
-                                        <apply>AFTER</apply>
-                                        <action>LOWER_CASE</action>
-                                      </transformationRule>
-                                    </transformationRules>
-                                  </replacementProperty>
+                        <replacementProperty>
+                            <property>git.branch</property>
+                            <propertyOutputSuffix>newbranch</propertyOutputSuffix>
+                            <token>^([^\/]*\/)*([^\/]*)$</token>
+                            <value>$2</value>
+                            <regex>true</regex>
+                            <transformationRules>
+                                <transformationRule>
+                                    <apply>BEFORE</apply>
+                                    <action>UPPER_CASE</action>
+                                </transformationRule>
+                                <transformationRule>
+                                    <apply>AFTER</apply>
+                                    <action>LOWER_CASE</action>
+                                </transformationRule>
+                            </transformationRules>
+                        </replacementProperty>
+                        <replacementProperty>
+                            <property>git.build.time</property>
+                            <propertyOutputSuffix>buildtime</propertyOutputSuffix>
+                            <token>^(.*)$</token>
+                            <value>$1</value>
+                            <regex>true</regex>
+                            <transformationRules>
+                                <transformationRule>
+                                    <apply>BEFORE</apply>
+                                    <action>UPPER_CASE</action>
+                                </transformationRule>
+                                <transformationRule>
+                                    <apply>AFTER</apply>
+                                    <action>LOWER_CASE</action>
+                                </transformationRule>
+                            </transformationRules>
+                        </replacementProperty>
                     </replacementProperties>
-                    <!--git描述配置,可选;由JGit提供实现;-->  
-                    <gitDescribe>  
-                        <!--是否生成描述属性-->  
-                        <skip>false</skip>  
-                        <!--提交操作未发现tag时,仅打印提交操作ID,-->  
-                        <always>false</always>  
+                    <!--git描述配置,可选;由JGit提供实现;-->
+                    <gitDescribe>
+                        <!--是否生成描述属性-->
+                        <skip>false</skip>
+                        <!--提交操作未发现tag时,仅打印提交操作ID,-->
+                        <always>false</always>
                         <!--提交操作ID显式字符长度,最大值为:40;默认值:7;  
                             0代表特殊意义;后面有解释;   
-                        -->  
-                        <abbrev>8</abbrev>  
-                        <!--构建触发时,代码有修改时(即"dirty state"),添加指定后缀;默认值:"";-->  
-                        <dirty>-dirty</dirty>  
+                        -->
+                        <abbrev>8</abbrev>
+                        <!--构建触发时,代码有修改时(即"dirty state"),添加指定后缀;默认值:"";-->
+                        <dirty>-dirty</dirty>
                         <!--always print using the "tag-commits_from_tag-g_commit_id-maybe_dirty" format, even if "on" a tag.  
                             The distance will always be 0 if you're "on" the tag.  
-                        -->  
-                        <forceLongFormat>false</forceLongFormat>  
+                        -->
+                        <forceLongFormat>false</forceLongFormat>
                     </gitDescribe>
                     <skip>${docker.skip}</skip>
-                </configuration>  
-            </plugin> 
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>com.spotify</groupId>
                 <artifactId>dockerfile-maven-plugin</artifactId>
