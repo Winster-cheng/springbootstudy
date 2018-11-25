@@ -75,7 +75,7 @@ public class HiveTableClient {
 //                    dbTableName,
 //                    RollsroyceClientUtil.buildBIDBProperties());
             Dataset<Row> bizdateDS = sparkSession.read().jdbc(
-                    "jdbc:mysql://back-risk.mysql.rds.aliyuncs.com:3306/db_bi?useUnicode=true&characterEncoding=UTF-8&verifyServerCertificate=false&useSSL=false",
+                    "jdbc:mysql://back-risk.mysql.rds.aliyuncs.com:3306/db_pasaat?useUnicode=true&characterEncoding=UTF-8&verifyServerCertificate=false&useSSL=false",
                     dbTableName,
                     RollsroyceClientUtil.buildBIDBProperties());
 
