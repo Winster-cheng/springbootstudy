@@ -48,7 +48,7 @@ public class HiveTableClient {
             return RollsroyceClientConstant.FAIL_CODE;
         }
         logger.info("参数验证完成，tableName = " + tableName + ", ds = " + ds);
-        String biDBName = "db_bi";
+        String biDBName = "db_pasaat";
         String partitionColumn = "ds";
         String realHiveTableName = biDBName + "." + tableName;
         //TODO 通过配置文件来读取wareHouseLocation
@@ -120,7 +120,7 @@ public class HiveTableClient {
             }
             createBuilder.append(") PARTITIONED by (").append(partitionColumn)
                     .append(" STRING) ").append("STORED AS PARQUET");
-            String createDBSQL = "CREATE DATABASE IF NOT EXISTS db_bi LOCATION '" + dbPath + "'";
+            String createDBSQL = "CREATE DATABASE IF NOT EXISTS db_pasaat LOCATION '" + dbPath + "'";
             String createTableSQL = createBuilder.toString();
             logger.info("建库脚本：" + createDBSQL);
             sparkSession.sql(createDBSQL);
@@ -131,7 +131,7 @@ public class HiveTableClient {
             JdbcUtil jdbcUtil = JdbcUtil.custom()
                     .driver("org.apache.hive.jdbc.HiveDriver")
                     //.url("jdbc:hive2://spark-test2:10000/db_bi")
-                    .url("jdbc:hive2://hadoop-server2:10000/db_bi")
+                    .url("jdbc:hive2://hadoop-server2:10000/db_pasaat")
                     .username("root")
                     .password("Apyb290ICAg")
                     .build();
