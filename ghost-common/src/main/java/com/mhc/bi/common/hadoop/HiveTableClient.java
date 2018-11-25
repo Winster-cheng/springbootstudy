@@ -37,6 +37,7 @@ public class HiveTableClient {
 //    }
 
     public int moveDataFromMysqlToHive(String tableName, String ds) {
+        dingDingAlert=new DingDingAlert();
         logger.info("hive 表执行任务开始--------");
         if (StringUtil.isEmpty(tableName)) {
             logger.info("请输入tableName ----------");
