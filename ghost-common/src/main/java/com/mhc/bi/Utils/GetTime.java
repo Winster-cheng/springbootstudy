@@ -129,6 +129,7 @@ public class GetTime {
      *@修改人和其它信息
      */
     public static String getTimeForCommand(String format){
+        DingDingAlert.sendMsg("替换前的值为"+format);
         int time=Integer.parseInt(format.replaceAll("\\s+","").replaceAll("yyyyMMdd",""));
         DingDingAlert.sendMsg("替换成为"+getTimeStamp("yyyyMMdd",time-1));
         return  getTimeStamp("yyyyMMdd",time-1);
