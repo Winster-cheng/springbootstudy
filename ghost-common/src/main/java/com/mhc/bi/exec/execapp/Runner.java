@@ -145,14 +145,11 @@ public class Runner implements Runnable {
                 String key = parament.split("=")[0];
                 String value = parament.split("=")[1];
                 if (Pattern.matches(pattern, value)) { //如果参数是{yyyyMMdd+1}格式，那么把他替换成时间
-                    DingDingAlert.sendMsg("替换时间参数"+value+"为：");
                     value = GetTime.getTimeForCommand(value.replaceAll("\\{|\\}", ""));
-                    DingDingAlert.sendMsg(value);
                 }
                 command = command.replaceAll("\\$\\{" + key + "\\}", value);
-                DingDingAlert.sendMsg("替换内容参数:"+command);
             }
-            DingDingAlert.sendMsg("打点1");
+            //TODO   DingDingAlert.sendMsg(command);会报错
             return command;
         } catch (Exception e) {
             DingDingAlert.sendMsg(e.getMessage());
