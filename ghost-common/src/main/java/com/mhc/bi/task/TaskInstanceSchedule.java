@@ -24,20 +24,17 @@ public class TaskInstanceSchedule {
 
     @Autowired
     private FlowControl flowControl;
-
-    @Autowired
-    DingDingAlert dingDingAlert;
     TaskInstance taskInstance;
 
         @Scheduled(cron = "0 30 23 ? * *")
     public void createTaskInstance() {
-        dingDingAlert.sendMsg("开始生成任务实例");
+        DingDingAlert.sendMsg("开始生成任务实例");
         taskInstanceService.createTaskInstance();
     }
 
         @Scheduled(cron = "0 01 00 ? * *")
     public void start() {
-        dingDingAlert.sendMsg("开始执行任务");
+        DingDingAlert.sendMsg("开始执行任务");
         flowControl.start();
     }
 }

@@ -11,6 +11,7 @@ import com.mhc.bi.service.ShellContentService;
 import com.mhc.bi.service.TaskInstanceService;
 import com.mhc.bi.service.alert.DingDingAlert;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import java.io.InputStream;
 import java.util.Arrays;
@@ -24,10 +25,6 @@ import java.util.regex.Pattern;
  * @description ShellRunner负责属性shell类型的任务
  */
 public class ShellRunner extends Runner {
-    public ShellRunner(TaskInstance taskInstance, TaskInstanceService taskInstanceService, ShellContentService shellContentService, ExecuteInstanceService executeInstanceService, DingDingAlert dingDingAlert) {
-        super(taskInstance, taskInstanceService, shellContentService, executeInstanceService, dingDingAlert);
-    }
-
     public int execute(String cmd) {
         String result = "";
         int exitValue = 1;
@@ -45,7 +42,8 @@ public class ShellRunner extends Runner {
                 result = result + new String(msg);
             }
             exitValue = process.waitFor();
-            dingDingAlert.sendMsg(result);
+            logger.info(result);
+            DingDingAlert.sendMsg(result);
             in.close();
         } catch (Exception ex) {
             ex.printStackTrace();

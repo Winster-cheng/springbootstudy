@@ -42,7 +42,7 @@
     
     <property>
       <name>hive.auto.convert.join.noconditionaltask.size</name>
-      <value>572662306</value>
+      <value>286331153</value>
     </property>
     
     <property>
@@ -72,7 +72,7 @@
     
     <property>
       <name>hive.cluster.delegation.token.store.zookeeper.connectString</name>
-      <value>hadoop-server3:2181,hadoop-server2:2181,hadoop-server1:2181</value>
+      <value>spark-test3:2181,spark-test1:2181,spark-test2:2181</value>
     </property>
     
     <property>
@@ -422,7 +422,7 @@
     
     <property>
       <name>hive.metastore.uris</name>
-      <value>thrift://hadoop-server2:9083</value>
+      <value>thrift://spark-test2:9083</value>
     </property>
     
     <property>
@@ -547,7 +547,7 @@
     
     <property>
       <name>hive.server2.enable.doAs</name>
-      <value>false</value>
+      <value>true</value>
     </property>
     
     <property>
@@ -667,7 +667,7 @@
     
     <property>
       <name>hive.tez.container.size</name>
-      <value>2048</value>
+      <value>1024</value>
     </property>
     
     <property>
@@ -777,7 +777,7 @@
     
     <property>
       <name>hive.zookeeper.quorum</name>
-      <value>hadoop-server3:2181,hadoop-server2:2181,hadoop-server1:2181</value>
+      <value>spark-test3:2181,spark-test1:2181,spark-test2:2181</value>
     </property>
     
     <property>
@@ -787,12 +787,12 @@
     
     <property>
       <name>javax.jdo.option.ConnectionURL</name>
-      <value>jdbc:mysql://hadoop-server1/hive</value>
+      <value>jdbc:mysql://spark-test1/hive</value>
     </property>
     
     <property>
       <name>javax.jdo.option.ConnectionUserName</name>
-      <value>root</value>
+      <value>hive</value>
     </property>
     
   </configuration>

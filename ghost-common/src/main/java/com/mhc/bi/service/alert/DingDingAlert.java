@@ -17,12 +17,11 @@ import java.io.IOException;
  * @date 2018/07/25
  * @description if node error ,send error msg to dingding
  */
-@Service
 public class DingDingAlert {
 
     public static String WEBHOOK_TOKEN = "https://oapi.dingtalk.com/robot/send?access_token=aa9e4a7c27ffb17e33b60df5a9d172c413fc704c7b9fc4e932bb36bf424f953d";
 
-    public  void sendMsg(String msg) {
+    public static void sendMsg(String msg) {
 
         HttpClient httpclient = HttpClients.createDefault();
 
@@ -49,4 +48,5 @@ public class DingDingAlert {
             System.out.println(result);
         }
     }
+
 }

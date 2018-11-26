@@ -23,8 +23,6 @@ public class TestController {
     @Autowired
     DesktopDocument2Service desktopDocument2Service;
 
-    @Autowired
-    DingDingAlert dingDingAlert;
 
     @RequestMapping("/hello")
     public String hello() {
@@ -40,7 +38,7 @@ public class TestController {
     @ResponseBody
     @GetMapping("dingding")
     public void sendDingDingMsg(String msg) {
-        dingDingAlert.sendMsg(msg);
+        DingDingAlert.sendMsg(msg);
     }
 
 }

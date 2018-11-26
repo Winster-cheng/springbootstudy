@@ -6,6 +6,7 @@ import com.mhc.bi.Utils.GetTime;
 import com.mhc.bi.common.hadoop.config.HiveDataTypeEnum;
 import com.mhc.bi.common.hadoop.config.SparkDataTypeEnum;
 import com.mhc.bi.common.hadoop.util.JdbcUtil;
+import com.mhc.bi.config.MyConfig;
 import com.mhc.bi.service.alert.DingDingAlert;
 import jodd.util.StringUtil;
 import org.apache.commons.collections.CollectionUtils;
@@ -16,28 +17,27 @@ import org.apache.spark.sql.types.StructField;
 import org.apache.spark.sql.types.StructType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 /**
- * DESCRIPTION :
- * BAIYAN's DESCRIPTION:
- * DATETIME : 2018/11/21
- *
  * @author baiyan
  * @version 2.0.0
+ * @Desprition:用于导数
  */
+@Component
 public class HiveTableClient {
-    DingDingAlert dingDingAlert;
+
+    @Autowired
+    MyConfig myConfig;
+
     private static Logger logger = LoggerFactory.getLogger(HiveTableClient.class);
 
-//    public static void main(String[] args) {
-//        new HiveTableClient().moveDataFromMysqlToHive("dws_b2b_car_com","20181123");
-//    }
-
     public int moveDataFromMysqlToHive(String tableName, String ds) {
-        dingDingAlert = new DingDingAlert();
         logger.info("hive 表执行任务开始--------");
         if (StringUtil.isEmpty(tableName)) {
             logger.info("请输入tableName ----------");
@@ -48,13 +48,20 @@ public class HiveTableClient {
             return RollsroyceClientConstant.FAIL_CODE;
         }
         logger.info("参数验证完成，tableName = " + tableName + ", ds = " + ds);
-        String biDBName = "db_pasaat";
-        String partitionColumn = "ds";
-        String realHiveTableName = biDBName + "." + tableName;
-        //TODO 通过配置文件来读取wareHouseLocation
-        //       String warehouseLocation = "hdfs://spark-test1:8020/apps/hive/warehouse"; //hdfs://spark-test1:8020/apps/hive/warehouse
-        String warehouseLocation = "hdfs://mycluster/apps/hive/warehouse"; //hdfs://spark-test1:8020/apps/hive/warehouse
-        String dbPath = warehouseLocation + "/" + biDBName + ".db";//
+        String dBName = myConfig.getdBName();
+        String tablePrefix=myConfig.getTablePrefix();
+        String dbUrl = myConfig.getDbUrl();
+        String dbUser = myConfig.getDbUser();
+        String dbPassword = myConfig.getDbPassword();
+        String dbDriver = myConfig.getDbDriver();
+        String warehouseLocation = myConfig.getWarehouseLocation();
+        String partitionColumn = myConfig.getPartitionColumn();
+        String hiveUrl = myConfig.getHiveUrl();
+        String hiveUser = myConfig.getHiveUser();
+        String hivePassword = myConfig.getHivePassword();
+        String realHiveTableName = dBName + "." + tableName;
+        Properties properties = RollsroyceClientUtil.buildBIDBProperties(dbUser, dbPassword, dbDriver);
+        String dbPath = warehouseLocation + "/" + dBName + ".db";//
         String timestamp = GetTime.getTimeStamp("yyyyMMdd");
         String taskAppName = "hive_table_data_sync_" + tableName + "_" + ds + "_" + timestamp;
         int capacity = 1000;
@@ -68,16 +75,12 @@ public class HiveTableClient {
                 .enableHiveSupport()
                 .getOrCreate();
         try {
-            String dbTableName = "hive_" + tableName;
-            //从mysql中生成DataFram
-//            Dataset<Row> bizdateDS = sparkSession.read().jdbc(
-//                    "jdbc:mysql://rds7fzjym7fzjymo.mysql.rds.aliyuncs.com:3306/db_bi?useUnicode=true&characterEncoding=UTF-8&verifyServerCertificate=false&useSSL=false",
-//                    dbTableName,
-//                    RollsroyceClientUtil.buildBIDBProperties());
+            String dbTableName = tablePrefix+tableName;
             Dataset<Row> bizdateDS = sparkSession.read().jdbc(
-                    "jdbc:mysql://back-risk.mysql.rds.aliyuncs.com:3306/db_pasaat?useUnicode=true&characterEncoding=UTF-8&verifyServerCertificate=false&useSSL=false",
+                    dbUrl,
                     dbTableName,
-                    RollsroyceClientUtil.buildBIDBProperties());
+                    properties
+            );
 
             StructType structType = bizdateDS.schema();
             StructField[] structFields = structType.fields();
@@ -120,32 +123,28 @@ public class HiveTableClient {
             }
             createBuilder.append(") PARTITIONED by (").append(partitionColumn)
                     .append(" STRING) ").append("STORED AS PARQUET");
-            String createDBSQL = "CREATE DATABASE IF NOT EXISTS db_pasaat LOCATION '" + dbPath + "'";
+            String createDBSQL = "CREATE DATABASE IF NOT EXISTS " + dBName + " LOCATION '" + dbPath + "'";
             String createTableSQL = createBuilder.toString();
             logger.info("建库脚本：" + createDBSQL);
             sparkSession.sql(createDBSQL);
             logger.info("建表脚本：" + createTableSQL);
             sparkSession.sql(createTableSQL);
-
             //JdbcUtil只是一个记录属性的类，不是Spark的类
             JdbcUtil jdbcUtil = JdbcUtil.custom()
                     .driver("org.apache.hive.jdbc.HiveDriver")
-                    //.url("jdbc:hive2://spark-test2:10000/db_bi")
-                    .url("jdbc:hive2://hadoop-server2:10000/db_pasaat")
-                    .username("root")
-                    .password("Apyb290ICAg")
+                    .url(hiveUrl)
+                    .username(hiveUser)
+                    .password(hivePassword)
                     .build();
-
             //获取建表脚本的hive表中的字段
             List<String> hiveTableColumns =
                     jdbcUtil.getTableColumns(tableName);
             if (null == hiveTableColumns) {
                 logger.error("表" + tableName + "不存在，程序关闭");
-                dingDingAlert.sendMsg("表" + tableName + "不存在，程序关闭");
+                DingDingAlert.sendMsg("表" + tableName + "不存在，程序关闭");
                 return RollsroyceClientConstant.FAIL_CODE;
             }
             List<String> alterColumns = Lists.newArrayList();
-
             //对比hive的表和mysql中的表的字段，如果hive中少了就加回去
             for (String dbTableColumn : dbTableColumns) {
                 if (!hiveTableColumns.contains(dbTableColumn)) {
@@ -167,7 +166,6 @@ public class HiveTableClient {
                 alterColumnsBuilder.append(")");
                 String alterColumnsSQL = alterColumnsBuilder.toString();
                 logger.info("添加字段脚本：" + alterColumnsSQL);
-//                sparkSession.sql(alterColumnsSQL);
                 jdbcUtil.edit(alterColumnsSQL);
             }
             //导数
@@ -177,8 +175,6 @@ public class HiveTableClient {
             insertBuilder.append("INSERT OVERWRITE TABLE ").append(realHiveTableName)
                     .append(" PARTITION (").append(partitionColumn).append(" = '")
                     .append(ds).append("') SELECT ");
-//            descDS = sparkSession.sql("DESC " + realHiveTableName);
-//            hiveTableColumns = RollsroyceSdkUtils.getSparkTableColumnNames(descDS);
             hiveTableColumns = jdbcUtil.getTableColumns(tableName);
             for (int i = 0, len = hiveTableColumns.size(); i < len; i++) {
                 columnName = hiveTableColumns.get(i);
@@ -201,8 +197,9 @@ public class HiveTableClient {
             logger.info("HIVE导数完成");
             jdbcUtil.close();
         } catch (Exception e) {
+            e.printStackTrace();
             logger.error(e.getMessage());
-            dingDingAlert.sendMsg(e.getMessage());
+            DingDingAlert.sendMsg(e.getMessage());
             return RollsroyceClientConstant.FAIL_CODE;
         } finally {
             sparkSession.close();

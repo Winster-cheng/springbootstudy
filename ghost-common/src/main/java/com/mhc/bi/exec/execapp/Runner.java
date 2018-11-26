@@ -11,6 +11,7 @@ import com.mhc.bi.service.ShellContentService;
 import com.mhc.bi.service.TaskInstanceService;
 import com.mhc.bi.service.alert.DingDingAlert;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.InputStream;
 import java.util.Arrays;
@@ -43,7 +44,7 @@ public class Runner implements Runnable {
     public org.slf4j.Logger logger;
 
 
-    public Runner(TaskInstance taskInstance, TaskInstanceService taskInstanceService, ShellContentService shellContentService, ExecuteInstanceService executeInstanceService, DingDingAlert dingDingAlert) {
+    public Runner init(TaskInstance taskInstance, TaskInstanceService taskInstanceService, ShellContentService shellContentService, ExecuteInstanceService executeInstanceService, DingDingAlert dingDingAlert) {
         //TODO 4个service类无法通过注入的方式实现，需要深入学习下这个知识点
         this.dingDingAlert = dingDingAlert;
         this.executeInstanceService = executeInstanceService;
@@ -61,6 +62,7 @@ public class Runner implements Runnable {
         this.output = taskInstance.getOutput();
         this.logger = LoggerFactory.getLogger(this.getClass());
         this.setInputListAndOutputList(taskInstance);
+        return this;
     }
 
     @Override
@@ -73,14 +75,13 @@ public class Runner implements Runnable {
         int time = timeCheck();
         if (time != 0) {
             logger.info("时间未到，等待" + time + "小时");
-            dingDingAlert.sendMsg(taskInstance.getName()+"时间未到，等待" + time + "小时");
+            dingDingAlert.sendMsg(taskInstance.getName() + "时间未到，等待" + time + "小时");
             try {
                 Thread.sleep(time * 3600000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-
         try {
             int execStatus = this.execute(this.command);
             this.taskInstance.setEndTme(GetTime.getTimeWithMysqlFormat());
@@ -100,9 +101,9 @@ public class Runner implements Runnable {
         if (this.outputNodeList.size() != 0) {
             for (TaskInstance taskInstance : outputNodeList) {
                 if (taskInstance.getType().equals("sqoop"))
-                    FlowControl.threadPoolExecutor.submit(new SqoopRunner(taskInstance, taskInstanceService, shellContentService, executeInstanceService, dingDingAlert));
+                    FlowControl.threadPoolExecutor.submit(new SqoopRunner().init(taskInstance, taskInstanceService, shellContentService, executeInstanceService, dingDingAlert));
                 else
-                    FlowControl.threadPoolExecutor.submit(new ShellRunner(taskInstance, taskInstanceService, shellContentService, executeInstanceService, dingDingAlert));
+                    FlowControl.threadPoolExecutor.submit(new ShellRunner().init(taskInstance, taskInstanceService, shellContentService, executeInstanceService, dingDingAlert));
 
             }
         }
@@ -144,11 +145,11 @@ public class Runner implements Runnable {
                 String key = parament.split("=")[0];
                 String value = parament.split("=")[1];
                 if (Pattern.matches(pattern, value)) { //如果参数是{yyyyMMdd+1}格式，那么把他替换成时间
-                    value = GetTime.getTimeForCommand(value.replaceAll("\\{|\\}",""));
+                    value = GetTime.getTimeForCommand(value.replaceAll("\\{|\\}", ""));
                 }
                 command = command.replaceAll("\\$\\{" + key + "\\}", value);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return command;

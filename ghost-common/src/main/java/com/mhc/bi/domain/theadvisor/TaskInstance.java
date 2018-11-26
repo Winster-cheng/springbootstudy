@@ -1,5 +1,8 @@
 package com.mhc.bi.domain.theadvisor;
 
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
+
 /**
  * @author baiyan
  * @date 2018/09/14
@@ -17,6 +20,7 @@ package com.mhc.bi.domain.theadvisor;
  * executetime
  * paraments
  */
+@Component
 public class TaskInstance {
     private int id;
     private String name;

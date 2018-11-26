@@ -29,8 +29,6 @@ public class FlowControl {
     @Autowired
     ShellContentService shellContentService;
 
-    @Autowired
-    DingDingAlert dingDingAlert;
 
     @Autowired
     ExecuteInstanceService executeInstanceService;
@@ -39,7 +37,6 @@ public class FlowControl {
     private List<TaskInstance> startNode;
 
     public static ThreadPoolExecutor threadPoolExecutor = (ThreadPoolExecutor) Executors.newFixedThreadPool(100);//创建一个缓冲池，缓冲池容量大小为Integer.MAX_VALUE
-    ShellRunner shellRunner;
 
     /**
      * @描述 每天0点开始，运行任务
@@ -52,9 +49,9 @@ public class FlowControl {
     public String start() {
 //        TaskInstance taskInstance=taskInstanceService.selectStartNode(GetTime.getTimeStamp("yyyyMMdd"));//根据execute_day执行，注意这是0点以后执行的
         TaskInstance taskInstance = taskInstanceService.selectStartNode(GetTime.getTimeStamp("20181127"));
-        shellRunner = new ShellRunner(taskInstance, taskInstanceService, shellContentService, executeInstanceService, dingDingAlert);
+        ShellRunner shellRunner = (ShellRunner) new ShellRunner().init(taskInstance, taskInstanceService, shellContentService, executeInstanceService, new DingDingAlert());
         FlowControl.threadPoolExecutor.submit(shellRunner);
-        dingDingAlert.sendMsg("头节点已经启动");
+        DingDingAlert.sendMsg("头节点已经启动");
         return "头节点已经启动";
     }
 }

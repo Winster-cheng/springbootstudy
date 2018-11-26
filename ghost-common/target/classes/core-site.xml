@@ -2,7 +2,7 @@
     
     <property>
       <name>fs.defaultFS</name>
-      <value>hdfs://mycluster</value>
+      <value>hdfs://spark-test1:8020</value>
       <final>true</final>
     </property>
     
@@ -17,23 +17,8 @@
     </property>
     
     <property>
-      <name>ha.zookeeper.quorum</name>
-      <value>hadoop-server2:2181,hadoop-server3:2181,hadoop-server1:2181</value>
-    </property>
-    
-    <property>
       <name>hadoop.http.authentication.simple.anonymous.allowed</name>
       <value>true</value>
-    </property>
-    
-    <property>
-      <name>hadoop.proxyuser.admin.groups</name>
-      <value>*</value>
-    </property>
-    
-    <property>
-      <name>hadoop.proxyuser.admin.hosts</name>
-      <value>hadoop-server1,hadoop-server2,hadoop-server3</value>
     </property>
     
     <property>
@@ -43,7 +28,7 @@
     
     <property>
       <name>hadoop.proxyuser.hcat.hosts</name>
-      <value>hadoop-server1,hadoop-server2,hadoop-server3</value>
+      <value>spark-test2</value>
     </property>
     
     <property>
@@ -53,7 +38,7 @@
     
     <property>
       <name>hadoop.proxyuser.hdfs.hosts</name>
-      <value>hadoop-server1,hadoop-server2,hadoop-server3</value>
+      <value>*</value>
     </property>
     
     <property>
@@ -63,17 +48,7 @@
     
     <property>
       <name>hadoop.proxyuser.hive.hosts</name>
-      <value>hadoop-server1,hadoop-server2,hadoop-server3</value>
-    </property>
-    
-    <property>
-      <name>hadoop.proxyuser.httpfs.groups</name>
-      <value>*</value>
-    </property>
-    
-    <property>
-      <name>hadoop.proxyuser.httpfs.hosts</name>
-      <value>hadoop-server1,hadoop-server2,hadoop-server3</value>
+      <value>spark-test2</value>
     </property>
     
     <property>
@@ -83,7 +58,7 @@
     
     <property>
       <name>hadoop.proxyuser.hue.hosts</name>
-      <value>hadoop-server1,hadoop-server2,hadoop-server3</value>
+      <value>*</value>
     </property>
     
     <property>
@@ -93,7 +68,7 @@
     
     <property>
       <name>hadoop.proxyuser.oozie.hosts</name>
-      <value>hadoop-server1,hadoop-server2,hadoop-server3</value>
+      <value>spark-test2,spark-test3</value>
     </property>
     
     <property>
@@ -103,7 +78,7 @@
     
     <property>
       <name>hadoop.proxyuser.root.hosts</name>
-      <value>hadoop-server1,hadoop-server2,hadoop-server3</value>
+      <value>spark-test1</value>
     </property>
     
     <property>
