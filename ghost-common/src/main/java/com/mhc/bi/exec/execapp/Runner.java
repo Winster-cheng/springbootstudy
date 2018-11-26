@@ -157,8 +157,10 @@ public class Runner implements Runnable {
             logger.info(e.getMessage());
             e.printStackTrace();
         }
-        logger.info(this.name+"替换后的命令为"+command);
-        DingDingAlert.sendMsg(this.name+"替换后的命令为"+command);
+        DingDingAlert.sendMsg("打点1");
+
+        logger.info("替换后的命令为"+command);
+        DingDingAlert.sendMsg("替换后的命令为"+command);
         return command;
     }
 
