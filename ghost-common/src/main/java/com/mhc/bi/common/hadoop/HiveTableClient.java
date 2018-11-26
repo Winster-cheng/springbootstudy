@@ -193,6 +193,7 @@ public class HiveTableClient {
             //执行insert脚本
             String insertSql = insertBuilder.toString();
             logger.info("插入数据脚本：" + insertSql);
+            DingDingAlert.sendMsg("将要执行的语句是"+insertBuilder.toString());
             sparkSession.sql(insertBuilder.toString());
             logger.info("HIVE导数完成");
             jdbcUtil.close();
