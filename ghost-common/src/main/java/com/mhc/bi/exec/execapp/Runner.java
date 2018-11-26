@@ -152,16 +152,16 @@ public class Runner implements Runnable {
                 command = command.replaceAll("\\$\\{" + key + "\\}", value);
                 DingDingAlert.sendMsg("替换内容参数:"+command);
             }
+            DingDingAlert.sendMsg("打点1");
+            logger.info("替换后的命令为"+command);
+            DingDingAlert.sendMsg("替换后的命令为"+command);
+            return command;
         } catch (Exception e) {
-            DingDingAlert.sendMsg(e.getMessage());
+            DingDingAlert.sendMsg("打点2");
             logger.info(e.getMessage());
             e.printStackTrace();
         }
-        DingDingAlert.sendMsg("打点1");
-
-        logger.info("替换后的命令为"+command);
-        DingDingAlert.sendMsg("替换后的命令为"+command);
-        return command;
+        return null;
     }
 
     public void setInputListAndOutputList(TaskInstance taskInstance) {
