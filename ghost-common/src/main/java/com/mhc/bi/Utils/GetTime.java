@@ -1,5 +1,7 @@
 package com.mhc.bi.Utils;
 
+import com.mhc.bi.service.alert.DingDingAlert;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -128,6 +130,7 @@ public class GetTime {
      */
     public static String getTimeForCommand(String format){
         int time=Integer.parseInt(format.replaceAll("\\s+","").replaceAll("yyyyMMdd",""));
+        DingDingAlert.sendMsg("替换成为"+getTimeStamp("yyyyMMdd",time-1));
         return  getTimeStamp("yyyyMMdd",time-1);
 
     }
