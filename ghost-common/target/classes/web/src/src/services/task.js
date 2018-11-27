@@ -1,18 +1,18 @@
 import request from '@/utils/request';
 
 export async function queryTaskTreeData() {
-    return request(`/taskSubmit/getDirectory`,{
+    return request(`/api/taskSubmit/getDirectory`,{
       method: 'POST',
     });
   }
 export async function queryGraphNode(params){
-  return request('/taskPlan/getMoreDependencies', {
+  return request('/api/taskPlan/getMoreDependencies', {
     method: 'POST',
     body: params,
   });
 }
 export async function queryAllGraphNodes(jobPlanId){
-  return request('/taskPlan/getDependencies', {
+  return request('/api/taskPlan/getDependencies', {
     method: 'POST',
     body: {
       jobPlanId,
@@ -20,7 +20,7 @@ export async function queryAllGraphNodes(jobPlanId){
   });
 }
 export async function queryContent(fileId){
-  return request('/taskSubmit/getContent', {
+  return request('/api/taskSubmit/getContent', {
     method: 'POST',
     body: {
       fileId,
@@ -28,7 +28,7 @@ export async function queryContent(fileId){
   });
 }
 export async function saveContent(params){
-  return request('/taskSubmit/save', {
+  return request('/api/taskSubmit/save', {
     method: 'POST',
     body: {
       ...params
@@ -36,7 +36,7 @@ export async function saveContent(params){
   });
 }
 export async function submitContent(params){
-  return request('/taskSubmit/submit', {
+  return request('/api/taskSubmit/submit', {
     method: 'POST',
     body: {
       ...params
@@ -45,13 +45,13 @@ export async function submitContent(params){
 }
 // 任务实例接口
 export async function queryTaskInstance(params) {
-  return request(`/taskInstance/select`, {
+  return request(`/api/taskInstance/select`, {
     method: 'POST',
     body: params,
   });
 }
 export async function queryAllInstanceNodes(taskInstanceId) {
-  return request(`/taskInstance/getDependencies`, {
+  return request(`/api/taskInstance/getDependencies`, {
     method: 'POST',
     body: {
       taskInstanceId
@@ -59,13 +59,13 @@ export async function queryAllInstanceNodes(taskInstanceId) {
   });
 }
 export async function queryInstanceNode(params) {
-  return request(`/taskInstance/getMoreDependencies`, {
+  return request(`/api/taskInstance/getMoreDependencies`, {
     method: 'POST',
     body: params,
   });
 }
 export async function queryLogs(taskInstanceId) {
-  return request(`/taskInstance/getLogs`, {
+  return request(`/api/taskInstance/getLogs`, {
     method: 'POST',
     body: {
       taskInstanceId
@@ -73,7 +73,7 @@ export async function queryLogs(taskInstanceId) {
   });
 }
 export async function queryAllStatuss() {
-  return request(`/taskInstance/getStatus`, {
+  return request(`/api/taskInstance/getStatus`, {
     method: 'POST',
   });
 }

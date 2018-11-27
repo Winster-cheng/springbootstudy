@@ -57,6 +57,7 @@ class TaskSubmit extends Component {
   }
 
   onSelect = (selectedKeys, {node}) => {
+    console.log(this.state)
     const {title, shelltype, nodeid} = node.props;
     const that = this;
     const {panes, activeKey, currentCodeContent} = that.state;
@@ -72,7 +73,6 @@ class TaskSubmit extends Component {
           payload: nodeid,
         })
         .then (content => {
-          if (content) {
             const newPane = {
               title,
               key: nodeid,
@@ -90,7 +90,6 @@ class TaskSubmit extends Component {
                 that.editor && that.editor.focus ();
               }
             );
-          }
         });
     } else {
       // 显示当前id对应的panel
@@ -176,8 +175,8 @@ class TaskSubmit extends Component {
           <Icon component={DropdownIcon} className={styles.dropDownMenuIcon} />
         </a>
       </Dropdown>
+    )
   };
-    );
 
   LeafIcon = () => <span className={styles.leafDot} />;
 
@@ -252,7 +251,7 @@ class TaskSubmit extends Component {
                 selectedKeys={[this.state.activeKey.toString ()]}
               >
                 {this.TreeNodeList (taskTreeData)}
-              </Tree>}
+                </Tree>}
           </Col>
           <Col
             span={18}

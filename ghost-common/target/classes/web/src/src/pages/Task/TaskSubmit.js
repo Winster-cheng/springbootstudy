@@ -176,8 +176,8 @@ class TaskSubmit extends Component {
           <Icon component={DropdownIcon} className={styles.dropDownMenuIcon} />
         </a>
       </Dropdown>
+    )
   };
-    );
 
   LeafIcon = () => <span className={styles.leafDot} />;
 

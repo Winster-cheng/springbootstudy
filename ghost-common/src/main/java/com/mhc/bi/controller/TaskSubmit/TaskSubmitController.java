@@ -105,8 +105,8 @@ public class TaskSubmitController {
         actionResult = new ActionResult();
         FileContent fileContent = new FileContent();
         String content = desktopDocument2Service.getContent(taskSubmitGetContent.getFileId());
-        if(content.equals(""))
-        {content=" ";}
+//        if(content.equals(""))
+//        {content=" ";}
         fileContent.setFileContent(content);
         try {
             actionResult.success();
