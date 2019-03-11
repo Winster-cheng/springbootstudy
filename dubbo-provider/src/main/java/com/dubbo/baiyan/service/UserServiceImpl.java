@@ -20,10 +20,4 @@ public class UserServiceImpl implements UserService {
         return list;
     }
 
-    @Override
-    public void sayHello() {
-        System.out.println("ＨＥＬＬＯ　ＭＵＭＵ");
-    }
-
-
 }
