@@ -1,0 +1,4 @@
+- dubbo-api是纯工具类，它不需要启动服务，它负责提供consumer和provider都用到的类，比如我们在consumer和provider中都用到了实体类User和接口类UserService，我们把他们写在dubbo中，然后在provider和consumer中加入dubbo依赖，避免重复编写
+- dubbo-provider dubbo服务提供者，在这里实现了UserService接口UserServiceImpl
+- dubbo-consumer  dubbo消费者,在这里我们用@Reference获取UserService的实现，也就是provider中的UserServiceImpl
+- 具体的pom依赖以及dubbo配置可以参考项目中的配置
