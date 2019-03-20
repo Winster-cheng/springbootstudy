@@ -3,3 +3,6 @@ dubbo使用：
 - dubbo-provider dubbo服务提供者，在这里实现了UserService接口UserServiceImpl
 - dubbo-consumer  dubbo消费者,在这里我们用@Reference获取UserService的实现，也就是provider中的UserServiceImpl
 - 具体的pom依赖以及dubbo配置可以参考项目中的配置
+
+mybatis使用
+- mybatis-xml mybatis的xml写法
