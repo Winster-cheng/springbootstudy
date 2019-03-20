@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.baiyan.mybatisxml.dal.mapper.UserMapper">
+
+    <resultMap type="com.baiyan.mybatisxml.dal.domain.User" id="userMap">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="password" property="password"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+
+    <select id="getUsers" resultType="com.baiyan.mybatisxml.dal.domain.User"
+            resultMap="userMap">
+        select * from user
+    </select>
+
+    <select id="update" parameterType="com.baiyan.mybatisxml.dal.domain.User">
+        update user set
+        name=#{name},password=#{password},create_time=#{createTime}
+        where
+        id=#{id}
+    </select>
+
+    <select id="del" parameterType="java.lang.Integer">
+        delete from user where id=#{id}
+    </select>
+
+    <select id="save" parameterType="com.baiyan.mybatisxml.dal.domain.User">
+        insert into user(name,password,create_time) values(#{name},#{password},#{createTime})
+    </select>
+
+</mapper>
