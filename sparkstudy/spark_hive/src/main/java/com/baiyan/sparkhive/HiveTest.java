@@ -35,7 +35,7 @@ public class HiveTest {
                 "user",
                 properties
         );
-        //读取mysql数据到临时表
+        //读取mysql数据到内存的临时表
         bizdateDS.createOrReplaceTempView("temporary_table");
         //插入临时表数据到hive
         sparkSession.sql("insert into db_test.user select id,name from temporary_table");
