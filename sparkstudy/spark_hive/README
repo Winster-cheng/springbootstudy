@@ -1,0 +1,35 @@
+这个module演示如何使用spark-local模式执行hive语句
+Step1 首先把core-site.xml/hdfs-site.xml/hive-site.xml放入resources中,这三个文件去集群上取
+
+Step2 接着定义SparkSession:
+        SparkSession sparkSession = SparkSession.builder()
+                .appName("hive sql test")
+                .master("local[*]")
+                .config("executor-memory", "4G")
+                .config("total-executor-cores", "2")//这个参数是所有的executor使用的总CPU核数
+                .config("spark.cores.max", "2")
+                .config("spark.sql.warehouse.dir", "hdfs://spark-test1:8020/apps/hive/warehouse")
+                .enableHiveSupport()
+                .getOrCreate();
+
+注意enableHiveSupport是必须加到
+
+Step3: sparkSession.sql就可以执行sql了
+
+附加 Step4:
+        Properties properties = new Properties();
+        properties.put("user", "root");
+        properties.put("password", "root@123");
+        properties.put("driver", "com.mysql.jdbc.Driver");
+        //读取mysql数据
+        Dataset<Row> bizdateDS = sparkSession.read().jdbc(
+                "jdbc:mysql://localhost:3306/mytest?useUnicode=true&verifyServerCertificate=false&useSSL=false&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull",
+                "user",
+                properties
+        );
+        //读取mysql数据到临时表
+        bizdateDS.createOrReplaceTempView("temporary_table");
+        //插入临时表数据到hive
+        sparkSession.sql("insert into db_test.user select id,name from temporary_table");
+
+用来将mysql的数据插入到hive
