@@ -1,4 +1,4 @@
-package com.baiyan.mybatisxml.dal.mapper;
+package com.baiyan.mybatisxml.dal.dao;
 
 import com.baiyan.mybatisxml.dal.domain.User;
 import org.apache.ibatis.annotations.Mapper;
