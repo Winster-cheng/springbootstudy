@@ -42,4 +42,8 @@ public interface UserMapper {
      */
     void save(User user);
 
+    //这里展示传入多个参数的情况
+    void insertWithMultipleParameters(@Param("user") User user,@Param("createTime")String createTime);
+
+
 }

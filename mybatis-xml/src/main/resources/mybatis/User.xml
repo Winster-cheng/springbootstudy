@@ -30,4 +30,9 @@
         insert into user(name,password,create_time) values(#{name},#{password},#{createTime})
     </select>
 
+    <!--这里展示传入多个参数的情况-->
+    <!--void insertWithMultipleParameters(@Param("user") User user,@Param("createTime")String createTime);-->
+    <insert id="insertWithMultipleParameters" useGeneratedKeys="true" keyProperty="id">
+        insert into user (name,password,create_time) values(#{user.name},#{user.password},#{createTime})
+    </insert>
 </mapper>

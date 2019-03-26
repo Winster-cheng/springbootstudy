@@ -27,4 +27,13 @@ public class MybatisTestController {
         List<User> userList=userMapper.getUsers();
         return userList;
     }
+    //这里展示传入多个参数的情况
+    @RequestMapping("insertWithMultipleParameters")
+    public void insertWithMultipleParameters() {
+        User user=new User();
+        user.setName("woniu");
+        user.setPassword("woniu1234");
+        userMapper.insertWithMultipleParameters(user,"20190325");
+    }
+
 }
