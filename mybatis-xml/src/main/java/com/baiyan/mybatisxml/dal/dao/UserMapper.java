@@ -3,6 +3,7 @@ package com.baiyan.mybatisxml.dal.dao;
 import com.baiyan.mybatisxml.dal.domain.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -11,7 +12,7 @@ import java.util.List;
  * @Date: 2019/3/20 10:04
  * @Description:
  */
-@Mapper
+@Repository
 public interface UserMapper {
 
     /**

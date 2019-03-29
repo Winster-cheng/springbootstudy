@@ -1,11 +1,9 @@
-package com.baiyan.mybatisxml.controller;
+package com.baiyan.mybatisannotation.controller;
 
-import com.baiyan.mybatisxml.dal.domain.User;
-import com.baiyan.mybatisxml.dal.dao.UserMapper;
+import com.baiyan.mybatisannotation.dal.dao.UserMapper;
+import com.baiyan.mybatisannotation.dal.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.Mapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,6 +16,7 @@ import java.util.List;
  * @Description:
  */
 @RestController
+@RequestMapping("/mybatis")
 public class MybatisTestController {
 
     @Autowired
@@ -26,7 +25,7 @@ public class MybatisTestController {
     @GetMapping("getUser")
     public List<User> getUser() {
         try {
-            List<User> userList = userMapper.getUsers();
+            List<User> userList = userMapper.getUsers2();
             return userList;
         }catch (Exception e){
             e.printStackTrace();
