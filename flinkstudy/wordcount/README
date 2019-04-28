@@ -1,0 +1,108 @@
+mac下启动flink
+步骤：
+1.安装jdk
+安装1.8版本jdk
+2.安装Flink
+$ brew install apache-flink
+...
+$ flink --version
+Version: 1.5.0, Commit ID: c61b108
+
+3.启动Flink和进入web交互页面
+Flink可以通过自带的脚本快速启动。首先通过brew来定位刚才安装的Flink的安装目录。
+$ brew info apache-flink
+/usr/local/Cellar/apache-flink/1.5.0 (116 files, 324MB) *
+  Built from source on 2018-06-22 at 16:42:50
+
+找到之后，进入"1.5.0"目录，然后执行启动脚本
+$ ./libexec/bin/start-cluster.sh
+
+接着就可以进入web页面(http://localhost:8081/)
+
+4.简单的示例
+首先用IDEA创建一个maven工程。
+
+创建一个SocketTextStreamWordCount文件，加入以下代码。
+package com.baiyan.wordcount;
+import org.apache.flink.api.common.functions.FlatMapFunction;
+import org.apache.flink.api.java.tuple.Tuple2;
+import org.apache.flink.streaming.api.datastream.DataStream;
+import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.apache.flink.util.Collector;
+
+/**
+ * @Auther: peilongcheng
+ * @Date: 2019/3/26 16:02
+ * @Description:
+ */
+public class SocketTextStreamWordCount {
+
+
+    public static void main(String[] args) throws Exception {
+        //参数检查
+        if (args.length != 2) {
+            System.err.println("USAGE:\nSocketTextStreamWordCount <hostname> <port>");
+            return;
+        }
+
+        String hostName = args[0];
+        Integer port = Integer.parseInt(args[1]);
+
+        //设置环境
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+
+        //获取数据
+        DataStream<String> text = env.socketTextStream(hostName, port);
+
+        //计数
+        DataStream<Tuple2<String, Integer>> counts = text.flatMap(new LineSplitter())
+                .keyBy(0)
+                .sum(1);
+        counts.print();
+
+        env.execute("Java WordCount from SocketTextStream Example");
+
+    }
+
+
+    public static final class LineSplitter implements FlatMapFunction<String, Tuple2<String, Integer>> {
+        public void flatMap(String s, Collector<Tuple2<String, Integer>> collector) {
+            String[] tokens = s.toLowerCase().split("\\W+");
+
+            for (String token: tokens) {
+                if (token.length() > 0) {
+                    collector.collect(new Tuple2<String, Integer>(token, 1));
+                }
+            }
+        }
+    }
+}
+
+接着进入工程目录，使用以下命令打包。
+$ maven clean package -Dmaven.test.skip=true
+
+然后我们开启监听9000端口。
+$ nc -l 9000
+
+最后进入flink安装目录执行以下命令跑程序。
+$flink run -c com.baiyan.wordcount.SocketTextStreamWordCount /Users/peilongcheng/gitcode/flinkstudy/wordcount/target/wordcount-1.0-SNAPSHOT.jar 127.0.0.1 9000
+
+执行完上述命令后，我们可以在webUI中看到正在运行的程序。
+
+
+
+
+我们可以在nc中输入text，比如
+$ nc -l 9000
+hello hello hello
+hehe
+your world
+
+然后我们通过tail命令看一下输出的log文件，来观察统计结果。进入flink目录，执行以下命令。
+tail -f ./libexec/log/flink-*-taskexecutor-1-localhost.out
+(hello,1)
+(hello,2)
+(hello,3)
+(hehe,1)
+(your,1)
+(world,1)
