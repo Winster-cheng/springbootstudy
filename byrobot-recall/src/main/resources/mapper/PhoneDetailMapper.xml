@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mhc.analysis.dal.dao.PhoneDetailDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.mhc.analysis.dal.domain.DO.GetPhoneDetailDo">
+        <id column="id" property="id" />
+        <result column="code" property="code" />
+        <result column="callInstanceId" property="callInstanceId" />
+        <result column="companyId" property="companyId" />
+        <result column="callUserId" property="callUserId" />
+        <result column="callJobId" property="callJobId" />
+        <result column="customerId" property="customerId" />
+        <result column="customerStatus" property="customerStatus" />
+        <result column="customerTelephone" property="customerTelephone" />
+        <result column="customerName" property="customerName" />
+        <result column="phonestatus" property="phonestatus" />
+        <result column="finishStatus" property="finishStatus" />
+        <result column="duration" property="duration" />
+        <result column="chatRound" property="chatRound" />
+        <result column="startTime" property="startTime" />
+        <result column="endTime" property="endTime" />
+        <result column="callerPhone" property="callerPhone" />
+        <result column="luyunOssUrl" property="luyunOssUrl" />
+        <result column="userLuyinOssUrl" property="userLuyinOssUrl" />
+        <result column="properties" property="properties" />
+        <result column="handlePerson" property="handlePerson" />
+        <result column="callType" property="callType" />
+        <result column="callIndex" property="callIndex" />
+        <result column="readStatus" property="readStatus" />
+        <result column="jobName" property="jobName" />
+        <result column="robotDefId" property="robotDefId" />
+        <result column="sceneDefId" property="sceneDefId" />
+        <result column="sceneRecordId" property="sceneRecordId" />
+        <result column="industry" property="industry" />
+        <result column="trackResult" property="trackResult" />
+        <result column="bugType" property="bugType" />
+        <result column="hangUp" property="hangUp" />
+        <result column="secondaryCallTime" property="secondaryCallTime" />
+        <result column="secondaryCallTimes" property="secondaryCallTimes" />
+        <result column="cost" property="cost" />
+        <result column="callbacked" property="callbacked" />
+        <result column="csStaffId" property="csStaffId" />
+        <result column="gmt_Create" property="gmtCreate" />
+        <result column="gmt_Modified" property="gmtModified" />
+        <result column="propertiesMap" property="propertiesMap" />
+        <result column="sceneInstanceResultId" property="sceneInstanceResultId" />
+        <result column="taskResult_companyId" property="taskResultCompanyId" />
+        <result column="taskResult_sceneInstanceId" property="taskResultSceneInstanceId" />
+        <result column="resultName" property="resultName" />
+        <result column="resultValue" property="resultValue" />
+        <result column="artificialResultValue" property="artificialResultValue" />
+        <result column="artificialChanged" property="artificialChanged" />
+        <result column="resultDesc" property="resultDesc" />
+        <result column="extra" property="extra" />
+        <result column="analyzeType" property="analyzeType" />
+        <result column="resultValueAlias" property="resultValueAlias" />
+        <result column="resultLabels" property="resultLabels" />
+        <result column="resultValueNew" property="resultValueNew" />
+        <result column="gmtCreate" property="tgmtCreate" />
+        <result column="gmtModified" property="tgmtModified" />
+        <result column="phoneLog" property="phoneLog" />
+        <result column="phoneLog_luyunOssUrl" property="phoneLogLuyunOssUrl" />
+        <result column="jobFinished" property="jobFinished" />
+        <result column="sign" property="sign" />
+
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id,code,callInstanceId,companyId,callUserId,callJobId,customerId,customerStatus,customerTelephone,customerName,phonestatus,
+        finishStatus,duration,chatRound,startTime,endTime,callerPhone,luyunOssUrl,userLuyinOssUrl,properties,handlePerson,callType,
+        callIndex,readStatus,jobName,robotDefId,sceneDefId,sceneRecordId,industry,trackResult,bugType,hangUp,secondaryCallTime,
+        secondaryCallTimes,cost,callbacked,csStaffId,gmt_Create AS gmtCreate,gmt_Modified AS gmtModified,propertiesMap,
+        sceneInstanceResultId,taskResult_companyId AS taskResultCompanyId,taskResult_sceneInstanceId AS taskResultSceneInstanceId,
+        resultName,resultValue,artificialResultValue,artificialChanged,resultDesc,extra,analyzeType,resultValueAlias,resultLabels,resultValueNew,
+        gmtCreate AS tgmtCreate,gmtModified AS tgmtModified,phoneLog,phoneLog_luyunOssUrl AS phoneLogLuyunOssUrl,jobFinished,sign
+    </sql>
+
+</mapper>
