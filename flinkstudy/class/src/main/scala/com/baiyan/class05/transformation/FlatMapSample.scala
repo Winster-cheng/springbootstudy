@@ -5,7 +5,7 @@ import org.apache.flink.api.scala._
 /*
   * @Auther: peilongcheng
   * @Date: 2019/5/21 18:37
-  * @Description:DataStream → DataStream:输入一个参数，产生 0 个、1 个或者多个输出。
+  * @Description:DataStream → DataStream:输入一个参数，产生 0 个、1 个或者多个输出 (对集合中每个元素进行操作然后再扁平化)
   */
 object FlatMapSample {
   def main(args: Array[String]): Unit = {

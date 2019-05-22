@@ -17,9 +17,6 @@ object ConnectSample {
 
     streamConnect.map(item=>println("text:"+item), item=>println("list:"+item))
 
-//    val streamConnect2 =streamConnect.map(x=>x,x=>x>3)
-
-//    streamConnect2.map(x=>println(x))
 
     env.execute("First Strat")
   }
