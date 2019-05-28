@@ -20,6 +20,7 @@
         <module>dubbo-provider</module>
         <module>mybatis-annotation</module>
         <module>mybatis-xml</module>
+        <module>spring-boot-upload</module>
     </modules>
     <dependencies>
         <dependency>

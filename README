@@ -6,3 +6,4 @@ dubbo使用：
 
 mybatis使用
 - mybatis-xml mybatis的xml写法
+- mybatis-annotation mybatis注解写法

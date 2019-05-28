@@ -11,8 +11,10 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -34,12 +36,21 @@ public class UploadController {
     public String upload(@RequestParam("file") MultipartFile file) {
         if (file.isEmpty()) {
             return "上传失败，请选择有内容的文件";
+        } else {
+            System.out.println("文件类型：" + file.getContentType());
         }
-
+        try {
+            InputStream in = file.getInputStream();
+            System.out.println("内容如下："+new String(readStream(in)));
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         String fileName = file.getOriginalFilename();
 
 
-        String filePath = "/Users/baiyan/gitcode/springbootstudy/spring-boot-upload/src/main/file/";
+        String filePath = "/Users/peilongcheng/gitcode/springbootstudy/spring-boot-upload/src/main/file/";
         File dest = new File(filePath + fileName);
         try {
             file.transferTo(dest);
@@ -49,6 +60,17 @@ public class UploadController {
             LOGGER.error(e.toString(), e);
         }
         return "上传失败！";
+    }
+    public static byte[] readStream(InputStream inStream) throws Exception {
+        ByteArrayOutputStream outSteam = new ByteArrayOutputStream();
+        byte[] buffer = new byte[1024];
+        int len = -1;
+        while ((len = inStream.read(buffer)) != -1) {
+            outSteam.write(buffer, 0, len);
+        }
+        outSteam.close();
+        inStream.close();
+        return outSteam.toByteArray();
     }
 
     @GetMapping("/multiUpload")
