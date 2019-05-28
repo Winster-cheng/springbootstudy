@@ -50,7 +50,7 @@ public class UploadController {
         String fileName = file.getOriginalFilename();
 
 
-        String filePath = "/Users/peilongcheng/gitcode/springbootstudy/spring-boot-upload/src/main/file/";
+        String filePath = "/Users/xxx/gitcode/springbootstudy/spring-boot-upload/src/main/file/";
         File dest = new File(filePath + fileName);
         try {
             file.transferTo(dest);
